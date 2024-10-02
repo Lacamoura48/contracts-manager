@@ -1,0 +1,8 @@
+{
+    "singleQuote": true,
+    "endOfLine": "lf",
+    "plugins": [
+        "prettier-plugin-organize-imports",
+        "prettier-plugin-tailwindcss"
+    ]
+}
