@@ -1,12 +1,39 @@
 ---
+# Deployment steps
 deployment:
   tasks:
-    - export DEPLOYPATH=/home/yourcpanelhomepath/
-    - /bin/cp -r * $DEPLOYPATH #copy all from root
-    - cd $DEPLOYPATH
+    # Define the source directory (where your repo is cloned)
+    - export SOURCE_DIRECTORY=contracts-manager
+
+    # Define the destination directory for deployment
+    - export DEPLOY_DIRECTORY=public_html
+
+    # Navigate to the source directory (where your Laravel project files are located)
+    - cd $SOURCE_DIRECTORY
+
+    # Install Composer dependencies
     - composer install --no-dev --optimize-autoloader
+
+    # Set up .env if not already configured
+    - if [ ! -f .env ]; then cp .env.example .env; fi
+
+    # Generate Laravel application key
+    - php artisan key:generate
+
+    # Clear and optimize caches
     - php artisan config:cache
     - php artisan route:cache
     - php artisan view:cache
+
+    # Sync (copy) the content to the deployment directory (e.g., public_html)
+    - rsync -av --exclude='.git' --exclude='.env' --exclude='storage' . ../$DEPLOY_DIRECTORY/
+
+    # Ensure correct permissions for the storage and bootstrap cache directories in the target location
+    - find ../$DEPLOY_DIRECTORY/storage -type d -exec chmod 775 {} \;
+    - find ../$DEPLOY_DIRECTORY/bootstrap/cache -type d -exec chmod 775 {} \;
+
+    # Navigate to the deployment directory
+    - cd ../$DEPLOY_DIRECTORY
+
+    # Run migrations from the public_html directory
     - php artisan migrate --force
-    
