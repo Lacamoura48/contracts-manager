@@ -5,4 +5,6 @@ deployment:
     - /bin/cp -r * $DEPLOYPATH #copy all from root
     - cd $DEPLOYPATH
     - /opt/alt/alt-nodejs16/root/usr/bin/npm install
+    - chown -R root:root
     - /opt/alt/alt-nodejs16/root/usr/bin/npm run build
+    
