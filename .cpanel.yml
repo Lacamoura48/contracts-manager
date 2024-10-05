@@ -4,7 +4,7 @@ deployment:
     - export DEPLOYPATH=/home/qosi2171/public_html
     - /bin/cp -r * $DEPLOYPATH #copy all from root
     - cd $DEPLOYPATH
-    - /opt/alt/alt-nodejs16/root/usr/bin/npm install
-    - chown -R root:root .
+    - /opt/alt/alt-nodejs16/root/usr/bin/npm 
+    - ls -l $(which node)
     - /opt/alt/alt-nodejs16/root/usr/bin/npm run build
     
