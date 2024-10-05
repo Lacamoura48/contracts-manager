@@ -5,7 +5,7 @@ deployment:
     - /bin/cp -r * $DEPLOYPATH #copy all from root
     - cd $DEPLOYPATH
     - /opt/alt/alt-nodejs16/root/usr/bin/npm install
-    - env node
+    # - env node
     - sudo ln -s /opt/cpanel/ea-nodejs14/bin/node /usr/bin/node
     - npm run build
     - /opt/alt/alt-nodejs16/root/usr/bin/npm run build
