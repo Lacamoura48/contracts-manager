@@ -3,10 +3,10 @@
 deployment:
   tasks:
     # Define the source directory (where your repo is cloned)
-    - export SOURCE_DIRECTORY=/bin/cp
+    - export SOURCE_DIRECTORY=/home/qosi2171/contracts-manager
 
     # Define the destination directory for deployment
-    - export DEPLOY_DIRECTORY=public_html
+    - export DEPLOY_DIRECTORY=/home/qosi2171/public_html
 
     # Navigate to the source directory (where your Laravel project files are located)
     - cd $SOURCE_DIRECTORY
