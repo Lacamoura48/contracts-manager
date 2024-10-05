@@ -12,18 +12,18 @@ deployment:
     - cd $SOURCE_DIRECTORY
 
     # Install Composer dependencies
-    - composer install --no-dev --optimize-autoloader
+    # - composer install --no-dev --optimize-autoloader
 
     # Set up .env if not already configured
     - if [ ! -f .env ]; then cp .env.example .env; fi
 
     # Generate Laravel application key
-    - php artisan key:generate
+    # - php artisan key:generate
 
     # Clear and optimize caches
-    - php artisan config:cache
-    - php artisan route:cache
-    - php artisan view:cache
+    # - php artisan config:cache
+    # - php artisan route:cache
+    # - php artisan view:cache
 
     # Sync (copy) the content to the deployment directory (e.g., public_html)
     - rsync -av --exclude='.git' --exclude='.env' --exclude='storage' . ../$DEPLOY_DIRECTORY/
