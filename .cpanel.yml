@@ -3,7 +3,7 @@
 deployment:
   tasks:
     # Define the source directory (where your repo is cloned)
-    - export SOURCE_DIRECTORY=contracts-manager
+    - export SOURCE_DIRECTORY=/bin/cp
 
     # Define the destination directory for deployment
     - export DEPLOY_DIRECTORY=public_html
