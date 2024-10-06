@@ -15,7 +15,7 @@ Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
 
-Route::get('/clients', [ClientController::class, 'index'])->middleware(['auth', 'verified'])->name('clients.index');
+Route::get('/clients', [ClientController::class, 'index'])->middleware(['auth', 'verified'])->name('clients');
 Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->middleware(['auth', 'verified'])->name('clients.destroy');
 
 Route::middleware('auth')->group(function () {

@@ -90,7 +90,7 @@ function SideBar({ open, openHandler }) {
                     <p className="mx-auto mt-auto pb-5 text-gray-600">0.0.1</p>
                 </div>
             </aside>
-            <div className="fixed bottom-16 left-0 right-0 z-[30] flex h-20 flex-row-reverse items-center bg-gray-900 p-1 md:hidden">
+            <div className="fixed bottom-0 left-0 right-0 z-[30] flex h-20 flex-row-reverse items-center bg-gray-900 p-1 md:hidden">
                 <Link
                     className={`${route().current('dashboard') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5`}
                     href="/dashboard"
