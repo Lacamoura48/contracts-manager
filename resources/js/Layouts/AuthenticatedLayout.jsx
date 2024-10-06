@@ -1,9 +1,7 @@
-import { usePage } from '@inertiajs/react';
+import SideBar from '@/Components/ui/Sidebar';
 import { useState } from 'react';
 
 export default function Authenticated({ children }) {
-    const user = usePage().props.auth.user;
-
     const [sideBarOpen, setSideBarOpen] = useState(true);
 
     return (
@@ -17,7 +15,6 @@ export default function Authenticated({ children }) {
             <SideBar
                 open={sideBarOpen}
                 openHandler={() => setSideBarOpen(!sideBarOpen)}
-                t={dict?.layout}
             />
             <div></div>
             <main>{children}</main>
