@@ -17,7 +17,7 @@ function ClientCard({ client }) {
                     <UserCircle size={40} color="rgb(90,90,90)" />
                     <div>
                         <h2 className="flex items-center gap-2 font-bold">
-                            {client.first_name + ' ' + client.last_name}
+                            {client.full_name}
                             <span className="rounded-md bg-gray-200 px-3 py-1 text-sm font-bold">
                                 {client.id_code}
                             </span>
@@ -45,8 +45,7 @@ function ClientCard({ client }) {
             <Modal show={showDelete}>
                 <div className="px-8 py-10">
                     <h2 className="mb-5 text-2xl font-bold">
-                        هل أنت متأكد أنك تريد حذف المستخدم{' '}
-                        {client.first_name + ' ' + client.last_name}
+                        هل أنت متأكد أنك تريد حذف المستخدم {client.full_name}
                     </h2>
                     <div className="flex gap-4">
                         <PrimaryButton

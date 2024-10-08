@@ -19,8 +19,7 @@ class ClientsTableSeeder extends Seeder
 
         for ($i = 0; $i < 35; $i++) {
             DB::table('clients')->insert([
-                'first_name' => $faker->firstName,
-                'last_name' => $faker->lastName,
+                'full_name' => $faker->userName,
                 'phone' => $faker->phoneNumber,
                 'id_code' => $faker->unique()->numerify('ID#######'),
                 'id_photo_front' => $faker->imageUrl(640, 480, 'people', true, 'ID Front'),

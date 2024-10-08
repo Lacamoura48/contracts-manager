@@ -1,3 +1,4 @@
+import { MessageCircleWarning } from 'lucide-react';
 import ClientCard from '../cards/ClientCard';
 import Pagination from '../pagination/Pagination';
 
@@ -19,8 +20,9 @@ function ClientsList({ clients }) {
                     </div>
                 </>
             ) : (
-                <p className="py-8 text-center text-3xl text-gray-600">
-                    no clients yet.
+                <p className="flex flex-col items-center justify-center gap-3 py-8 text-center text-3xl text-gray-600">
+                    <MessageCircleWarning size={100} />
+                    لا يوجد أي زبائن
                 </p>
             )}
         </>

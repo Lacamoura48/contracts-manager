@@ -6,7 +6,13 @@ import InsideLayout from '@/Layouts/InsideLayout';
 export default function Clients({ clients }) {
     return (
         <AuthenticatedLayout>
-            <InsideLayout headerTitle="الزبناء">
+            <InsideLayout
+                headerTitle="الزبناء"
+                headerLink={{
+                    label: 'إضافة زبون جديد',
+                    url: '/clients/create',
+                }}
+            >
                 <FilterSection />
                 <ClientsList clients={clients} />
             </InsideLayout>

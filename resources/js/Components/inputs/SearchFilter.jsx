@@ -4,11 +4,10 @@ import CustomInput from './CustomInput';
 function SearchFilter({ value, onChange, placeholder, name }) {
     return (
         <div className="flex-1">
-            <label className="mb-1 block" htmlFor="search">
-                بحث
-            </label>
             <CustomInput
                 defaultValue={value}
+                id="clients-search"
+                label="بحث"
                 name={name}
                 onChange={onChange}
                 placeholder={placeholder}

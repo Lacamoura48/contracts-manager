@@ -15,23 +15,29 @@ class ClientController extends Controller
         $clientsQuery = Client::query();
         if ($search) {
             $clientsQuery->where(function ($queryBuilder) use ($search) {
-                $queryBuilder->where('first_name', 'like', "%$search%")
-                    ->orWhere('last_name', 'like', "%$search%")
+                $queryBuilder->where('full_name', 'like', "%$search%")
                     ->orWhere('id_code', 'like', "%$search%")
                     ->orWhere('wife_name', 'like', "%$search%");
             });
         }
-        $clients = $clientsQuery->select(["first_name", "last_name", "id_code", "created_at", "phone", "id"])->paginate(12);
-        return Inertia::render('Clients', [
+        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "phone", "id"])->paginate(12);
+        return Inertia::render('clients/Clients', [
             'clients' => $clients,
         ]);
     }
-
+    public function show(Client $client){
+        return Inertia::render('clients/Clients', [
+            'client' => $client,
+        ]);
+    }
+    public function create()
+    {
+        return Inertia::render('clients/ClientsForm');
+    }
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'first_name' => 'required',
-            'last_name' => 'required',
+            'full_name' => 'required',
             "phone" => 'required',
             "id_code" => 'required',
             "id_photo_front" => 'required',
@@ -40,10 +46,10 @@ class ClientController extends Controller
             "wife_name" => 'required',
             "wife_phone" => 'required',
         ]);
-
-        Client::create($validated);
-        return to_route('users.index');
+        $client_created = Client::create($validated);
+        return redirect("/clients?search=" . $client_created['full_name']);
     }
+
 
     public function destroy(Request $request, Client $client)
     {
