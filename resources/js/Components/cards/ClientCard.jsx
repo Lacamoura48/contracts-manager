@@ -1,4 +1,5 @@
-import { router } from '@inertiajs/react';
+import { formatMoroccanDate } from '@/utils/functions';
+import { Link, router } from '@inertiajs/react';
 import { Pen, PhoneCall, Trash, UserCircle } from 'lucide-react';
 import { useState } from 'react';
 import Modal from '../Modal';
@@ -16,14 +17,18 @@ function ClientCard({ client }) {
                 <div className="flex items-center gap-2">
                     <UserCircle size={40} color="rgb(90,90,90)" />
                     <div>
-                        <h2 className="flex items-center gap-2 font-bold">
+                        <Link
+                            href={'/clients/' + client.id + '/show'}
+                            className="flex items-center gap-2 font-bold hover:underline"
+                        >
                             {client.full_name}
                             <span className="rounded-md bg-gray-200 px-3 py-1 text-sm font-bold">
                                 {client.id_code}
                             </span>
-                        </h2>
+                        </Link>
                         <p className="text-sm text-gray-400">
-                            أضيف يوم الأحد 4 ديسمبر 2024
+                            أضيف يوم{' '}
+                            {formatMoroccanDate(new Date(client.created_at))}
                         </p>
                     </div>
                 </div>
@@ -32,9 +37,12 @@ function ClientCard({ client }) {
                 </a>
             </div>
             <div className="flex justify-end gap-1 rounded-lg px-2">
-                <button className="flex w-full justify-center rounded-md bg-gray-900 px-3 py-2 lg:w-12">
+                <Link
+                    href={`/clients/${client.id}/edit`}
+                    className="flex w-full justify-center rounded-md bg-gray-900 px-3 py-2 lg:w-12"
+                >
                     <Pen color="white" size={20} />
-                </button>
+                </Link>
                 <button
                     onClick={() => setShowDelete(true)}
                     className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 lg:w-12"
