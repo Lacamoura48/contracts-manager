@@ -5,7 +5,7 @@ export default function Dashboard() {
     return (
         <AuthenticatedLayout>
             <InsideLayout headerTitle="الرئيسية">
-            You're logged in!
+                You're logged in!
             </InsideLayout>
         </AuthenticatedLayout>
     );

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ProfileController;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
@@ -20,7 +21,9 @@ Route::post('/clients/create', [ClientController::class, 'store'])->middleware([
 Route::get('/clients/{client}/edit', [ClientController::class, 'edit'])->middleware(['auth', 'verified'])->name('clients.edit');
 Route::patch('/clients/{client}/edit', [ClientController::class, 'update'])->middleware(['auth', 'verified'])->name('clients.update');
 Route::delete('/clients/{client}', [ClientController::class, 'destroy'])->middleware(['auth', 'verified'])->name('clients.destroy');
-
+Route::get('/api/user', function ()  {
+    return response()->json(["user"=> Auth::user()]);
+});
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');

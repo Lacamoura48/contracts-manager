@@ -23,7 +23,7 @@ function ClientCard({ client }) {
                         >
                             {client.full_name}
                             <span className="rounded-md bg-gray-200 px-3 py-1 text-sm font-bold">
-                                {client.id_code}
+                                {client.phone}
                             </span>
                         </Link>
                         <p className="text-sm text-gray-400">
