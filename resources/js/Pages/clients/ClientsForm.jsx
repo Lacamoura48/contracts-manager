@@ -8,6 +8,8 @@ import { formatIdCode } from '@/utils/functions';
 import { useForm } from '@inertiajs/react';
 function ClientsForm(props) {
     const client = props.client;
+    console.log(props.errors);
+
     const initialValues = client
         ? {
               full_name: client.full_name,
@@ -16,6 +18,7 @@ function ClientsForm(props) {
               address: client.address,
               wife_name: client.wife_name,
               wife_phone: client.wife_phone,
+              _method: 'PATCH',
           }
         : {
               full_name: '',
@@ -42,9 +45,7 @@ function ClientsForm(props) {
     const submit = (e) => {
         e.preventDefault();
         if (client) {
-            patch(route('clients.update', client.id), {
-                forceFormData: true,
-            });
+            post(route('clients.update', client.id));
         } else {
             post(route('clients.store'), {
                 forceFormData: true,

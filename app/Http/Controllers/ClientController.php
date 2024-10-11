@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
 class ClientController extends Controller
@@ -62,28 +63,57 @@ class ClientController extends Controller
         $client_created = Client::create($validated);
         return redirect("/clients/" . $client_created['id'] . "/show");
     }
-    public function edit(Client $client){
+    public function edit(Client $client)
+    {
         return Inertia::render('clients/ClientsForm', [
             'client' => $client,
         ]);
     }
-    public function update(Request $request, Client $client){
+    public function update(Request $request, Client $client)
+    {
+
         $validated = $request->validate([
             'full_name' => 'required',
             "phone" => 'required',
             "id_code" => 'required',
-            "id_photo_front" => 'required',
-            "id_photo_back" => 'required',
+            "id_photo_front" => 'nullable',
+            "id_photo_back" => 'nullable',
             "address" => 'required',
             "wife_name" => 'required',
             "wife_phone" => 'required',
         ]);
+        if ($request->file('id_photo_front')) {
+            $front_path = $this->saveImage($request->file('id_photo_front'));
+            if (File::exists(substr($client->id_photo_front, 1))) {
+                File::delete(substr($client->id_photo_front, 1));
+            }
+            $validated['id_photo_front'] = $front_path;
+        } else {
+            $validated['id_photo_front'] = $client['id_photo_front'];
+        }
+
+        if ($request->file('id_photo_back')) {
+            $back_path = $this->saveImage($request->file('id_photo_back'));
+            if (File::exists(substr($client->id_photo_back, 1))) {
+                File::delete(substr($client->id_photo_back, 1));
+            }
+            $validated['id_photo_back'] = $back_path;
+        } else {
+            $validated['id_photo_back'] = $client['id_photo_back'];
+        }
         $client->update($validated);
+        return redirect("/clients/" . $client['id'] . "/show");
     }
 
 
     public function destroy(Request $request, Client $client)
     {
+        if (File::exists(substr($client->id_photo_front, 1))) {
+            File::delete(substr($client->id_photo_front, 1));
+        }
+        if (File::exists(substr($client->id_photo_back, 1))) {
+            File::delete(substr($client->id_photo_back, 1));
+        }
         $client->delete();
     }
 }

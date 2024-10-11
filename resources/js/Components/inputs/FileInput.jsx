@@ -18,8 +18,9 @@ function FileInput(props) {
                         <img
                             className="h-full w-full object-contain"
                             src={
-                                props.defaultImage ||
-                                URL.createObjectURL(props.imageSelected)
+                                props.imageSelected
+                                    ? URL.createObjectURL(props.imageSelected)
+                                    : props.defaultImage
                             }
                             alt="image selected"
                         />

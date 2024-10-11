@@ -1,4 +1,4 @@
-import{j as e,Y as r,a}from"./app-BgkO7Lrd.js";import{c}from"./AuthenticatedLayout-DdWDjtOw.js";/**
+import{j as e,Y as r,a}from"./app-BCmrr3BS.js";import{c}from"./AuthenticatedLayout-TmU5YNhO.js";/**
  * @license lucide-react v0.447.0 - ISC
  *
  * This source code is licensed under the ISC license.
