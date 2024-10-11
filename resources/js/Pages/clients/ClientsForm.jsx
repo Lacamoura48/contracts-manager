@@ -132,7 +132,9 @@ function ClientsForm(props) {
                         />
                     </div>
                     <div>
-                        <SubmitButton loading={processing}>إرسال</SubmitButton>
+                        <SubmitButton loading={processing}>
+                            {client ? 'تحديث' : 'إرسال'}
+                        </SubmitButton>
                     </div>
                 </form>
             </InsideLayout>
