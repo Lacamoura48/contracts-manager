@@ -16,7 +16,7 @@ export default function ClientPage({ client }) {
                         icon: Undo2,
                     },
                     {
-                        label: 'إنشاء قرض',
+                        label: 'إنشاء عقد',
                         url: `/contracts/create?client_id=${client.id}`,
                         icon: PlusCircle,
                     },

@@ -50,10 +50,10 @@ function ContractsForm(props) {
     return (
         <AuthenticatedLayout>
             <InsideLayout
-                headerTitle="إضافة قرض جديد"
+                headerTitle="إضافة عقد جديد"
                 headerLink={[
                     {
-                        label: 'رجوع إلى قائمة زبناء',
+                        label: 'رجوع إلى قائمة العقود',
                         url: route('contracts.index'),
                         icon: Undo2,
                     },

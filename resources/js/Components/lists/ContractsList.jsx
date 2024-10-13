@@ -11,7 +11,7 @@ function ContractsList({ contracts }) {
                 <tr className="w-full border-b-2 border-b-black">
                     <th
                         scope="col"
-                        className="small:text-xs me-5 pb-4 text-start text-base"
+                        className="small:text-xs me-5 hidden pb-4 text-start text-base md:block"
                     >
                         الحالة
                     </th>
@@ -39,7 +39,7 @@ function ContractsList({ contracts }) {
                 {contracts.data.map((line) => {
                     return (
                         <tr key={line.id}>
-                            <td className="small:text-xs me-5 border-b py-4 text-start">
+                            <td className="small:text-xs me-5 hidden border-b py-4 text-start md:block">
                                 <Circle />
                             </td>
                             <td className="small:text-xs me-5 border-b py-4 text-start">
@@ -50,7 +50,7 @@ function ContractsList({ contracts }) {
                                     new Date(line.bonds[0].payement_date),
                                 )}
                             </td>
-                            <td className="small:text-xs me-5 border-b py-4 text-start">
+                            <td className="small:text-xs me-5 w-28 border-b py-4 text-start md:w-44 lg:w-72">
                                 <ContractBondsLine bonds={line.bonds} />
                             </td>
                         </tr>
