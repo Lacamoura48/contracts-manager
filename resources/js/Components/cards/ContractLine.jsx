@@ -1,8 +1,10 @@
 import React from 'react'
 
-function ContractLine() {
+function ContractLine({contract}) {
   return (
-    <div>ContractLine</div>
+    <div>
+      
+    </div>
   )
 }
 

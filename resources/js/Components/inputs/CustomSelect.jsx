@@ -1,4 +1,4 @@
-function CustomInput(props) {
+function CustomSelect(props) {
     return (
         <div className={`relative ${props.width ?? 'w-full'}`}>
             <label className="mb-1 block text-black" htmlFor={props.id}>
@@ -9,15 +9,17 @@ function CustomInput(props) {
                     {props.icon}
                 </div>
             )}
-            <input
+            <select
                 {...props}
                 className={`w-full border-none px-2 py-2 placeholder:text-gray-400 focus:ring-black ${
                     props.error ? 'bg-red-100' : 'bg-gray-100'
                 } placeholder:text-placeholder rounded-lg ${props.icon && 'pr-11'}`}
-            />
+            >
+                {props.children}
+            </select>
             <span className="text-xs text-red-600">{props.error}</span>
         </div>
     );
 }
 
-export default CustomInput;
+export default CustomSelect;

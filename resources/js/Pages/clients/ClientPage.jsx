@@ -1,33 +1,54 @@
+import ClientPDFButton from '@/Components/buttons/ClientPDFButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatMoroccanDate } from '@/utils/functions';
+import { Phone, PlusCircle, Undo2 } from 'lucide-react';
 
 export default function ClientPage({ client }) {
     return (
         <AuthenticatedLayout>
             <InsideLayout
                 headerTitle={client.full_name}
-                headerLink={{
-                    label: 'رجوع إلى قائمة زبناء',
-                    url: '/clients',
-                }}
+                headerLink={[
+                    {
+                        label: 'رجوع إلى قائمة زبناء',
+                        url: '/clients',
+                        icon: Undo2,
+                    },
+                    {
+                        label: 'إنشاء قرض',
+                        url: `/contracts/create?client_id=${client.id}`,
+                        icon: PlusCircle,
+                    },
+                ]}
             >
                 <div className="max-w-2xl">
                     <p className="mb-4 text-center text-sm text-gray-400 md:text-start">
                         أضيف يوم{' '}
                         {formatMoroccanDate(new Date(client.created_at))}
                     </p>
-                    <p className="mx-auto w-fit rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0">
-                        {client.id_code}
+                    <p className="mx-auto flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0">
+                        <Phone size={20} /> {client.phone}
                     </p>
-                    <hr className="my-8" />
+                    <div className="mt-6 flex justify-center">
+                        <ClientPDFButton client={client} />
+                    </div>
+                    <hr className="my-5" />
                     <table className="mx-auto max-w-full md:mx-0">
                         <tr>
                             <th className="w-1/2 px-2 py-4 text-right">
-                                رقم الهاتف
+                                رقم واتساب
                             </th>
                             <td className="w-1/2 px-2 text-left">
-                                {client.phone}
+                                {client.phone2}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th className="w-1/2 px-2 py-4 text-right">
+                                رقم الهوية
+                            </th>
+                            <td className="w-1/2 px-2 text-left">
+                                {client.id_code}
                             </td>
                         </tr>
                         <tr>

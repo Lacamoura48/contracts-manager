@@ -10,7 +10,7 @@ function FileInput(props) {
                 {...props}
             />
             <label
-                className={`group flex aspect-square max-h-32 w-full cursor-pointer ${props.imageSelected || props.defaultImage ? '' : 'flex-col items-center justify-center'} gap-2 rounded-2xl border-4 border-[rgb(200,200,200)] text-gray-600 md:max-h-44`}
+                className={`group flex aspect-square max-h-32 w-full cursor-pointer ${props.imageSelected || props.defaultImage ? '' : 'flex-col items-center justify-center'} gap-2 rounded-2xl border-4 ${props.error ? 'border-red-100 text-red-600' : 'border-[rgb(200,200,200)] text-gray-600'} md:max-h-44`}
                 htmlFor={props.id}
             >
                 {props.imageSelected || props.defaultImage ? (
@@ -27,8 +27,11 @@ function FileInput(props) {
                     </div>
                 ) : (
                     <>
-                        <FileUp size={60} color="rgb(200,200,200)" />
-                        <span>{props.label}</span>
+                        <FileUp
+                            size={60}
+                            color={props.error ? 'red' : 'rgb(200,200,200)'}
+                        />
+                        <span>{props.error || props.label}</span>
                     </>
                 )}
             </label>

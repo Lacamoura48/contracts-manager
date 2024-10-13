@@ -11,15 +11,21 @@ export default function InsideLayout({ children, headerTitle, headerLink }) {
                         <h1 className="text-center text-4xl font-bold md:text-start md:text-5xl">
                             {headerTitle}
                         </h1>
-                        {headerLink && (
-                            <Link
-                                href={headerLink.url}
-                                className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
-                            >
-                                <PlusCircle className="ml-2 inline" />
-                                {headerLink.label}
-                            </Link>
-                        )}
+                        <div className="flex flex-wrap gap-2">
+                            {headerLink &&
+                                headerLink.map((hLink) => {
+                                    return (
+                                        <Link
+                                            key={hLink.label}
+                                            href={hLink.url}
+                                            className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
+                                        >
+                                            <hLink.icon className="ml-2 inline" />
+                                            {hLink.label}
+                                        </Link>
+                                    );
+                                })}
+                        </div>
                     </div>
 
                     <div className="bg-white shadow-sm sm:rounded-lg">

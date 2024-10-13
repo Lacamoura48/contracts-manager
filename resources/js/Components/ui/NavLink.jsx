@@ -8,7 +8,7 @@ function NavLink({ showHandler, link, label, subLink, icon }) {
             className={`${isCurrentLink ? 'bg-primary text-secondary' : 'bg-secondary text-primary hover:bg-muted'} ${
                 subLink ? 'py-1 pl-6 pr-2' : 'px-2 py-2 font-medium'
             } group mb-2 flex w-full items-center gap-3 rounded-md text-sm text-white`}
-            href={'/' + link}
+            href={route(link)}
         >
             <span
                 className={`${isCurrentLink ? 'h-4' : 'h-1'} w-1 rounded-full bg-white transition-all group-hover:h-4`}

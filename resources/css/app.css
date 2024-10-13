@@ -4,7 +4,7 @@
 
 @font-face {
     font-family: 'Rubik';
-    src: url('fonts/rubik.ttf') format('truetype');
+    src: url('/fonts/rubik.ttf') format('truetype');
 }
 
 html {

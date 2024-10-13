@@ -1,7 +1,7 @@
 import SearchFilter from '../inputs/SearchFilter';
 import PrimaryButton from '../PrimaryButton';
 
-function FilterSection({ onFilter }) {
+function FilterSection() {
     const queryParams = new URLSearchParams(window.location.search);
     return (
         <div className="mb-5 py-3">

@@ -6,6 +6,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatIdCode } from '@/utils/functions';
 import { useForm } from '@inertiajs/react';
+import { Undo2 } from 'lucide-react';
 function ClientsForm(props) {
     const client = props.client;
     console.log(props.errors);
@@ -14,6 +15,7 @@ function ClientsForm(props) {
         ? {
               full_name: client.full_name,
               phone: client.phone,
+              phone2: client.phone2,
               id_code: client.id_code,
               address: client.address,
               wife_name: client.wife_name,
@@ -23,12 +25,13 @@ function ClientsForm(props) {
         : {
               full_name: '',
               phone: '',
+              phone2: '',
               id_code: '',
               address: '',
               wife_name: '',
               wife_phone: '',
           };
-    const { data, setData, post, patch, processing, errors, reset } = useForm({
+    const { data, setData, post, processing, errors } = useForm({
         ...initialValues,
         id_photo_front: null,
         id_photo_back: null,
@@ -54,7 +57,16 @@ function ClientsForm(props) {
     };
     return (
         <AuthenticatedLayout>
-            <InsideLayout headerTitle="إضافة زبون جديد">
+            <InsideLayout
+                headerTitle="إضافة زبون جديد"
+                headerLink={[
+                    {
+                        label: 'رجوع إلى قائمة زبناء',
+                        url: '/clients',
+                        icon: Undo2,
+                    },
+                ]}
+            >
                 <form onSubmit={submit} className="max-w-2xl py-8">
                     <div className="mb-4 flex gap-3">
                         <CustomInput
@@ -63,25 +75,37 @@ function ClientsForm(props) {
                             label="الاسم الكامل"
                             name="full_name"
                             id="clients-full_name"
+                            error={errors.full_name}
                         />
-                    </div>
-                    <div className="mb-8 flex gap-3">
                         <CustomInput
                             label="رقم الهوية"
                             name="id_code"
                             defaultValue={data.id_code}
                             id="clients-id_code"
                             value={data.id_code}
+                            error={errors.id_code}
                             onChange={(e) =>
                                 setData('id_code', formatIdCode(e.target.value))
                             }
                         />
+                    </div>
+                    <div className="mb-8 flex gap-3">
                         <CustomInput
                             label="رقم الهاتف"
                             name="phone"
                             defaultValue={data.phone}
                             onChange={handleOnChange}
+                            error={errors.phone}
                             id="clients-phone"
+                        />
+                        <CustomInput
+                            label="رقم واتساب"
+                            name="phone2"
+                            placeholder="اختياري"
+                            defaultValue={data.phone2}
+                            error={errors.phone2}
+                            onChange={handleOnChange}
+                            id="clients-phone2"
                         />
                     </div>
                     <div className="mb-4 flex gap-3">
@@ -91,6 +115,7 @@ function ClientsForm(props) {
                             label="صورة الهوية (وجه)"
                             imageSelected={data.id_photo_front}
                             defaultImage={client?.id_photo_front}
+                            error={errors.id_photo_front}
                             onChange={(e) =>
                                 setData('id_photo_front', e.target.files[0])
                             }
@@ -101,6 +126,7 @@ function ClientsForm(props) {
                             label="صورة الهوية (ظهر)"
                             imageSelected={data.id_photo_back}
                             defaultImage={client?.id_photo_back}
+                            error={errors.id_photo_back}
                             onChange={(e) =>
                                 setData('id_photo_back', e.target.files[0])
                             }
@@ -113,6 +139,7 @@ function ClientsForm(props) {
                             onChange={handleOnChange}
                             defaultValue={data.address}
                             label="العنوان"
+                            placeholder="اختياري"
                         />
                     </div>
                     <div className="mb-8 flex gap-3">
@@ -122,6 +149,7 @@ function ClientsForm(props) {
                             onChange={handleOnChange}
                             defaultValue={data.wife_name}
                             id="clients-wife_name"
+                            placeholder="اختياري"
                         />
                         <CustomInput
                             label="رقم هاتف الزوجة"
@@ -129,6 +157,7 @@ function ClientsForm(props) {
                             id="clients-wife_phone"
                             defaultValue={data.wife_phone}
                             onChange={handleOnChange}
+                            placeholder="اختياري"
                         />
                     </div>
                     <div>

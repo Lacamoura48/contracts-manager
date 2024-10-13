@@ -1,6 +1,6 @@
 import { formatMoroccanDate } from '@/utils/functions';
 import { Link, router } from '@inertiajs/react';
-import { Pen, PhoneCall, Trash, UserCircle } from 'lucide-react';
+import { Pen, Phone, Trash, UserCircle } from 'lucide-react';
 import { useState } from 'react';
 import Modal from '../Modal';
 import PrimaryButton from '../PrimaryButton';
@@ -14,17 +14,14 @@ function ClientCard({ client }) {
     return (
         <div className="rounded-lg border border-gray-400 bg-gray-100 p-3">
             <div className="mb-8 flex justify-between">
-                <div className="flex items-center gap-2">
+                <div className="flex w-1/2 items-center gap-2">
                     <UserCircle size={40} color="rgb(90,90,90)" />
                     <div>
                         <Link
-                            href={'/clients/' + client.id + '/show'}
-                            className="flex items-center gap-2 font-bold hover:underline"
+                            href={route('clients.show', client.id)}
+                            className="font-bold hover:underline"
                         >
                             {client.full_name}
-                            <span className="rounded-md bg-gray-200 px-3 py-1 text-sm font-bold">
-                                {client.phone}
-                            </span>
                         </Link>
                         <p className="text-sm text-gray-400">
                             أضيف يوم{' '}
@@ -32,8 +29,11 @@ function ClientCard({ client }) {
                         </p>
                     </div>
                 </div>
-                <a href={`tel:${client.phone}`}>
-                    <PhoneCall color="black" size={25} />
+                <a
+                    href={`tel:${client.phone}`}
+                    className="flex h-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-2 py-1 text-sm font-medium"
+                >
+                    <Phone size={18} /> {client.phone}
                 </a>
             </div>
             <div className="flex justify-end gap-1 rounded-lg px-2">

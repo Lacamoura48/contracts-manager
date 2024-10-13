@@ -53,12 +53,17 @@ function SideBar({ open, openHandler }) {
                             label="الرئيسية"
                             icon={<Home size={22} />}
                         />
-
                         <NavLink
                             showHandler={() => setShown(false)}
-                            link={'clients'}
+                            link={'clients.index'}
                             label="الزبناء"
                             icon={<Users size={22} />}
+                        />
+                        <NavLink
+                            showHandler={() => setShown(false)}
+                            link={'contracts.index'}
+                            label="العقود"
+                            icon={<ScrollText size={22} />}
                         />
 
                         {/* <NavlinksContainer
@@ -111,7 +116,7 @@ function SideBar({ open, openHandler }) {
                 </Link>
                 <Link
                     className={`${route().current('contracts') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5`}
-                    href="#"
+                    href="/contracts"
                 >
                     <ScrollText
                         size={25}

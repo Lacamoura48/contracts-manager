@@ -5,12 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Client extends Model
+class Bond extends Model
 {
     use HasFactory;
+
     protected $guarded = [];
 
-    public function contracts() {
-        $this->hasMany(Contract::class);
+    public function contract() {
+        return $this->belongsTo(Contract::class);
     }
 }

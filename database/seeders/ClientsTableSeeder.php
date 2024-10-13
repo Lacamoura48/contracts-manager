@@ -21,6 +21,7 @@ class ClientsTableSeeder extends Seeder
             DB::table('clients')->insert([
                 'full_name' => $faker->userName,
                 'phone' => $faker->phoneNumber,
+                'phone2' => $faker->phoneNumber,
                 'id_code' => $faker->unique()->numerify('ID#######'),
                 'id_photo_front' => $faker->imageUrl(640, 480, 'people', true, 'ID Front'),
                 'id_photo_back' => $faker->imageUrl(640, 480, 'people', true, 'ID Back'),

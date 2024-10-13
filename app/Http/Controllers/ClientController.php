@@ -18,13 +18,15 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         $search = $request->get("search");
-
         $clientsQuery = Client::query();
         if ($search) {
             $clientsQuery->where(function ($queryBuilder) use ($search) {
                 $queryBuilder->where('full_name', 'like', "%$search%")
                     ->orWhere('id_code', 'like', "%$search%")
-                    ->orWhere('wife_name', 'like', "%$search%");
+                    ->orWhere('wife_name', 'like', "%$search%")
+                    ->orWhere('phone', 'like', "%$search%")
+                    ->orWhere('phone2', 'like', "%$search%")
+                    ->orWhere('address', 'like', "%$search%");
             });
         }
         $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "phone", "id"])->paginate(12);
@@ -47,12 +49,13 @@ class ClientController extends Controller
         $validated = $request->validate([
             'full_name' => 'required',
             "phone" => 'required',
-            "id_code" => 'required',
+            "phone2" => 'nullable',
+            "id_code" => 'required|max:18|min:18',
             "id_photo_front" => 'required',
             "id_photo_back" => 'required',
-            "address" => 'required',
-            "wife_name" => 'required',
-            "wife_phone" => 'required',
+            "address" => 'nullable',
+            "wife_name" => 'nullable',
+            "wife_phone" => 'nullable',
         ]);
 
         $front_path = $this->saveImage($request->file('id_photo_front'));
@@ -61,7 +64,7 @@ class ClientController extends Controller
         $validated['id_photo_front'] = $front_path;
         $validated['id_photo_back'] = $back_path;
         $client_created = Client::create($validated);
-        return redirect("/clients/" . $client_created['id'] . "/show");
+        return redirect("/clients/" . $client_created['id']);
     }
     public function edit(Client $client)
     {
@@ -75,12 +78,13 @@ class ClientController extends Controller
         $validated = $request->validate([
             'full_name' => 'required',
             "phone" => 'required',
-            "id_code" => 'required',
+            "phone2" => 'nullable',
+            "id_code" => 'required|max:18|min:18',
             "id_photo_front" => 'nullable',
             "id_photo_back" => 'nullable',
-            "address" => 'required',
-            "wife_name" => 'required',
-            "wife_phone" => 'required',
+            "address" => 'nullable',
+            "wife_name" => 'nullable',
+            "wife_phone" => 'nullable',
         ]);
         if ($request->file('id_photo_front')) {
             $front_path = $this->saveImage($request->file('id_photo_front'));
@@ -102,9 +106,29 @@ class ClientController extends Controller
             $validated['id_photo_back'] = $client['id_photo_back'];
         }
         $client->update($validated);
-        return redirect("/clients/" . $client['id'] . "/show");
+        return redirect("/clients/" . $client['id']);
     }
-
+    public function autocomplete(Request $request)
+    {
+        $search = $request->get('q');
+        $client_id = $request->get('id');
+        $clientsQuery = Client::query();
+        if ($client_id) {
+            $clientsQuery->where('id', $client_id);
+        }
+        if ($search) {
+            $clientsQuery->where(function ($queryBuilder) use ($search) {
+                $queryBuilder->where('full_name', 'like', "%$search%")
+                    ->orWhere('id_code', 'like', "%$search%")
+                    ->orWhere('wife_name', 'like', "%$search%")
+                    ->orWhere('phone', 'like', "%$search%")
+                    ->orWhere('phone2', 'like', "%$search%")
+                    ->orWhere('address', 'like', "%$search%");
+            });
+        }
+        $clients = $clientsQuery->select(["full_name", "id"])->paginate(6);
+        return response()->json($clients);
+    }
 
     public function destroy(Request $request, Client $client)
     {

@@ -3,6 +3,8 @@ import ClientCard from '../cards/ClientCard';
 import Pagination from '../pagination/Pagination';
 
 function ClientsList({ clients }) {
+    console.log(clients);
+    
     return (
         <>
             {clients?.data?.length ? (
