@@ -1,0 +1,1 @@
+import{j as r}from"./app-DT-ZfShl.js";import{A as e}from"./AuthenticatedLayout-DFRDrKh6.js";import{I as t}from"./InsideLayout-DZXVSJWy.js";function s(){return r.jsx(e,{children:r.jsx(t,{headerTitle:"الرئيسية",children:"You're logged in!"})})}export{s as default};

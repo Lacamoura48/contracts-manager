@@ -68,14 +68,18 @@ function BondLine({ bond, current, lastBond }) {
         );
     }
     function delayBond() {
-        router.patch(`/bonds/${bond.id}/delay`, null, {
-            onStart: () => setShow(false),
-        });
+        router.post(
+            `/bonds/${bond.id}/delay`,
+            { _method: 'PATCH' },
+            {
+                onStart: () => setShow(false),
+            },
+        );
     }
     function partPayement() {
-        router.patch(
+        router.post(
             `/bonds/${bond.id}/part`,
-            { amount_paid: amountPaid },
+            { amount_paid: amountPaid, _method: 'PATCH' },
             {
                 onStart: () => setShow(false),
             },
