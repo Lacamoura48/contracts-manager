@@ -58,10 +58,11 @@ function BondLine({ bond, current, lastBond }) {
     const [show, setShow] = useState(false);
     const [amountPaid, setAmountPaid] = useState();
     function markBondAsPaid() {
-        router.patch(
+        router.post(
             `/bonds/${bond.id}`,
             {
                 status: bond.status == 'paid' ? '' : 'paid',
+                _method: 'PATCH',
             },
             { onStart: () => setShow(false) },
         );
