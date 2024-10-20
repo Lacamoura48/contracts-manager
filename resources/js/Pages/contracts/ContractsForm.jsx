@@ -130,7 +130,7 @@ function ContractsForm(props) {
                                     key={dof}
                                     name={`proof${dof + 1}`}
                                     id={`contract-proof-${dof + 1}`}
-                                    label={`file proof ${dof + 1}`}
+                                    label={`إثبات الدفعة ${dof + 1}`}
                                     imageSelected={data[`proof${dof + 1}`]}
                                     defaultImage={
                                         contract?.bonds[dof].proof_image
