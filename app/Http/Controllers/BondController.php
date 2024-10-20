@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Bond;
+use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class BondController extends Controller
 {
@@ -47,12 +49,76 @@ class BondController extends Controller
         //
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
+    public function saveImage($image)
+    {
+        $filename = uniqid('bi_') . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images/bi'), $filename);
+        return '/images/bi/' . $filename;
+    }
     public function update(Request $request, Bond $bond)
     {
-        //
+        $data = [];
+        $path = null;
+        if ($request->hasFile('proof_image')) {
+            if (File::exists(substr($bond->proof_image, 1))) {
+                File::delete(substr($bond->proof_image, 1));
+            }
+            $path =  $this->saveImage($request->file("proof_image"));
+            $data['proof_image'] = $path;
+        }
+        if ($request->has('status')) {
+            $data['status'] = $request->get('status');
+        }
+        $bond->update($data);
+    }
+
+    public function delay(Request $request, Bond $bond)
+    {
+        $bonds = Bond::where('contract_id', $bond["contract_id"])->get();
+        $found = false;
+        // $amount = $request->get('amount_paid')
+
+        foreach ($bonds as $currentBond) {
+            if ($found) {
+                $bondDate = Carbon::createFromFormat('Y-m-d', $currentBond->payement_date);
+                $currentBond->payement_date = $bondDate->addMonth();
+                // if ($amount > 0) {
+                //     $currentBond->amount = $currentBond->amount + $amount;
+                //     $amount = 0;
+                // }
+                $currentBond->save(); // Save the updated bond
+            }
+
+            // Check if the current bond matches the provided bond
+            if ($currentBond->id === $bond->id) {
+                $bondDate = Carbon::createFromFormat('Y-m-d', $currentBond->payement_date);
+                $currentBond->payement_date = $bondDate->copy()->addMonth()->firstOfMonth();
+                $currentBond->save(); // Save the updated bond
+                $found = true;
+            }
+        }
+    }
+    public function part(Request $request, Bond $bond)
+    {
+        $bonds = Bond::where('contract_id', $bond["contract_id"])->get();
+        $found = false;
+        $amount = $request->get('amount_paid');
+
+        foreach ($bonds as $currentBond) {
+            if ($found !== false) {
+                $currentBond->amount = $currentBond->amount + $found - $amount;
+                $currentBond->save(); // Save the updated bond
+                $found = false;
+            }
+
+            // Check if the current bond matches the provided bond
+            if ($currentBond->id === $bond->id) {
+                $found = $currentBond->amount;
+                $currentBond->amount = $amount;
+                $currentBond->status = "paid";
+                $currentBond->save(); // Save the updated bond
+            }
+        }
     }
 
     /**

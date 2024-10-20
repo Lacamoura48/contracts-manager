@@ -2,9 +2,11 @@ import { autocompleteFetch } from '@/actions/autocomplete';
 import AutocompleteInput from '@/Components/inputs/autocomplete/Autocomplete';
 import CustomInput from '@/Components/inputs/CustomInput';
 import CustomSelect from '@/Components/inputs/CustomSelect';
+import FileInput from '@/Components/inputs/FileInput';
 import SubmitButton from '@/Components/SubmitButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
+import { formatFilterDate } from '@/utils/functions';
 import { useForm } from '@inertiajs/react';
 import { PlusCircle, Undo2 } from 'lucide-react';
 function ContractsForm(props) {
@@ -16,18 +18,19 @@ function ContractsForm(props) {
               client_id: contract.client_id,
               total_price: contract.total_price,
               contract_type: contract.contract_type,
+              start_date: contract.start_date,
               _method: 'PATCH',
           }
         : {
               client_id: queryParams.get('client_id') || '',
               total_price: '',
               contract_type: '',
+              start_date: formatFilterDate(new Date()),
           };
 
     const { data, setData, post, processing, errors } = useForm({
         ...initialValues,
     });
-    console.log(data);
 
     const handleOnChange = (event) => {
         setData(
@@ -47,6 +50,8 @@ function ContractsForm(props) {
             });
         }
     };
+    console.log(+data.contract_type);
+
     return (
         <AuthenticatedLayout>
             <InsideLayout
@@ -107,8 +112,39 @@ function ContractsForm(props) {
                             <option value={10}>10 دفعات</option>
                             <option value={12}>12 دفعات</option>
                         </CustomSelect>
+                        <CustomInput
+                            type="date"
+                            label="تاريخ أول دفعة"
+                            min={formatFilterDate(new Date())}
+                            onChange={handleOnChange}
+                            defaultValue={data.start_date}
+                            name="start_date"
+                            id="contracts-start_date"
+                            error={errors.start_date}
+                        />
                     </div>
-
+                    <div className="my-8 grid grid-cols-2 gap-3">
+                        {[...Array(+data.contract_type).keys()].map((dof) => {
+                            return (
+                                <FileInput
+                                    key={dof}
+                                    name={`proof${dof + 1}`}
+                                    id={`contract-proof-${dof + 1}`}
+                                    label={`file proof ${dof + 1}`}
+                                    imageSelected={data[`proof${dof + 1}`]}
+                                    defaultImage={
+                                        contract?.bonds[dof].proof_image
+                                    }
+                                    onChange={(e) =>
+                                        setData(
+                                            `proof${dof + 1}`,
+                                            e.target.files[0],
+                                        )
+                                    }
+                                />
+                            );
+                        })}
+                    </div>
                     <div>
                         <SubmitButton loading={processing}>
                             {contract ? 'تحديث' : 'إرسال'}

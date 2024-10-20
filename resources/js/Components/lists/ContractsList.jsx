@@ -1,23 +1,19 @@
-import { formatMoroccanDate } from '@/utils/functions';
-import { Circle } from 'lucide-react';
-import ContractBondsLine from '../ContractBondsLine';
+import ContractLine from '../cards/ContractLine';
 
 function ContractsList({ contracts }) {
-    console.log(contracts.data);
-
     return (
         <table className="mt-12 w-full">
             <thead>
                 <tr className="w-full border-b-2 border-b-black">
                     <th
                         scope="col"
-                        className="small:text-xs me-5 hidden pb-4 text-start text-base md:block"
+                        className="small:text-xs hidden pb-4 text-start text-base md:block"
                     >
                         الحالة
                     </th>
                     <th
                         scope="col"
-                        className="small:text-xs me-5 pb-4 text-start"
+                        className="small:text-xs me-5 pb-4 pr-10 text-start"
                     >
                         اسم الزبون
                     </th>
@@ -37,24 +33,7 @@ function ContractsList({ contracts }) {
             </thead>
             <tbody>
                 {contracts.data.map((line) => {
-                    return (
-                        <tr key={line.id}>
-                            <td className="small:text-xs me-5 hidden border-b py-4 text-start md:block">
-                                <Circle />
-                            </td>
-                            <td className="small:text-xs me-5 border-b py-4 text-start">
-                                {line.client.full_name}
-                            </td>
-                            <td className="small:text-xs me-5 border-b py-4 text-start">
-                                {formatMoroccanDate(
-                                    new Date(line.bonds[0].payement_date),
-                                )}
-                            </td>
-                            <td className="small:text-xs me-5 w-28 border-b py-4 text-start md:w-44 lg:w-72">
-                                <ContractBondsLine bonds={line.bonds} />
-                            </td>
-                        </tr>
-                    );
+                    return <ContractLine key={line.id} contract={line} />;
                 })}
             </tbody>
         </table>

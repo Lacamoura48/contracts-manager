@@ -1,10 +1,8 @@
-import { MessageCircleWarning } from 'lucide-react';
 import ClientCard from '../cards/ClientCard';
 import Pagination from '../pagination/Pagination';
+import EmptyList from './EmptyList';
 
 function ClientsList({ clients }) {
-    console.log(clients);
-    
     return (
         <>
             {clients?.data?.length ? (
@@ -22,10 +20,7 @@ function ClientsList({ clients }) {
                     </div>
                 </>
             ) : (
-                <p className="flex flex-col items-center justify-center gap-3 py-8 text-center text-3xl text-gray-600">
-                    <MessageCircleWarning size={100} />
-                    لا يوجد أي زبائن
-                </p>
+                <EmptyList model="زبائن" />
             )}
         </>
     );

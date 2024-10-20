@@ -11,7 +11,6 @@ function ContractsFilterSection() {
         e.preventDefault();
         router.get(route('contracts.index'), { ...filters });
     };
-    console.log(queryParams.get('q'));
 
     return (
         <div className="mb-5 py-3">
@@ -25,10 +24,10 @@ function ContractsFilterSection() {
                     dataFunction={async (fetchParams) =>
                         autocompleteFetch('clients', fetchParams)
                     }
-                    defaultValue={queryParams.get('q')}
+                    defaultValue={queryParams.get('client_id')}
                     choiceHandler={(choice) =>
                         setFilters((p) => {
-                            return { ...p, q: choice };
+                            return { ...p, client_id: choice };
                         })
                     }
                     listItemAtributeName={'full_name'}

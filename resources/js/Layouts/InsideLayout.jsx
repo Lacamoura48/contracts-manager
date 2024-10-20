@@ -1,5 +1,5 @@
-import { Head, Link } from '@inertiajs/react';
-import { PlusCircle } from 'lucide-react';
+import CustomLink from '@/Components/buttons/CustomLink';
+import { Head } from '@inertiajs/react';
 
 export default function InsideLayout({ children, headerTitle, headerLink }) {
     return (
@@ -15,14 +15,12 @@ export default function InsideLayout({ children, headerTitle, headerLink }) {
                             {headerLink &&
                                 headerLink.map((hLink) => {
                                     return (
-                                        <Link
+                                        <CustomLink
                                             key={hLink.label}
                                             href={hLink.url}
-                                            className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
-                                        >
-                                            <hLink.icon className="ml-2 inline" />
-                                            {hLink.label}
-                                        </Link>
+                                            Icon={hLink.icon}
+                                            label={hLink.label}
+                                        />
                                     );
                                 })}
                         </div>

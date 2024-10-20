@@ -5,7 +5,6 @@ function Pagination({ data }) {
     return (
         <div className="flex flex-row-reverse">
             {data?.links.map((link, index) => {
-                console.log(index, data.links.length);
 
                 if (index === 0)
                     return (

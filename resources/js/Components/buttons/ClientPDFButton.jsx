@@ -51,13 +51,16 @@ const styles = StyleSheet.create({
         fontSize: 12,
         fontWeight: 'bold',
         color: '#000',
-        marginBottom: 5,
     },
     value: {
         fontSize: 12,
-        textAlign: 'right',
         color: '#555',
-        marginBottom: 10,
+    },
+    flexBetween: {
+        display: 'flex',
+        flexDirection: 'row-reverse',
+        justifyContent: 'space-between',
+        marginBottom: 16,
     },
     imageSection: {
         textAlign: 'center',
@@ -103,20 +106,28 @@ const ClientPDFDocument = ({ client }) => (
             {/* WhatsApp, ID, and Wife's Information */}
             <View style={styles.section}>
                 <Text style={styles.heading}>تفاصيل إضافية</Text>
-                <Text style={styles.label}>رقم الواتساب</Text>
-                <Text style={styles.value}>{client.phone2 || 'غير متوفر'}</Text>
-
-                <Text style={styles.label}>رقم الهوية</Text>
-                <Text style={styles.value}>{client.id_code}</Text>
-
-                <Text style={styles.label}>اسم الزوجة</Text>
-                <Text style={styles.value}>{client.wife_name}</Text>
-
-                <Text style={styles.label}>هاتف الزوجة</Text>
-                <Text style={styles.value}>{client.wife_phone}</Text>
-
-                <Text style={styles.label}>العنوان</Text>
-                <Text style={styles.value}>{client.address}</Text>
+                <View style={styles.flexBetween}>
+                    <Text style={styles.label}>رقم الواتساب</Text>
+                    <Text style={styles.value}>
+                        {client.phone2 || 'غير متوفر'}
+                    </Text>
+                </View>
+                <View style={styles.flexBetween}>
+                    <Text style={styles.label}>رقم الهوية</Text>
+                    <Text style={styles.value}>{client.id_code}</Text>
+                </View>
+                <View style={styles.flexBetween}>
+                    <Text style={styles.label}>اسم الزوجة</Text>
+                    <Text style={styles.value}>{client.wife_name}</Text>
+                </View>
+                <View style={styles.flexBetween}>
+                    <Text style={styles.label}>هاتف الزوجة</Text>
+                    <Text style={styles.value}>{client.wife_phone}</Text>
+                </View>
+                <View style={styles.flexBetween}>
+                    <Text style={styles.label}>العنوان</Text>
+                    <Text style={styles.value}>{client.address}</Text>
+                </View>
             </View>
 
             {/* ID Photos */}
@@ -160,6 +171,7 @@ export default function ClientPDFButton({ client }) {
         <PDFDownloadLink
             document={<ClientPDFDocument client={client} />}
             fileName={`معلومات_العميل_${client.full_name}.pdf`}
+            target="_blank"
         >
             {({ blob, url, loading, error }) => (
                 <button className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white">

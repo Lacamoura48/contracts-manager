@@ -9,7 +9,6 @@ import { useForm } from '@inertiajs/react';
 import { Undo2 } from 'lucide-react';
 function ClientsForm(props) {
     const client = props.client;
-    console.log(props.errors);
 
     const initialValues = client
         ? {
@@ -113,9 +112,9 @@ function ClientsForm(props) {
                             id="clients-id_photo_front"
                             name="id_photo_front"
                             label="صورة الهوية (وجه)"
-                            imageSelected={data.id_photo_front}
                             defaultImage={client?.id_photo_front}
                             error={errors.id_photo_front}
+                            imageSelected={data.id_photo_front}
                             onChange={(e) =>
                                 setData('id_photo_front', e.target.files[0])
                             }
