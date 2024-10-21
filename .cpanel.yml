@@ -2,7 +2,9 @@
 deployment:
   tasks:
     - export DEPLOYPATH=/home/qosi2171/public_html
+    - export BUILDPATH=/home/qosi2171/public_html/public/build
+    - cd $BUILDPATH && rm -rf ./*
     - /bin/cp -r * $DEPLOYPATH #copy all from root
-    - cd $DEPLOYPATH
-    - /opt/alt/alt-nodejs16/root/usr/bin/npm install
+
+    #- /opt/alt/alt-nodejs16/root/usr/bin/npm install
     
