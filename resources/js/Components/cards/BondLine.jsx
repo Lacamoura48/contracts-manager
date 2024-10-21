@@ -1,6 +1,12 @@
 import { formatMoroccanDate } from '@/utils/functions';
 import { router } from '@inertiajs/react';
-import { Check, HandCoins, ReceiptText, TimerReset } from 'lucide-react';
+import {
+    ArrowLeftRight,
+    Check,
+    HandCoins,
+    ReceiptText,
+    TimerReset,
+} from 'lucide-react';
 import { useRef, useState } from 'react';
 import Modal from '../Modal';
 import PrimaryButton from '../PrimaryButton';
@@ -8,12 +14,18 @@ import CustomInput from '../inputs/CustomInput';
 
 function BondLine({ bond, current, lastBond }) {
     const proofImageRef = useRef();
+
+    const [amount, setAmount] = useState();
+    const [show, setShow] = useState(false);
+    const [amountPaid, setAmountPaid] = useState();
+
     function updateProofPic(e) {
         router.post(route('bonds.update', bond.id), {
             proof_image: e.target.files[0],
             _method: 'PATCH',
         });
     }
+
     const modalContents = {
         markAsPaid: {
             text: `تريد إثبات الدفع الخاص بتاريخ 
@@ -54,9 +66,20 @@ function BondLine({ bond, current, lastBond }) {
             ),
             action: partPayement,
         },
+        changeAmount: {
+            text: (
+                <CustomInput
+                    label="أدخل مبلغ الدفعة"
+                    placeholder="(ستتم تقسيم الباقي للأشهر المقبلة)"
+                    onChange={(e) => setAmount(e.target.value)}
+                    type="number"
+                    min="0"
+                />
+            ),
+            action: changeAmount,
+        },
     };
-    const [show, setShow] = useState(false);
-    const [amountPaid, setAmountPaid] = useState();
+
     function markBondAsPaid() {
         router.post(
             `/bonds/${bond.id}`,
@@ -80,6 +103,15 @@ function BondLine({ bond, current, lastBond }) {
         router.post(
             `/bonds/${bond.id}/part`,
             { amount_paid: amountPaid, _method: 'PATCH' },
+            {
+                onStart: () => setShow(false),
+            },
+        );
+    }
+    function changeAmount() {
+        router.post(
+            `/bonds/${bond.id}`,
+            { amount: amount, _method: 'PATCH' },
             {
                 onStart: () => setShow(false),
             },
@@ -128,13 +160,24 @@ function BondLine({ bond, current, lastBond }) {
                         <TimerReset className="ml-2 inline-block" /> تأجيل
                         الدفعة
                     </button>
+
                     {!lastBond && (
-                        <button
-                            onClick={() => setShow('partPayement')}
-                            className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
-                        >
-                            <HandCoins className="ml-2 inline-block" /> دفع جزئي
-                        </button>
+                        <>
+                            <button
+                                onClick={() => setShow('changeAmount')}
+                                className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                            >
+                                <ArrowLeftRight className="ml-2 inline-block" />{' '}
+                                تغيير المبلغ
+                            </button>{' '}
+                            <button
+                                onClick={() => setShow('partPayement')}
+                                className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                            >
+                                <HandCoins className="ml-2 inline-block" /> دفع
+                                جزئي
+                            </button>
+                        </>
                     )}
                 </div>
             )}

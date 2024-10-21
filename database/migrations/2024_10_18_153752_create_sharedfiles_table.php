@@ -14,8 +14,8 @@ return new class extends Migration
         Schema::create('sharedfiles', function (Blueprint $table) {
             $table->id();
             $table->foreignId('contract_id')->constrained()->onDelete('cascade');
-            $table->text('title');
-            $table->string('image');
+            $table->text('title')->nullable();
+            $table->string('image')->nullable();
             $table->timestamps();
         });
     }

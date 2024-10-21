@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
+use function Laravel\Prompts\error;
+
 class SharedfileController extends Controller
 {
     public function saveImage($image)
@@ -22,16 +24,16 @@ class SharedfileController extends Controller
      */
     public function store(Request $request, Contract $contract)
     {
-        $path = null;
-        if ($request->hasFile('image')) {
-            $path = $this->saveImage($request->file('image'));
-        }
-        Sharedfile::create([
-            'image' => $path,
-            'title' => $request->get('title'),
-            'contract_id' => $contract->id
-        ]);
-       return to_route('contracts.files', $contract->id);
+            $path = null;
+            if ($request->hasFile('image')) {
+                $path = $this->saveImage($request->file('image'));
+            }
+            Sharedfile::create([
+                'image' => $path,
+                'title' => $request->get('title'),
+                'contract_id' => $contract->id
+            ]);
+            return to_route('contracts.files', $contract->id);
     }
 
     /**

@@ -9,10 +9,11 @@ import InsideLayout from '@/Layouts/InsideLayout';
 import { formatFilterDate } from '@/utils/functions';
 import { useForm } from '@inertiajs/react';
 import { PlusCircle, Undo2 } from 'lucide-react';
+import { useEffect, useRef } from 'react';
 function ContractsForm(props) {
     const contract = props.contract;
     const queryParams = new URLSearchParams(window.location.search);
-
+    const startAmountInput = useRef();
     const initialValues = contract
         ? {
               client_id: contract.client_id,
@@ -25,6 +26,7 @@ function ContractsForm(props) {
               client_id: queryParams.get('client_id') || '',
               total_price: '',
               contract_type: '',
+              start_amount: '',
               start_date: formatFilterDate(new Date()),
           };
 
@@ -40,8 +42,18 @@ function ContractsForm(props) {
                 : event.target.value,
         );
     };
+    useEffect(() => {
+        if (+data.total_price > 0 && +data.contract_type > 0) {
+            const amountToShow = (
+                +data.total_price / +data.contract_type
+            ).toFixed(2);
+            setData('start_amount', amountToShow);
+            startAmountInput.current.value = amountToShow;
+        }
+    }, [data.contract_type, data.total_price]);
     const submit = (e) => {
         e.preventDefault();
+        console.log(data);
         if (contract) {
             post(route('contracts.update', contract.id));
         } else {
@@ -50,7 +62,6 @@ function ContractsForm(props) {
             });
         }
     };
-    console.log(+data.contract_type);
 
     return (
         <AuthenticatedLayout>
@@ -112,6 +123,8 @@ function ContractsForm(props) {
                             <option value={10}>10 دفعات</option>
                             <option value={12}>12 دفعات</option>
                         </CustomSelect>
+                    </div>
+                    <div className="mb-4 flex gap-3">
                         <CustomInput
                             type="date"
                             label="تاريخ أول دفعة"
@@ -122,6 +135,33 @@ function ContractsForm(props) {
                             id="contracts-start_date"
                             error={errors.start_date}
                         />
+                        <div className={`relative w-full`}>
+                            <label
+                                className="mb-1 block text-black"
+                                htmlFor="contracts-start_amount"
+                            >
+                                مبلغ أول دفعة
+                            </label>
+                            <input
+                                id="contracts-start_amount"
+                                type="number"
+                                placeholder="المبلغ بالدرهم"
+                                min={1}
+                                max={data.total_price}
+                                onChange={handleOnChange}
+                                ref={startAmountInput}
+                                defaultValue={data.start_amount}
+                                name="start_amount"
+                                className={`w-full border-none px-2 py-2 placeholder:text-gray-400 focus:ring-black ${
+                                    errors.start_amount
+                                        ? 'bg-red-100'
+                                        : 'bg-gray-100'
+                                } placeholder:text-placeholder rounded-lg`}
+                            />
+                            <span className="text-xs text-red-600">
+                                {errors.start_amount}
+                            </span>
+                        </div>
                     </div>
                     <div className="my-8 grid grid-cols-2 gap-3">
                         {[...Array(+data.contract_type).keys()].map((dof) => {

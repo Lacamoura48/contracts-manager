@@ -24,8 +24,14 @@ export default function FileCard({ file }) {
             <p className="text-sm font-medium text-gray-500">
                 {formatMoroccanDate(new Date(file.created_at))}
             </p>
-            <p className="mb-3 text-lg font-medium text-black">{file.title}</p>
-            <img className="rounded-lg" src={file.image} alt="file image" />
+            {file.title && (
+                <p className="mb-3 text-lg font-medium text-black">
+                    {file.title}
+                </p>
+            )}
+            {file.image && (
+                <img className="rounded-lg" src={file.image} alt="file image" />
+            )}
             <Modal show={showDelete}>
                 <div className="px-8 py-10">
                     <h2 className="mb-5 text-2xl font-bold">

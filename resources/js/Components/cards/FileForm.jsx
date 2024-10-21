@@ -1,15 +1,21 @@
 import { useForm } from '@inertiajs/react';
+import { useState } from 'react';
 import CustomInput from '../inputs/CustomInput';
 import FileInput from '../inputs/FileInput';
 import SubmitButton from '../SubmitButton';
 
 export default function FileForm({ closeHandler, contract_id }) {
-    const { data, setData, post, processing, errors } = useForm({
+    const [errors, setErrors] = useState(false);
+    const { data, setData, post, processing } = useForm({
         title: '',
         image: null,
     });
     function submitForm(e) {
         e.preventDefault();
+        if (!data.title && !data.image) {
+            setErrors('يجب ملء أحد المدخلات لإضافة ملحق');
+            return;
+        }
         post(route('files.store', contract_id), {
             forceFormData: true,
             onFinish: closeHandler,
@@ -25,6 +31,7 @@ export default function FileForm({ closeHandler, contract_id }) {
                 onChange={(e) => setData('title', e.target.value)}
                 name="title"
                 id="title-files"
+                error={errors}
             />
             <FileInput
                 imageSelected={data.image}

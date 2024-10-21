@@ -6,6 +6,7 @@ import EmptyList from './EmptyList';
 
 export default function FilesList({ files, contract_id }) {
     const [showForm, setShowForm] = useState(false);
+
     return (
         <div>
             <div className="my-6">
