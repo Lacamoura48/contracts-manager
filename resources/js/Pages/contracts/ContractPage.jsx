@@ -28,11 +28,6 @@ export default function ContractPage({ contract }) {
                         icon: PenBox,
                     },
                     {
-                        label: 'jsld على العقد',
-                        url: route('contracts.destroy', contract.id),
-                        icon: Trash2,
-                    },
-                    {
                         label: 'المزيد عن هذا الزبون',
                         url: route('clients.show', contract.client.id),
                         icon: Info,
