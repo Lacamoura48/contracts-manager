@@ -5,7 +5,9 @@ deployment:
     - export BUILDPATH=/home/qosi2171/public_html/public/build
     - pwd
     - cd $BUILDPATH && rm -rf ./*
-    #- /bin/cp -r * $DEPLOYPATH #copy all from root
+    - cd /home/qosi2171/contracts-manager
+    - pwd
+    - /bin/cp -r * $DEPLOYPATH #copy all from root
 
     #- /opt/alt/alt-nodejs16/root/usr/bin/npm install
     
