@@ -55,10 +55,36 @@ export const getDiscColor = (status, payment_date) => {
     const diffInDays = (today - paymentDate) / (1000 * 60 * 60 * 24);
     if (diffInDays < 1.5 && diffInDays >= 0) return 'bg-blue-500';
     if (diffInDays > 1.5 && diffInDays <= 3) return 'bg-orange-300';
-    if (diffInDays > 3 && diffInDays <= 7) return 'bg-red-500';
-    return 'bg-gray-200'; // Default
+    if (diffInDays > 3) return 'bg-red-500';
+    return 'bg-gray-300'; // Default
 };
-
+export const getStatusFromClasses = (classes) => {
+    if (classes.includes('bg-red-500'))
+        return {
+            label: 'متعترة الدفع',
+            color: 'bg-red-100 text-red-500',
+        };
+    if (classes.includes('bg-orange-300'))
+        return {
+            label: 'متأخر',
+            color: 'bg-orange-100 text-orange-500',
+        };
+    if (classes.includes('bg-blue-500'))
+        return {
+            label: 'مستحق الدفع',
+            color: 'bg-blue-100 text-blue-500 animate-pulse',
+        };
+    const allGreen = classes.every((c) => c === 'bg-green-500');
+    if (allGreen)
+        return {
+            label: 'مدفوع',
+            color: 'text-green-500 bg-green-100',
+        };
+    return {
+        label: 'قادم',
+        color: 'text-gray-500 bg-gray-200',
+    }; // Default case if none of the conditions match
+};
 export const formatFilterDate = (date) => {
     const datee = new Date(date);
     const formattedDate = new Intl.DateTimeFormat('fr-FR', {

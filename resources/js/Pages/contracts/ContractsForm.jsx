@@ -14,12 +14,17 @@ function ContractsForm(props) {
     const contract = props.contract;
     const queryParams = new URLSearchParams(window.location.search);
     const startAmountInput = useRef();
+    console.log(props);
+
     const initialValues = contract
         ? {
               client_id: contract.client_id,
-              total_price: contract.total_price,
-              contract_type: contract.contract_type,
-              start_date: contract.start_date,
+              total_price: contract.bonds_sum_amount,
+              contract_type: contract.bonds_count,
+              start_date: formatFilterDate(
+                  new Date(contract.bonds[0].created_at),
+              ),
+              start_amount: contract.bonds[0].amount,
               _method: 'PATCH',
           }
         : {
@@ -114,7 +119,7 @@ function ContractsForm(props) {
                             label="عدد الدفعات"
                             id="contracts-contract_type"
                             name="contract_type"
-                            defaultSelected={8}
+                            defaultValue={data.contract_type}
                         >
                             <option value={0}>بدون إقساط</option>
                             <option value={4}>4 دفعات</option>
@@ -128,7 +133,7 @@ function ContractsForm(props) {
                         <CustomInput
                             type="date"
                             label="تاريخ أول دفعة"
-                            min={formatFilterDate(new Date())}
+                            min={contract ? null : formatFilterDate(new Date())}
                             onChange={handleOnChange}
                             defaultValue={data.start_date}
                             name="start_date"
@@ -163,28 +168,34 @@ function ContractsForm(props) {
                             </span>
                         </div>
                     </div>
-                    <div className="my-8 grid grid-cols-2 gap-3">
-                        {[...Array(+data.contract_type).keys()].map((dof) => {
-                            return (
-                                <FileInput
-                                    key={dof}
-                                    name={`proof${dof + 1}`}
-                                    id={`contract-proof-${dof + 1}`}
-                                    label={`إثبات الدفعة ${dof + 1}`}
-                                    imageSelected={data[`proof${dof + 1}`]}
-                                    defaultImage={
-                                        contract?.bonds[dof].proof_image
-                                    }
-                                    onChange={(e) =>
-                                        setData(
-                                            `proof${dof + 1}`,
-                                            e.target.files[0],
-                                        )
-                                    }
-                                />
-                            );
-                        })}
-                    </div>
+                    {!contract && (
+                        <div className="my-8 grid grid-cols-2 gap-3">
+                            {[...Array(+data.contract_type).keys()].map(
+                                (dof) => {
+                                    return (
+                                        <FileInput
+                                            key={dof}
+                                            name={`proof${dof + 1}`}
+                                            id={`contract-proof-${dof + 1}`}
+                                            label={`إثبات الدفعة ${dof + 1}`}
+                                            imageSelected={
+                                                data[`proof${dof + 1}`]
+                                            }
+                                            defaultImage={
+                                                contract?.bonds[dof].proof_image
+                                            }
+                                            onChange={(e) =>
+                                                setData(
+                                                    `proof${dof + 1}`,
+                                                    e.target.files[0],
+                                                )
+                                            }
+                                        />
+                                    );
+                                },
+                            )}
+                        </div>
+                    )}
                     <div>
                         <SubmitButton loading={processing}>
                             {contract ? 'تحديث' : 'إرسال'}

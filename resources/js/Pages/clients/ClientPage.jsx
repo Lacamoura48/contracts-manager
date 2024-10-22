@@ -30,7 +30,7 @@ export default function ClientPage({ client }) {
                     <p className="mx-auto flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0">
                         <Phone size={20} /> {client.phone}
                     </p>
-                    <div className="mt-6 flex justify-center">
+                    <div className="mt-6 flex justify-center md:justify-normal">
                         <ClientPDFButton client={client} />
                     </div>
                     <hr className="my-5" />

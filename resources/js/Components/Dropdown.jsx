@@ -7,7 +7,8 @@ const DropDownContext = createContext();
 const Dropdown = ({ children }) => {
     const [open, setOpen] = useState(false);
 
-    const toggleOpen = () => {
+    const toggleOpen = (e) => {
+        e.stopPropagation();
         setOpen((previousState) => !previousState);
     };
 

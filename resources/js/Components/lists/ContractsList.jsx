@@ -1,4 +1,5 @@
 import ContractLine from '../cards/ContractLine';
+import Pagination from '../pagination/Pagination';
 
 function ContractsList({ contracts }) {
     return (
@@ -13,7 +14,7 @@ function ContractsList({ contracts }) {
                     </th>
                     <th
                         scope="col"
-                        className="small:text-xs me-5 pb-4 pr-10 text-start"
+                        className="small:text-xs me-5 pb-4 text-start md:pr-10"
                     >
                         اسم الزبون
                     </th>
@@ -29,6 +30,7 @@ function ContractsList({ contracts }) {
                     >
                         الدفعات
                     </th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -36,6 +38,15 @@ function ContractsList({ contracts }) {
                     return <ContractLine key={line.id} contract={line} />;
                 })}
             </tbody>
+            <tfoot>
+                <tr>
+                    <td colSpan={4}>
+                        <div className="mt-12 flex justify-center">
+                            <Pagination data={contracts} />
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
         </table>
     );
 }

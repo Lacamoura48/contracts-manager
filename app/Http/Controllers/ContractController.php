@@ -6,6 +6,7 @@ use App\Models\Bond;
 use App\Models\Contract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
 class ContractController extends Controller
@@ -32,7 +33,7 @@ class ContractController extends Controller
                 $query->select('contract_id', 'status', 'payement_date');
             }])
             ->orderBy('created_at', 'desc')
-            ->paginate(12);
+            ->paginate(5);
 
         return Inertia::render('contracts/Contracts', [
             'contracts' => $contracts,
@@ -129,7 +130,12 @@ class ContractController extends Controller
      */
     public function edit(Contract $contract)
     {
-        //
+        $contract_data = $contract
+            ->with('bonds')
+            ->withSum('bonds', 'amount')
+            ->withCount('bonds')
+            ->find($contract->id);
+        return Inertia::render('contracts/ContractsForm', ['contract' => $contract_data]);
     }
 
     /**
@@ -137,7 +143,50 @@ class ContractController extends Controller
      */
     public function update(Request $request, Contract $contract)
     {
-        //
+        $validated = $request->validate([
+            'client_id' => 'required|exists:clients,id',
+            'total_price' => 'required|numeric|min:1',
+            'contract_type' => 'required|in:0,4,6,8,10,12',
+            'start_date' => 'date|required',
+            'start_amount' => 'numeric|required',
+        ]);
+
+        $contract->update([
+            'client_id' => $validated['client_id'],
+        ]);
+
+        $paybackAmount = ($validated['total_price'] - $validated['start_amount']) / ($validated['contract_type'] - 1);
+
+        $startDate = Carbon::createFromFormat('Y-m-d', $validated['start_date']);
+        $old_bonds = Bond::where('contract_id', $contract->id)->get();
+        $countOldBonds = Bond::where('contract_id', $contract->id)->count();
+        for ($i = 0; $i < $validated['contract_type']; $i++) {
+            if ($countOldBonds > $i) {
+                $old_bonds[$i]->update([
+                    'amount' => $i == 0 ? $validated['start_amount'] : $paybackAmount,
+                    'payement_date' => $i == 0 ? $startDate : $startDate->copy()->startOfMonth()->addMonth()->addMonths($i - 1),
+                ]);
+            } else {
+                $path = "";
+                if ($request->file("proof" . $i + 1))
+                    $path = $this->saveImage($request->file("proof" . $i + 1));
+                Bond::create([
+                    'contract_id' => $contract->id,
+                    'amount' => $i == 0 ? $validated['start_amount'] : $paybackAmount,
+                    'payement_date' => $i == 0 ? $startDate : $startDate->copy()->startOfMonth()->addMonth()->addMonths($i - 1),
+                    'proof_image' => $path,
+                ]);
+            }
+        }
+        if ($countOldBonds > $validated['contract_type']) {
+            for ($i = $validated['contract_type']; $i < $countOldBonds; $i++) {
+                if (File::exists(substr($old_bonds[$i]->proof_image, 1))) {
+                    File::delete(substr($old_bonds[$i]->proof_image, 1));
+                }
+                $old_bonds[$i]->delete();
+            }
+        }
+        return to_route("contracts.show", $contract->id);
     }
 
     /**
@@ -146,6 +195,6 @@ class ContractController extends Controller
     public function destroy(Contract $contract)
     {
         $contract->delete();
-        return redirect('contracts.index');
+        return to_route('contracts.index');
     }
 }

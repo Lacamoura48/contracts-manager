@@ -2,7 +2,15 @@ import BondsList from '@/Components/lists/BondsList';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatMoroccanDate } from '@/utils/functions';
-import { Banknote, File, Info, Phone, Undo2 } from 'lucide-react';
+import {
+    Banknote,
+    File,
+    Info,
+    PenBox,
+    Phone,
+    Trash2,
+    Undo2,
+} from 'lucide-react';
 export default function ContractPage({ contract }) {
     return (
         <AuthenticatedLayout>
@@ -13,6 +21,16 @@ export default function ContractPage({ contract }) {
                         label: 'رجوع إلى قائمة عقود',
                         url: route('contracts.index'),
                         icon: Undo2,
+                    },
+                    {
+                        label: 'تعديل على العقد',
+                        url: route('contracts.edit', contract.id),
+                        icon: PenBox,
+                    },
+                    {
+                        label: 'jsld على العقد',
+                        url: route('contracts.destroy', contract.id),
+                        icon: Trash2,
                     },
                     {
                         label: 'المزيد عن هذا الزبون',

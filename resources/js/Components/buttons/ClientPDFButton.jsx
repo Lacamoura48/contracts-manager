@@ -159,8 +159,7 @@ const ClientPDFDocument = ({ client }) => (
 
             {/* Footer */}
             <Text style={styles.footer}>
-                تم إنشاء هذا الملف بواسطة النظام بتاريخ{' '}
-                {new Date().toLocaleDateString()}
+                تم إنشاء هذا الملف بتاريخ {new Date().toLocaleDateString()}
             </Text>
         </Page>
     </Document>
@@ -172,6 +171,7 @@ export default function ClientPDFButton({ client }) {
             document={<ClientPDFDocument client={client} />}
             fileName={`معلومات_العميل_${client.full_name}.pdf`}
             target="_blank"
+            tabIndex={2}
         >
             {({ blob, url, loading, error }) => (
                 <button className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white">
@@ -184,12 +184,5 @@ export default function ClientPDFButton({ client }) {
                 </button>
             )}
         </PDFDownloadLink>
-        //     <button
-        //     onClick={generateClientPDF}
-        //     className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
-        // >
-        //     <FileDown className="ml-2 mr-1 inline" />
-        //     تحميل PDF
-        // </button>
     );
 }

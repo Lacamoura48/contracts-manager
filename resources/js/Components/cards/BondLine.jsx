@@ -118,70 +118,75 @@ function BondLine({ bond, current, lastBond }) {
         );
     }
     return (
-        <div
-            className={`mb-3 rounded-xl border px-3 py-4 transition-colors duration-500 ${bond.status ? 'border-green-500 bg-green-100' : ''}`}
-        >
-            <div className="flex items-center justify-between">
-                <div className="small:text-xs me-5 rounded-r-xl text-start">
-                    <button
-                        onClick={() =>
-                            setShow(bond.status ? 'markAsUnpaid' : 'markAsPaid')
-                        }
-                        className={`${bond.status ? 'bg-green-500' : 'bg-gray-200'} flex h-8 w-8 items-center justify-center rounded-xl transition-colors`}
-                    >
-                        <Check
-                            color="white"
-                            className={`transition-all duration-500 ${bond.status ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
-                        />
+        <>
+            {' '}
+            <div
+                className={`mb-3 rounded-xl border px-3 py-4 transition-colors duration-500 ${bond.status ? 'border-green-500 bg-green-100' : ''}`}
+            >
+                <div className="flex items-center justify-between">
+                    <div className="small:text-xs me-5 rounded-r-xl text-start">
+                        <button
+                            onClick={() =>
+                                setShow(
+                                    bond.status ? 'markAsUnpaid' : 'markAsPaid',
+                                )
+                            }
+                            className={`${bond.status ? 'bg-green-500' : 'bg-gray-200'} flex h-8 w-8 items-center justify-center rounded-xl transition-colors`}
+                        >
+                            <Check
+                                color="white"
+                                className={`transition-all duration-500 ${bond.status ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
+                            />
+                        </button>
+                    </div>
+                    <div className="small:text-xs me-5 text-start">
+                        {bond.amount} درهم
+                    </div>
+                    <div className="small:text-xs me-5 rounded-l-xl text-start">
+                        {formatMoroccanDate(new Date(bond.payement_date))}
+                    </div>
+                    <button onClick={() => setShow('showProof')}>
+                        <ReceiptText />
                     </button>
+                    <input
+                        ref={proofImageRef}
+                        onChange={updateProofPic}
+                        className="hidden"
+                        type="file"
+                    />
                 </div>
-                <div className="small:text-xs me-5 text-start">
-                    {bond.amount} درهم
-                </div>
-                <div className="small:text-xs me-5 rounded-l-xl text-start">
-                    {formatMoroccanDate(new Date(bond.payement_date))}
-                </div>
-                <button onClick={() => setShow('showProof')}>
-                    <ReceiptText />
-                </button>
-                <input
-                    ref={proofImageRef}
-                    onChange={updateProofPic}
-                    className="hidden"
-                    type="file"
-                />
-            </div>
-            {current && !bond.status && (
-                <div className="mt-6 flex gap-2">
-                    <button
-                        onClick={() => setShow('delayBond')}
-                        className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
-                    >
-                        <TimerReset className="ml-2 inline-block" /> تأجيل
-                        الدفعة
-                    </button>
+                {current && !bond.status && (
+                    <div className="mt-6 flex gap-2">
+                        <button
+                            onClick={() => setShow('delayBond')}
+                            className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                        >
+                            <TimerReset className="ml-2 inline-block" /> تأجيل
+                            الدفعة
+                        </button>
 
-                    {!lastBond && (
-                        <>
-                            <button
-                                onClick={() => setShow('changeAmount')}
-                                className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
-                            >
-                                <ArrowLeftRight className="ml-2 inline-block" />{' '}
-                                تغيير المبلغ
-                            </button>{' '}
-                            <button
-                                onClick={() => setShow('partPayement')}
-                                className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
-                            >
-                                <HandCoins className="ml-2 inline-block" /> دفع
-                                جزئي
-                            </button>
-                        </>
-                    )}
-                </div>
-            )}
-            <Modal show={show}>
+                        {!lastBond && (
+                            <>
+                                <button
+                                    onClick={() => setShow('changeAmount')}
+                                    className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                                >
+                                    <ArrowLeftRight className="ml-2 inline-block" />{' '}
+                                    تغيير المبلغ
+                                </button>{' '}
+                                <button
+                                    onClick={() => setShow('partPayement')}
+                                    className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                                >
+                                    <HandCoins className="ml-2 inline-block" />{' '}
+                                    دفع جزئي
+                                </button>
+                            </>
+                        )}
+                    </div>
+                )}
+            </div>
+            <Modal maxWidth="lg" show={show}>
                 <div className="px-8 py-10">
                     <h2 className="mb-5 text-2xl font-bold">
                         {modalContents[show]?.text}
@@ -202,7 +207,7 @@ function BondLine({ bond, current, lastBond }) {
                     </div>
                 </div>
             </Modal>
-        </div>
+        </>
     );
 }
 
