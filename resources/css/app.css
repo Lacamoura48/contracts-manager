@@ -14,3 +14,16 @@ html {
 *{ 
     font-family: 'Rubik';
 }
+
+.bcg-red {
+    background: red;
+}
+.bcg-orange {
+    background: orange;
+}
+.bcg-blue {
+    background: blue;
+}
+.bcg-green {
+    background: green;
+}

@@ -49,32 +49,32 @@ export function getNextPaymentDate(payements) {
 }
 
 export const getDiscColor = (status, payment_date) => {
-    if (status === 'paid') return 'bg-green-500';
+    if (status === 'paid') return 'bcg-green';
     const today = new Date();
     const paymentDate = new Date(payment_date);
     const diffInDays = (today - paymentDate) / (1000 * 60 * 60 * 24);
-    if (diffInDays < 1.5 && diffInDays >= 0) return 'bg-blue-500';
-    if (diffInDays > 1.5 && diffInDays <= 3) return 'bg-orange-300';
-    if (diffInDays > 3) return 'bg-red-500';
+    if (diffInDays < 1.5 && diffInDays >= 0) return 'bcg-blue';
+    if (diffInDays > 1.5 && diffInDays <= 3) return 'bcg-orange';
+    if (diffInDays > 3) return 'bcg-red';
     return 'bg-gray-200'; // Default
 };
 export const getStatusFromClasses = (classes) => {
-    if (classes.includes('bg-red-500'))
+    if (classes.includes('bcg-red'))
         return {
             label: 'متعترة الدفع',
             color: 'bg-red-100 text-red-500',
         };
-    if (classes.includes('bg-orange-300'))
+    if (classes.includes('bcg-orange'))
         return {
             label: 'متأخر',
             color: 'bg-orange-100 text-orange-500',
         };
-    if (classes.includes('bg-blue-500'))
+    if (classes.includes('bcg-blue'))
         return {
             label: 'مستحق الدفع',
             color: 'bg-blue-100 text-blue-500 animate-pulse',
         };
-    const allGreen = classes.every((c) => c === 'bg-green-500');
+    const allGreen = classes.every((c) => c === 'bcg-green');
     if (allGreen)
         return {
             label: 'مدفوع',
