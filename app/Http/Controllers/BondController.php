@@ -81,6 +81,15 @@ class BondController extends Controller
                 }
             }
         }
+        if($request->has('payement_date')){
+            $data['payement_date'] = $request->get('payement_date');
+        }
+        if($request->has('postable')){
+            $data['postable'] = $request->get('postable');
+        }
+        if($request->has('title')){
+            $data['title'] = $request->get('title');
+        }
         $bond->update($data);
     }
 

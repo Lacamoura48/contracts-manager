@@ -16,6 +16,8 @@ return new class extends Migration
             $table->decimal('amount', 10, 2);
             $table->string('status')->nullable();
             $table->date('payement_date');
+            $table->string('title')->nullable();
+            $table->boolean('postable');
             $table->string('proof_image')->nullable();
             $table->foreignId('contract_id')->constrained()->onDelete('cascade');
             $table->timestamps();

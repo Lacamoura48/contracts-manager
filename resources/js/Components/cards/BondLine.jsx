@@ -5,11 +5,13 @@ import {
     Check,
     HandCoins,
     ReceiptText,
+    Settings,
     TimerReset,
 } from 'lucide-react';
 import { useRef, useState } from 'react';
 import Modal from '../Modal';
 import PrimaryButton from '../PrimaryButton';
+import BondOptionsContent from '../bond-modals/BondOptionsContent';
 import CustomInput from '../inputs/CustomInput';
 
 function BondLine({ bond, current, lastBond }) {
@@ -40,6 +42,14 @@ function BondLine({ bond, current, lastBond }) {
         delayBond: {
             text: 'هل أنت متأكد من أنك تريد تأخير هذا الدفع إلى بداية الشهر القادم؟',
             action: delayBond,
+        },
+        updateBond: {
+            text: (
+                <BondOptionsContent
+                    closeHandler={() => setShow('')}
+                    proof={bond}
+                />
+            ),
         },
         showProof: {
             text: (
@@ -145,9 +155,21 @@ function BondLine({ bond, current, lastBond }) {
                     <div className="small:text-xs me-5 rounded-l-xl text-start">
                         {formatMoroccanDate(new Date(bond.payement_date))}
                     </div>
-                    <button onClick={() => setShow('showProof')}>
-                        <ReceiptText />
-                    </button>
+                    <div className="flex gap-1">
+                        <button
+                            className="w-12 rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                            onClick={() => setShow('showProof')}
+                        >
+                            <ReceiptText className="inline-block" />
+                        </button>
+                        <button
+                            onClick={() => setShow('updateBond')}
+                            className="w-12 rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                        >
+                            <Settings className="inline-block" />
+                        </button>
+                    </div>
+
                     <input
                         ref={proofImageRef}
                         onChange={updateProofPic}
@@ -164,7 +186,6 @@ function BondLine({ bond, current, lastBond }) {
                             <TimerReset className="ml-2 inline-block" /> تأجيل
                             الدفعة
                         </button>
-
                         {!lastBond && (
                             <>
                                 <button
@@ -188,16 +209,16 @@ function BondLine({ bond, current, lastBond }) {
             </div>
             <Modal maxWidth="lg" show={show}>
                 <div className="px-8 py-10">
-                    <h2 className="mb-5 text-2xl font-bold">
-                        {modalContents[show]?.text}
-                    </h2>
+                    <h2 className="mb-5">{modalContents[show]?.text}</h2>
                     <div className="flex gap-4">
-                        <PrimaryButton
-                            className="text-xl"
-                            onClick={modalContents[show]?.action}
-                        >
-                            نعم
-                        </PrimaryButton>
+                        {modalContents[show]?.action && (
+                            <PrimaryButton
+                                className="text-xl"
+                                onClick={modalContents[show]?.action}
+                            >
+                                نعم
+                            </PrimaryButton>
+                        )}
                         <PrimaryButton
                             className="text-xl"
                             onClick={() => setShow(false)}

@@ -49,6 +49,7 @@ class ClientController extends Controller
         $validated = $request->validate([
             'full_name' => 'required',
             "phone" => 'required',
+            "email" => 'email|nullable',
             "phone2" => 'nullable',
             "id_code" => 'required|max:18|min:18',
             "id_photo_front" => 'required',
@@ -56,6 +57,7 @@ class ClientController extends Controller
             "address" => 'nullable',
             "wife_name" => 'nullable',
             "wife_phone" => 'nullable',
+            "notes" => 'nullable',
         ]);
 
         $front_path = $this->saveImage($request->file('id_photo_front'));
@@ -79,12 +81,14 @@ class ClientController extends Controller
             'full_name' => 'required',
             "phone" => 'required',
             "phone2" => 'nullable',
+            "email" => 'email|nullable',
             "id_code" => 'required|max:18|min:18',
             "id_photo_front" => 'nullable',
             "id_photo_back" => 'nullable',
             "address" => 'nullable',
             "wife_name" => 'nullable',
             "wife_phone" => 'nullable',
+            "notes" => 'nullable',
         ]);
         if ($request->file('id_photo_front')) {
             $front_path = $this->saveImage($request->file('id_photo_front'));

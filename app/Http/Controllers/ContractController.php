@@ -65,41 +65,42 @@ class ContractController extends Controller
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'total_price' => 'required|numeric|min:1',
-            'contract_type' => 'required|in:0,4,6,8,10,12',
+            'contract_type' => 'required|in:3,4,6,8,10,12',
             'start_date' => 'date|required',
+            'finishing_date' => 'date|required',
             'start_amount' => 'numeric|required',
-            'proof1' => 'nullable',
-            'proof2' => 'nullable',
-            'proof3' => 'nullable',
-            'proof4' => 'nullable',
-            'proof5' => 'nullable',
-            'proof6' => 'nullable',
-            'proof7' => 'nullable',
-            'proof8' => 'nullable',
-            'proof9' => 'nullable',
-            'proof10' => 'nullable',
-            'proof11' => 'nullable',
-            'proof12' => 'nullable',
+            'bonds_array' => 'nullable',
+            'width' => 'nullable',
+            'height' => 'nullable',
+            'intensity' => 'nullable',
+            'notes' => 'nullable',
         ]);
-
         // Create the loan
         $contract = Contract::create([
             'client_id' => $validated['client_id'],
+            'finishing_date' => $validated['finishing_date'],
+            'width' => $validated['width'],
+            'height' => $validated['height'],
+            'intensity' => $validated['intensity'],
+            'notes' => $validated['notes'],
         ]);
 
         // Calculate each payback amount
         $paybackAmount = ($validated['total_price'] - $validated['start_amount']) / ($validated['contract_type'] - 1);
 
         $startDate = Carbon::createFromFormat('Y-m-d', $validated['start_date']);
-        for ($i = 0; $i < $validated['contract_type']; $i++) {
+        for ($i = 0; $i < count($validated['bonds_array']); $i++) {
             $path = "";
-            if ($request->file("proof" . $i + 1))
-                $path = $this->saveImage($request->file("proof" . $i + 1));
+            $currentBond = $validated['bonds_array'][$i];
+            if ($currentBond['proof_image'])
+                $path = $this->saveImage($currentBond['proof_image']);
             Bond::create([
                 'contract_id' => $contract->id,
                 'amount' => $i == 0 ? $validated['start_amount'] : $paybackAmount,
                 'payement_date' => $i == 0 ? $startDate : $startDate->copy()->startOfMonth()->addMonth()->addMonths($i - 1),
                 'proof_image' => $path,
+                'title' => $currentBond['title'],
+                'postable' => $currentBond['postable'],
             ]);
         }
         return to_route("contracts.show", $contract->id);
@@ -146,13 +147,24 @@ class ContractController extends Controller
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'total_price' => 'required|numeric|min:1',
-            'contract_type' => 'required|in:0,4,6,8,10,12',
+            'contract_type' => 'required|in:3,4,6,8,10,12',
             'start_date' => 'date|required',
+            'finishing_date' => 'date|required',
             'start_amount' => 'numeric|required',
+            'bonds_array' => 'nullable',
+            'width' => 'nullable',
+            'height' => 'nullable',
+            'intensity' => 'nullable',
+            'notes' => 'nullable',
         ]);
 
         $contract->update([
             'client_id' => $validated['client_id'],
+            'finishing_date' => $validated['finishing_date'],
+            'width' => $validated['width'],
+            'height' => $validated['height'],
+            'intensity' => $validated['intensity'],
+            'notes' => $validated['notes'],
         ]);
 
         $paybackAmount = ($validated['total_price'] - $validated['start_amount']) / ($validated['contract_type'] - 1);
@@ -175,6 +187,7 @@ class ContractController extends Controller
                     'amount' => $i == 0 ? $validated['start_amount'] : $paybackAmount,
                     'payement_date' => $i == 0 ? $startDate : $startDate->copy()->startOfMonth()->addMonth()->addMonths($i - 1),
                     'proof_image' => $path,
+                    'postable' => true,
                 ]);
             }
         }

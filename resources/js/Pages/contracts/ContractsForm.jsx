@@ -1,8 +1,9 @@
 import { autocompleteFetch } from '@/actions/autocomplete';
+import ProofInput from '@/Components/cards/ProofInput';
 import AutocompleteInput from '@/Components/inputs/autocomplete/Autocomplete';
 import CustomInput from '@/Components/inputs/CustomInput';
 import CustomSelect from '@/Components/inputs/CustomSelect';
-import FileInput from '@/Components/inputs/FileInput';
+import TextArea from '@/Components/inputs/TextArea';
 import SubmitButton from '@/Components/SubmitButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
@@ -14,7 +15,6 @@ function ContractsForm(props) {
     const contract = props.contract;
     const queryParams = new URLSearchParams(window.location.search);
     const startAmountInput = useRef();
-    console.log(props);
 
     const initialValues = contract
         ? {
@@ -25,20 +25,56 @@ function ContractsForm(props) {
                   new Date(contract.bonds[0].created_at),
               ),
               start_amount: contract.bonds[0].amount,
+              height: contract.height,
+              width: contract.width,
+              intensity: contract.intensity,
+              finishing_date: contract.finishing_date,
+              notes: contract.notes,
               _method: 'PATCH',
           }
         : {
               client_id: queryParams.get('client_id') || '',
               total_price: '',
-              contract_type: '',
+              contract_type: 3,
               start_amount: '',
               start_date: formatFilterDate(new Date()),
+              bonds_array: [],
+              height: '',
+              width: '',
+              intensity: '',
+              finishing_date: formatFilterDate(
+                  new Date().setMonth(new Date().getMonth() + 1),
+              ),
+              notes: '',
           };
 
     const { data, setData, post, processing, errors } = useForm({
         ...initialValues,
     });
-
+    function proofChangeHandler(dataPassed) {
+        const res = data.bonds_array.map((proof) => {
+            if (proof.id == dataPassed.id) {
+                return dataPassed;
+            } else {
+                return proof;
+            }
+        });
+        setData('bonds_array', res);
+    }
+    const generateProofsInputs = (num) => {
+        return [...Array(num).keys()].map((dof) => {
+            const proofId = dof + 1;
+            return {
+                id: proofId,
+                proof_image: data.bonds_array[dof]?.proof_image || null,
+                title: data.bonds_array[dof]?.title || '',
+                postable:
+                    data.bonds_array[dof]?.postable !== undefined
+                        ? data.bonds_array[dof]?.postable
+                        : true,
+            };
+        });
+    };
     const handleOnChange = (event) => {
         setData(
             event.target.name,
@@ -48,12 +84,28 @@ function ContractsForm(props) {
         );
     };
     useEffect(() => {
-        if (+data.total_price > 0 && +data.contract_type > 0) {
-            const amountToShow = (
-                +data.total_price / +data.contract_type
-            ).toFixed(2);
-            setData('start_amount', amountToShow);
-            startAmountInput.current.value = amountToShow;
+        if (+data.total_price > 0) {
+            if (+data.contract_type !== 3) {
+                const amountToShow = (
+                    +data.total_price / +data.contract_type
+                ).toFixed(2);
+                setData({
+                    ...data,
+                    start_amount: amountToShow,
+                    bonds_array:
+                        !contract && generateProofsInputs(+data.contract_type),
+                });
+                startAmountInput.current.value = amountToShow;
+            } else {
+                const amountToShow = (+data.total_price / 2).toFixed(2);
+                setData({
+                    ...data,
+                    start_amount: amountToShow,
+                    bonds_array:
+                        !contract && generateProofsInputs(+data.contract_type),
+                });
+                startAmountInput.current.value = amountToShow;
+            }
         }
     }, [data.contract_type, data.total_price]);
     const submit = (e) => {
@@ -67,6 +119,7 @@ function ContractsForm(props) {
             });
         }
     };
+    console.log('bondsarray', data.bonds_array);
 
     return (
         <AuthenticatedLayout>
@@ -120,8 +173,9 @@ function ContractsForm(props) {
                             id="contracts-contract_type"
                             name="contract_type"
                             defaultValue={data.contract_type}
+                            error={errors.contract_type}
                         >
-                            <option value={0}>بدون إقساط</option>
+                            <option value={3}>بدون إقساط</option>
                             <option value={4}>4 دفعات</option>
                             <option value={6}>6 دفعات</option>
                             <option value={8}>8 دفعات</option>
@@ -168,34 +222,71 @@ function ContractsForm(props) {
                             </span>
                         </div>
                     </div>
+                    <div className="mb-4 flex gap-3">
+                        <CustomInput
+                            type="date"
+                            label="تاريخ انتهاء العمل"
+                            onChange={handleOnChange}
+                            defaultValue={data.finishing_date}
+                            name="finishing_date"
+                            id="contracts-finishing_date"
+                            error={errors.finishing_date}
+                        />
+                    </div>
                     {!contract && (
-                        <div className="my-8 grid grid-cols-2 gap-3">
-                            {[...Array(+data.contract_type).keys()].map(
-                                (dof) => {
-                                    return (
-                                        <FileInput
-                                            key={dof}
-                                            name={`proof${dof + 1}`}
-                                            id={`contract-proof-${dof + 1}`}
-                                            label={`إثبات الدفعة ${dof + 1}`}
-                                            imageSelected={
-                                                data[`proof${dof + 1}`]
-                                            }
-                                            defaultImage={
-                                                contract?.bonds[dof].proof_image
-                                            }
-                                            onChange={(e) =>
-                                                setData(
-                                                    `proof${dof + 1}`,
-                                                    e.target.files[0],
-                                                )
-                                            }
-                                        />
-                                    );
-                                },
-                            )}
+                        <div className="my-8 grid grid-cols-2 gap-x-3 gap-y-6">
+                            {data.bonds_array.map((proof) => {
+                                return (
+                                    <ProofInput
+                                        key={proof.id}
+                                        number={proof.id}
+                                        changeHandler={proofChangeHandler}
+                                    />
+                                );
+                            })}
                         </div>
                     )}
+                    <div className="my-4">
+                        <h2 className="mb-3 text-2xl font-bold">
+                            معلومات عن المنتج
+                        </h2>
+                        <div className="flex gap-2">
+                            <CustomInput
+                                onChange={handleOnChange}
+                                defaultValue={data.intensity}
+                                name="intensity"
+                                id="contracts-intensity"
+                                placeholder="اختياري"
+                                label="كثافة"
+                            />
+                            <CustomInput
+                                onChange={handleOnChange}
+                                defaultValue={data.width}
+                                name="width"
+                                id="contracts-width"
+                                placeholder="اختياري"
+                                label="عرض"
+                            />
+                            <CustomInput
+                                onChange={handleOnChange}
+                                defaultValue={data.height}
+                                name="height"
+                                id="contracts-height"
+                                placeholder="اختياري"
+                                label="ارتفاع"
+                            />
+                        </div>
+                    </div>
+                    <div className="mb-8 flex">
+                        <TextArea
+                            id="contracts-notes"
+                            name="notes"
+                            onChange={handleOnChange}
+                            defaultValue={data.notes}
+                            label="ملاحظات"
+                            placeholder="اختياري"
+                        />
+                    </div>
                     <div>
                         <SubmitButton loading={processing}>
                             {contract ? 'تحديث' : 'إرسال'}

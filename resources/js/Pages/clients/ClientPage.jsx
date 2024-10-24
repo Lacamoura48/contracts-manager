@@ -27,9 +27,12 @@ export default function ClientPage({ client }) {
                         أضيف يوم{' '}
                         {formatMoroccanDate(new Date(client.created_at))}
                     </p>
-                    <p className="mx-auto flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0">
+                    <a
+                        href={'tel:' + client.phone}
+                        className="mx-auto flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0"
+                    >
                         <Phone size={20} /> {client.phone}
-                    </p>
+                    </a>
                     <div className="mt-6 flex justify-center md:justify-normal">
                         <ClientPDFButton client={client} />
                     </div>
@@ -41,6 +44,14 @@ export default function ClientPage({ client }) {
                             </th>
                             <td className="w-1/2 px-2 text-left">
                                 {client.phone2}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th className="w-1/2 px-2 py-4 text-right">
+                                البريد الإلكتروني
+                            </th>
+                            <td className="w-1/2 px-2 text-left">
+                                {client.email}
                             </td>
                         </tr>
                         <tr>
@@ -73,6 +84,14 @@ export default function ClientPage({ client }) {
                             </th>
                             <td className="w-1/2 px-2 text-left">
                                 {client.address}
+                            </td>
+                        </tr>
+                        <tr>
+                            <th className="w-1/2 px-2 py-4 text-right">
+                                ملاحظات
+                            </th>
+                            <td className="w-1/2 px-2 text-left">
+                                {client.notes}
                             </td>
                         </tr>
                     </table>

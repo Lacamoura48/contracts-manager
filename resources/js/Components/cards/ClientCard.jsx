@@ -1,4 +1,3 @@
-import { formatMoroccanDate } from '@/utils/functions';
 import { Link, router } from '@inertiajs/react';
 import { Pen, Phone, Trash, UserCircle } from 'lucide-react';
 import { useState } from 'react';
@@ -23,10 +22,7 @@ function ClientCard({ client }) {
                         >
                             {client.full_name}
                         </Link>
-                        <p className="text-sm text-gray-400">
-                            أضيف يوم{' '}
-                            {formatMoroccanDate(new Date(client.created_at))}
-                        </p>
+                        <p className="text-sm text-gray-400">{client.email}</p>
                     </div>
                 </div>
                 <a

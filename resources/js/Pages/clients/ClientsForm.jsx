@@ -14,21 +14,25 @@ function ClientsForm(props) {
         ? {
               full_name: client.full_name,
               phone: client.phone,
+              email: client.email,
               phone2: client.phone2,
               id_code: client.id_code,
               address: client.address,
               wife_name: client.wife_name,
               wife_phone: client.wife_phone,
+              notes: client.notes,
               _method: 'PATCH',
           }
         : {
               full_name: '',
               phone: '',
+              email: '',
               phone2: '',
               id_code: '',
               address: '',
               wife_name: '',
               wife_phone: '',
+              notes: '',
           };
     const { data, setData, post, processing, errors } = useForm({
         ...initialValues,
@@ -54,6 +58,7 @@ function ClientsForm(props) {
             });
         }
     };
+    console.log(errors.email);
     return (
         <AuthenticatedLayout>
             <InsideLayout
@@ -86,6 +91,17 @@ function ClientsForm(props) {
                             onChange={(e) =>
                                 setData('id_code', formatIdCode(e.target.value))
                             }
+                        />
+                    </div>
+                    <div className="mb-4 flex gap-3">
+                        <CustomInput
+                            onChange={handleOnChange}
+                            defaultValue={data.email}
+                            label="البريد الإلكتروني"
+                            placeholder="اختياري"
+                            name="email"
+                            id="clients-email"
+                            error={errors.email}
                         />
                     </div>
                     <div className="mb-8 flex gap-3">
@@ -141,7 +157,7 @@ function ClientsForm(props) {
                             placeholder="اختياري"
                         />
                     </div>
-                    <div className="mb-8 flex gap-3">
+                    <div className="mb-4 flex gap-3">
                         <CustomInput
                             label="اسم الزوجة"
                             name="wife_name"
@@ -156,6 +172,16 @@ function ClientsForm(props) {
                             id="clients-wife_phone"
                             defaultValue={data.wife_phone}
                             onChange={handleOnChange}
+                            placeholder="اختياري"
+                        />
+                    </div>
+                    <div className="mb-8 flex">
+                        <TextArea
+                            id="clients-notes"
+                            name="notes"
+                            onChange={handleOnChange}
+                            defaultValue={data.notes}
+                            label="ملاحظات"
                             placeholder="اختياري"
                         />
                     </div>

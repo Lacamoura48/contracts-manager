@@ -56,7 +56,7 @@ export const getDiscColor = (status, payment_date) => {
     if (diffInDays < 1.5 && diffInDays >= 0) return 'bg-blue-500';
     if (diffInDays > 1.5 && diffInDays <= 3) return 'bg-orange-300';
     if (diffInDays > 3) return 'bg-red-500';
-    return 'bg-gray-300'; // Default
+    return 'bg-gray-200'; // Default
 };
 export const getStatusFromClasses = (classes) => {
     if (classes.includes('bg-red-500'))

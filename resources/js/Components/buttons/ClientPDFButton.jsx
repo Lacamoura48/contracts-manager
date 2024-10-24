@@ -4,12 +4,12 @@ import {
     Font,
     Image,
     Page,
-    PDFDownloadLink,
+    pdf,
     StyleSheet,
     Text,
     View,
 } from '@react-pdf/renderer';
-import { FileDown, Loader2 } from 'lucide-react';
+import { FileDown } from 'lucide-react';
 import rubik from '../../assets/fonts/rubik.ttf';
 
 // Example of importing custom Arabic fonts (Google Fonts)
@@ -113,6 +113,10 @@ const ClientPDFDocument = ({ client }) => (
                     </Text>
                 </View>
                 <View style={styles.flexBetween}>
+                    <Text style={styles.label}>البريد الإلكتروني</Text>
+                    <Text style={styles.value}>{client.email}</Text>
+                </View>
+                <View style={styles.flexBetween}>
                     <Text style={styles.label}>رقم الهوية</Text>
                     <Text style={styles.value}>{client.id_code}</Text>
                 </View>
@@ -127,6 +131,10 @@ const ClientPDFDocument = ({ client }) => (
                 <View style={styles.flexBetween}>
                     <Text style={styles.label}>العنوان</Text>
                     <Text style={styles.value}>{client.address}</Text>
+                </View>
+                <View style={styles.flexBetween}>
+                    <Text style={styles.label}>ملاحظات</Text>
+                    <Text style={styles.value}>{client.notes}</Text>
                 </View>
             </View>
 
@@ -166,23 +174,19 @@ const ClientPDFDocument = ({ client }) => (
 );
 
 export default function ClientPDFButton({ client }) {
+    const openPdfInNewTab = async () => {
+        const doc = <ClientPDFDocument client={client} />; // Your PDF document
+        const blob = await pdf(doc).toBlob(); // Generate the PDF blob
+        const url = URL.createObjectURL(blob); // Create a URL for the blob
+        window.open(url, '_blank'); // Open the URL in a new tab
+    };
     return (
-        <PDFDownloadLink
-            document={<ClientPDFDocument client={client} />}
-            fileName={`معلومات_العميل_${client.full_name}.pdf`}
-            target="_blank"
-            tabIndex={2}
+        <button
+            onClick={openPdfInNewTab}
+            className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
         >
-            {({ blob, url, loading, error }) => (
-                <button className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white">
-                    {loading ? (
-                        <Loader2 className="ml-2 mr-1 inline animate-spin" />
-                    ) : (
-                        <FileDown className="ml-2 mr-1 inline" />
-                    )}
-                    تحميل PDF
-                </button>
-            )}
-        </PDFDownloadLink>
+            <FileDown className="ml-2 mr-1 inline" />
+            فتح PDF
+        </button>
     );
 }
