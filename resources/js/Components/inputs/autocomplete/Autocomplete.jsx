@@ -87,12 +87,12 @@ function AutocompleteInput({
         }
     }, [page]);
     return (
-        <div className="relative w-full min-w-44">
+        <div className="relative w-full">
             <label htmlFor={id} className="mb-1 text-black">
                 {label}
             </label>
             <input
-                className={`w-full min-w-44 border-none px-2 py-2 placeholder:text-gray-400 focus:ring-black ${
+                className={`w-full border-none px-2 py-2 placeholder:text-gray-400 focus:ring-black ${
                     error ? 'bg-red-100' : 'bg-gray-100'
                 } placeholder:text-placeholder rounded-lg`}
                 ref={inputRef}
