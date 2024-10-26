@@ -28,7 +28,7 @@ function ContractsForm(props) {
               height: contract.height,
               width: contract.width,
               intensity: contract.intensity,
-              finishing_date: contract.finishing_date,
+              work_duration: contract.work_duration,
               notes: contract.notes,
               _method: 'PATCH',
           }
@@ -40,11 +40,9 @@ function ContractsForm(props) {
               start_date: formatFilterDate(new Date()),
               bonds_array: [],
               height: '',
-              width: '',
-              intensity: '',
-              finishing_date: formatFilterDate(
-                  new Date().setMonth(new Date().getMonth() + 1),
-              ),
+              width: '70cm',
+              intensity: '20kg/H',
+              work_duration: '',
               notes: '',
           };
 
@@ -224,17 +222,18 @@ function ContractsForm(props) {
                     </div>
                     <div className="mb-4 flex gap-3">
                         <CustomInput
-                            type="date"
-                            label="تاريخ انتهاء العمل"
+                            type="number"
+                            label="مدة انتهاء العمل"
+                            placeholder="عدد أيام"
                             onChange={handleOnChange}
-                            defaultValue={data.finishing_date}
-                            name="finishing_date"
-                            id="contracts-finishing_date"
-                            error={errors.finishing_date}
+                            defaultValue={data.work_duration}
+                            name="work_duration"
+                            id="contracts-work_duration"
+                            error={errors.work_duration}
                         />
                     </div>
                     {!contract && (
-                        <div className="my-8 grid grid-cols-2 gap-x-3 gap-y-6">
+                        <div className="my-8 grid grid-cols-1 gap-x-3 gap-y-6 md:grid-cols-2">
                             {data.bonds_array.map((proof) => {
                                 return (
                                     <ProofInput
@@ -251,28 +250,33 @@ function ContractsForm(props) {
                             معلومات عن المنتج
                         </h2>
                         <div className="flex gap-2">
-                            <CustomInput
+                            <CustomSelect
                                 onChange={handleOnChange}
                                 defaultValue={data.intensity}
                                 name="intensity"
                                 id="contracts-intensity"
-                                placeholder="اختياري"
                                 label="كثافة"
-                            />
-                            <CustomInput
+                            >
+                                <option value="20kg/H">20kg/H</option>
+                                <option value="25kg/H">25kg/H</option>
+                                <option value="30kg/H">30kg/H</option>
+                            </CustomSelect>
+                            <CustomSelect
                                 onChange={handleOnChange}
                                 defaultValue={data.width}
                                 name="width"
                                 id="contracts-width"
-                                placeholder="اختياري"
                                 label="عرض"
-                            />
+                            >
+                                <option value="70cm">70cm</option>
+                                <option value="75cm">75cm</option>
+                                <option value="80cm">80cm</option>
+                            </CustomSelect>
                             <CustomInput
                                 onChange={handleOnChange}
                                 defaultValue={data.height}
                                 name="height"
                                 id="contracts-height"
-                                placeholder="اختياري"
                                 label="ارتفاع"
                             />
                         </div>

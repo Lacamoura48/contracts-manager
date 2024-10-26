@@ -16,6 +16,7 @@ return new class extends Migration
             $table->foreignId('contract_id')->constrained()->onDelete('cascade');
             $table->text('title')->nullable();
             $table->string('image')->nullable();
+            $table->boolean('as_note');
             $table->timestamps();
         });
     }

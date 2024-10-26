@@ -1,5 +1,12 @@
 import { Link } from '@inertiajs/react';
-import { ChevronRight, Home, ScrollText, Settings, Users } from 'lucide-react';
+import {
+    ChevronRight,
+    Home,
+    ScrollText,
+    Settings,
+    Upload,
+    Users,
+} from 'lucide-react';
 import { useState } from 'react';
 import NavLink from './NavLink';
 
@@ -65,6 +72,12 @@ function SideBar({ open, openHandler }) {
                             label="العقود"
                             icon={<ScrollText size={22} />}
                         />
+                        <NavLink
+                            showHandler={() => setShown(false)}
+                            link={'bonds.index'}
+                            label="الدفعات"
+                            icon={<Upload size={22} />}
+                        />
 
                         {/* <NavlinksContainer
                             title="Reporting"
@@ -92,12 +105,12 @@ function SideBar({ open, openHandler }) {
                             />
                         </NavlinksContainer> */}
                     </div>
-                    <p className="mx-auto mt-auto pb-5 text-gray-600">0.0.1</p>
+                    <p className="mx-auto mt-auto pb-5 text-gray-600">0.0.6</p>
                 </div>
             </aside>
-            <div className="fixed bottom-0 left-0 right-0 z-[30] flex h-20 flex-row-reverse items-center bg-black p-1 md:hidden">
+            <div className="fixed bottom-0 left-0 right-0 z-[30] flex h-16 flex-row-reverse items-center bg-black p-1 md:hidden">
                 <Link
-                    className={`${route().current('dashboard') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5`}
+                    className={`${route().current('dashboard') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
                     href="/dashboard"
                 >
                     <Home
@@ -106,25 +119,42 @@ function SideBar({ open, openHandler }) {
                     />
                 </Link>
                 <Link
-                    className={`${route().current('clients') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5`}
+                    className={`${route().current('clients.index') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
                     href="/clients"
                 >
                     <Users
                         size={25}
-                        color={route().current('clients') ? 'black' : 'white'}
+                        color={
+                            route().current('clients.index') ? 'black' : 'white'
+                        }
                     />
                 </Link>
                 <Link
-                    className={`${route().current('contracts') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5`}
+                    className={`${route().current('contracts.index') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
                     href="/contracts"
                 >
                     <ScrollText
                         size={25}
-                        color={route().current('contracts') ? 'black' : 'white'}
+                        color={
+                            route().current('contracts.index')
+                                ? 'black'
+                                : 'white'
+                        }
                     />
                 </Link>
                 <Link
-                    className={`${route().current('settings') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5`}
+                    className={`${route().current('bonds.index') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
+                    href="/bonds"
+                >
+                    <Upload
+                        size={25}
+                        color={
+                            route().current('bonds.index') ? 'black' : 'white'
+                        }
+                    />
+                </Link>
+                <Link
+                    className={`${route().current('settings.index') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
                     href="#"
                 >
                     <Settings

@@ -1,6 +1,6 @@
 function CustomInput(props) {
     return (
-        <div className={`relative ${props.width ?? 'w-full'}`}>
+        <div className={`relative ${props.width ?? 'w-full min-w-44'}`}>
             <label className="mb-1 block text-black" htmlFor={props.id}>
                 {props.label}
             </label>
@@ -11,7 +11,7 @@ function CustomInput(props) {
             )}
             <input
                 {...props}
-                className={`w-full border-none px-2 py-2 placeholder:text-gray-400 focus:ring-black ${
+                className={`w-full border-none px-2 py-2 accent-black placeholder:text-gray-400 focus:ring-black ${
                     props.error ? 'bg-red-100' : 'bg-gray-100'
                 } placeholder:text-placeholder rounded-lg ${props.icon && 'pr-11'}`}
             />

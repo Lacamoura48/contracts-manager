@@ -2,15 +2,7 @@ import BondsList from '@/Components/lists/BondsList';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatMoroccanDate } from '@/utils/functions';
-import {
-    Banknote,
-    File,
-    Info,
-    PenBox,
-    Phone,
-    Trash2,
-    Undo2,
-} from 'lucide-react';
+import { Banknote, File, Info, PenBox, Phone, Undo2 } from 'lucide-react';
 export default function ContractPage({ contract }) {
     return (
         <AuthenticatedLayout>
@@ -33,7 +25,7 @@ export default function ContractPage({ contract }) {
                         icon: Info,
                     },
                     {
-                        label: `الملحقات (${contract.files_count})`,
+                        label: `الملاحظات/الملحقات (${contract.files_count})`,
                         url: route('contracts.files', contract.id),
                         icon: File,
                     },

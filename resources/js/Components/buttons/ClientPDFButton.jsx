@@ -86,6 +86,15 @@ const styles = StyleSheet.create({
         borderTop: '1px solid #ccc',
         paddingTop: 10,
     },
+    notes: {
+        textAlign: 'center',
+        fontSize: 10,
+    },
+    notesTitle: {
+        fontSize: 13,
+        textAlign: 'center',
+        marginBottom: 6,
+    },
 });
 
 // PDF Document Component
@@ -132,10 +141,6 @@ const ClientPDFDocument = ({ client }) => (
                     <Text style={styles.label}>العنوان</Text>
                     <Text style={styles.value}>{client.address}</Text>
                 </View>
-                <View style={styles.flexBetween}>
-                    <Text style={styles.label}>ملاحظات</Text>
-                    <Text style={styles.value}>{client.notes}</Text>
-                </View>
             </View>
 
             {/* ID Photos */}
@@ -164,8 +169,8 @@ const ClientPDFDocument = ({ client }) => (
                     )}
                 </View>
             </View>
-
-            {/* Footer */}
+            <Text style={styles.notesTitle}>ملاحظات</Text>
+            <Text style={styles.notes}>{client.notes}</Text>
             <Text style={styles.footer}>
                 تم إنشاء هذا الملف بتاريخ {new Date().toLocaleDateString()}
             </Text>

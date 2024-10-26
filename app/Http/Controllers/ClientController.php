@@ -29,7 +29,7 @@ class ClientController extends Controller
                     ->orWhere('address', 'like', "%$search%");
             });
         }
-        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "email", "id"])->orderBy('created_at', 'desc')->paginate(12);
+        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "email", "phone", "id"])->orderBy('created_at', 'desc')->paginate(12);
         return Inertia::render('clients/Clients', [
             'clients' => $clients,
         ]);

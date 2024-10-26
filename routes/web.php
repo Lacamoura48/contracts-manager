@@ -28,7 +28,7 @@ Route::delete('/sharedFiles/{sharedfile}', [SharedfileController::class, "destro
 
 
 
-Route::patch('/bonds/{bond}', [BondController::class, "update"])->middleware(['auth', 'verified'])->name('bonds.update');
+Route::resource('bonds', BondController::class)->middleware(['auth', 'verified']);
 Route::patch('/bonds/{bond}/delay', [BondController::class, "delay"])->middleware(['auth', 'verified']);
 Route::patch('/bonds/{bond}/part', [BondController::class, "part"])->middleware(['auth', 'verified']);
 

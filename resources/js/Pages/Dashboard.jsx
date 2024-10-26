@@ -51,15 +51,15 @@ export default function Dashboard({ data }) {
                             </p>
                             <p className="text-sm font-normal">مدفوعة</p>
                         </div>
-                        <div className="flex flex-col aspect-square items-center justify-center rounded-xl bg-blue-100 text-4xl font-bold text-blue-500">
+                        <div className="flex aspect-square flex-col items-center justify-center rounded-xl bg-blue-100 text-4xl font-bold text-blue-500">
                             {String(data.current_contracts).padStart(2, '0')}
                             <p className="text-sm font-normal">مستحقة</p>
                         </div>
-                        <div className="flex flex-col aspect-square items-center justify-center rounded-xl bg-orange-100 text-4xl font-bold text-yellow-600">
+                        <div className="flex aspect-square flex-col items-center justify-center rounded-xl bg-orange-100 text-4xl font-bold text-yellow-600">
                             {String(data.late_contracts).padStart(2, '0')}
                             <p className="text-sm font-normal">متأخرة</p>
                         </div>
-                        <div className="flex flex-col aspect-square items-center justify-center rounded-xl bg-red-100 text-4xl font-bold text-red-500">
+                        <div className="flex aspect-square flex-col items-center justify-center rounded-xl bg-red-100 text-4xl font-bold text-red-500">
                             {String(data.very_late_contracts).padStart(2, '0')}
                             <p className="text-sm font-normal">متعثرة الدفع</p>
                         </div>

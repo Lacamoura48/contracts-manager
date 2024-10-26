@@ -6,6 +6,7 @@ import PrimaryButton from '../PrimaryButton';
 import SecondaryButton from '../SecondaryButton';
 
 function ClientCard({ client }) {
+    
     const [showDelete, setShowDelete] = useState(false);
     function deleteClient() {
         router.delete(`/clients/${client.id}`);

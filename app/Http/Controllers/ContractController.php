@@ -67,8 +67,8 @@ class ContractController extends Controller
             'total_price' => 'required|numeric|min:1',
             'contract_type' => 'required|in:3,4,6,8,10,12',
             'start_date' => 'date|required',
-            'finishing_date' => 'date|required',
-            'start_amount' => 'numeric|required',
+            'work_duration' => 'numeric|min:1|required',
+            'start_amount' => 'numeric|min:1|required',
             'bonds_array' => 'nullable',
             'width' => 'nullable',
             'height' => 'nullable',
@@ -78,7 +78,7 @@ class ContractController extends Controller
         // Create the loan
         $contract = Contract::create([
             'client_id' => $validated['client_id'],
-            'finishing_date' => $validated['finishing_date'],
+            'work_duration' => $validated['work_duration'],
             'width' => $validated['width'],
             'height' => $validated['height'],
             'intensity' => $validated['intensity'],
@@ -149,8 +149,8 @@ class ContractController extends Controller
             'total_price' => 'required|numeric|min:1',
             'contract_type' => 'required|in:3,4,6,8,10,12',
             'start_date' => 'date|required',
-            'finishing_date' => 'date|required',
-            'start_amount' => 'numeric|required',
+            'work_duration' => 'numeric|min:1|required',
+            'start_amount' => 'numeric|min:1|required',
             'bonds_array' => 'nullable',
             'width' => 'nullable',
             'height' => 'nullable',
@@ -160,7 +160,7 @@ class ContractController extends Controller
 
         $contract->update([
             'client_id' => $validated['client_id'],
-            'finishing_date' => $validated['finishing_date'],
+            'work_duration' => $validated['work_duration'],
             'width' => $validated['width'],
             'height' => $validated['height'],
             'intensity' => $validated['intensity'],

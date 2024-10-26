@@ -13,10 +13,13 @@ export default function BondOptionsContent({ proof, closeHandler }) {
     });
     function submitForm(e) {
         e.preventDefault();
-        post(route('bonds.update', proof.id), { onSuccess: closeHandler });
+        post(route('bonds.update', proof.id), {
+            preserveScroll: false,
+            onSuccess: closeHandler,
+        });
     }
     return (
-        <div>
+        <div className="w-full">
             <form onSubmit={submitForm}>
                 <ProofInput
                     changeHandler={(d) => setData({ ...data, ...d })}
@@ -35,7 +38,7 @@ export default function BondOptionsContent({ proof, closeHandler }) {
                         error={errors.payement_date}
                     />
                 </div>
-                <SubmitButton loading={processing}>go go</SubmitButton>
+                <SubmitButton loading={processing}>تحديث</SubmitButton>
             </form>
         </div>
     );

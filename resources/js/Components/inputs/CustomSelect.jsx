@@ -1,6 +1,6 @@
 function CustomSelect(props) {
     return (
-        <div className={`relative ${props.width ?? 'w-full'}`}>
+        <div className={`relative ${props.width ?? 'w-full min-w-44'}`}>
             <label className="mb-1 block text-black" htmlFor={props.id}>
                 {props.label}
             </label>

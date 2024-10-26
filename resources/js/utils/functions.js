@@ -1,3 +1,5 @@
+import { ArrowUpFromLine, Check, X } from 'lucide-react';
+
 export const formatIdCode = (value) => {
     // Remove all non-digit characters and limit to 14 digits
     const digitsOnly = value.replace(/\D/g, '').slice(0, 15);
@@ -96,3 +98,27 @@ export const formatFilterDate = (date) => {
     const formattedDateString = `${year}-${month}-${day}`;
     return formattedDateString;
 };
+export function generateCheckStatus(currentStatus) {
+    const statuses = {
+        paid: { bg: 'bcg-green text-white', icon: Check },
+        posted: { bg: 'bcg-blue text-white', icon: ArrowUpFromLine },
+        denied: { bg: 'bcg-red text-white', icon: X },
+        // none: { bg: 'bg-gray-200 text-gray-200', icon: X },
+    };
+    return statuses[currentStatus];
+}
+export function checkDateReturnDiff(inputDate) {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const givenDate = new Date(inputDate);
+    givenDate.setHours(0, 0, 0, 0);
+    if (givenDate < today) {
+        const diffInMilliseconds = today - givenDate;
+        const diffInDays = Math.floor(
+            diffInMilliseconds / (1000 * 60 * 60 * 24),
+        );
+        return `متأخر ب ${diffInDays} ${diffInDays > 2 && diffInDays < 11 ? 'أيام' : 'يوم'}`;
+    } else {
+        return formatMoroccanDate(givenDate);
+    }
+}

@@ -5,16 +5,75 @@ namespace App\Http\Controllers;
 use App\Models\Bond;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Inertia\Inertia;
 
 class BondController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        //
+        $month = $request->get("month") ?? Carbon::now()->toDateTimeString();
+        $clientId = $request->get("client_id");
+        $status = $request->get("status");
+        $bondsQuery = Bond::query();
+        if ($month) {
+            $startOfMonth = Carbon::parse($month)->startOfMonth();
+            $endOfMonth = Carbon::parse($month)->endOfMonth();
+            $bondsQuery->whereBetween('payement_date', [$startOfMonth, $endOfMonth]);
+        }
+        if ($status) {
+            $today = Carbon::today();
+            if ($status == 'paid') {
+                $startOfMonth = $today->copy()->startOfMonth();
+                $endOfMonth = $today->copy()->endOfMonth();
+                $bondsQuery
+                    ->whereBetween('bonds.payement_date', [$startOfMonth, $endOfMonth])
+                    ->where('status', 'paid');
+            }
+            if ($status == 'late') {
+                $twoDaysAfter = $today->copy()->subDays(2);
+                $threeDaysLate = $today->copy()->subDays(3);
+                $bondsQuery
+                    ->whereBetween('bonds.payement_date', [$threeDaysLate, $twoDaysAfter])
+                    ->whereNull('bonds.status');
+            }
+            if ($status == 'pending') {
+                $oneDayLate = $today->copy()->subDays(1);
+                $bondsQuery
+                    ->whereBetween('bonds.payement_date', [$oneDayLate, $today])
+                    ->whereNull('bonds.status');
+            }
+            if ($status == 'very_late') {
+                $fourDaysLate = $today->copy()->subDays(4);
+                $bondsQuery
+                    ->where('bonds.payement_date', '<=', $fourDaysLate)
+                    ->whereNull('bonds.status');
+            }
+        }
+        if ($clientId) {
+            $bondsQuery->whereHas('contract', function ($query) use ($clientId) {
+                $query->where('client_id', $clientId);
+            });
+        }
+        $bonds = $bondsQuery
+            ->with([
+                'contract' => function ($query) {
+                    $query->select('id', 'client_id'); // Select specific columns from the contract table
+                },
+                'contract.client' => function ($query) {
+                    $query->select('id', 'full_name', 'phone'); // Select specific columns from the user table
+                }
+            ])
+            ->orderBy('created_at', 'desc')
+            ->paginate(10);
+
+        return Inertia::render('bonds/Bonds', [
+            'bonds' => $bonds,
+        ]);
     }
 
     /**
@@ -81,13 +140,14 @@ class BondController extends Controller
                 }
             }
         }
-        if($request->has('payement_date')){
+        if ($request->has('payement_date')) {
             $data['payement_date'] = $request->get('payement_date');
         }
-        if($request->has('postable')){
+        if ($request->has('postable')) {
             $data['postable'] = $request->get('postable');
+            $data['status'] = '';
         }
-        if($request->has('title')){
+        if ($request->has('title')) {
             $data['title'] = $request->get('title');
         }
         $bond->update($data);

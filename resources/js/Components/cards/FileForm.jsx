@@ -1,5 +1,6 @@
 import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
+import Checkbox from '../Checkbox';
 import CustomInput from '../inputs/CustomInput';
 import FileInput from '../inputs/FileInput';
 import SubmitButton from '../SubmitButton';
@@ -9,6 +10,7 @@ export default function FileForm({ closeHandler, contract_id }) {
     const { data, setData, post, processing } = useForm({
         title: '',
         image: null,
+        as_note: false,
     });
     function submitForm(e) {
         e.preventDefault();
@@ -40,6 +42,16 @@ export default function FileForm({ closeHandler, contract_id }) {
                 id="image-files"
                 label="صورة الملحق"
             />
+            <div>
+                <Checkbox
+                    onChange={(e) => setData('as_note', e.target.checked)}
+                    id={`asNoteInput`}
+                    defaultChecked={data.as_note}
+                />
+                <label className="mr-2 font-normal" htmlFor={`asNoteInput`}>
+                    تضاف لملاحظات العقد
+                </label>
+            </div>
             <SubmitButton loading={processing}>إضافة</SubmitButton>
         </form>
     );

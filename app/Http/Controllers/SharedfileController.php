@@ -31,6 +31,7 @@ class SharedfileController extends Controller
             Sharedfile::create([
                 'image' => $path,
                 'title' => $request->get('title'),
+                'as_note' => $request->get('as_note'),
                 'contract_id' => $contract->id
             ]);
             return to_route('contracts.files', $contract->id);

@@ -2,7 +2,7 @@ import ClientPDFButton from '@/Components/buttons/ClientPDFButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatMoroccanDate } from '@/utils/functions';
-import { Phone, PlusCircle, Undo2 } from 'lucide-react';
+import { PenBox, Phone, PlusCircle, Scroll, Undo2, Upload } from 'lucide-react';
 
 export default function ClientPage({ client }) {
     return (
@@ -19,6 +19,21 @@ export default function ClientPage({ client }) {
                         label: 'إنشاء عقد',
                         url: `/contracts/create?client_id=${client.id}`,
                         icon: PlusCircle,
+                    },
+                    {
+                        label: 'تعديل على الزبون',
+                        url: route('clients.edit', client.id),
+                        icon: PenBox,
+                    },
+                    {
+                        label: 'عقود الزبون',
+                        url: '/contracts?client_id=' + client.id,
+                        icon: Scroll,
+                    },
+                    {
+                        label: 'دفعات الزبون',
+                        url: '/bonds?client_id=' + client.id,
+                        icon: Upload,
                     },
                 ]}
             >
