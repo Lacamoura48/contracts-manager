@@ -1,0 +1,1 @@
+import{j as e}from"./app-B8texML4.js";function t({className:o="",...r}){return e.jsx("input",{...r,type:"checkbox",className:"rounded border-gray-300 text-black shadow-sm focus:ring-black "+o})}export{t as C};

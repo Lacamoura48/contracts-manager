@@ -13,12 +13,16 @@ return new class extends Migration
     {
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
+            $table->string('uuid')->nullable();
+            $table->string('code')->unique();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->text('notes')->nullable();
             $table->integer('work_duration');
             $table->string('width')->nullable();
             $table->string('height')->nullable();
             $table->string('intensity')->nullable();
+            $table->boolean('read')->default(false);
+            $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });
     }

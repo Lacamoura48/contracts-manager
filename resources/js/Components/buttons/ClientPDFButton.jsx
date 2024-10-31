@@ -10,12 +10,16 @@ import {
     View,
 } from '@react-pdf/renderer';
 import { FileDown } from 'lucide-react';
-import rubik from '../../assets/fonts/rubik.ttf';
+import rubikBold from '../../assets/fonts/Rubik-Bold.ttf';
+import rubik from '../../assets/fonts/Rubik-Regular.ttf';
 
 // Example of importing custom Arabic fonts (Google Fonts)
 Font.register({
     family: 'rubik',
-    src: rubik,
+    fonts: [
+        { src: rubik, fontWeight: 'normal' },
+        { src: rubikBold, fontWeight: 'bold' },
+    ],
 });
 
 // Styles for the PDF

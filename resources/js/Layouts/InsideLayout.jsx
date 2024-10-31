@@ -11,7 +11,7 @@ export default function InsideLayout({ children, headerTitle, headerLink }) {
                         <h1 className="text-center text-4xl font-bold md:text-start md:text-5xl">
                             {headerTitle}
                         </h1>
-                        <div className="flex flex-wrap gap-2">
+                        <div className="flex flex-wrap justify-center gap-2 md:justify-normal">
                             {headerLink &&
                                 headerLink.map((hLink) => {
                                     return (

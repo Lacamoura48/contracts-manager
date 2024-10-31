@@ -2,11 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\NotifyViewMail;
 use App\Models\Bond;
+use App\Models\Client;
 use App\Models\Contract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
 
 class ContractController extends Controller
@@ -84,6 +87,7 @@ class ContractController extends Controller
             'intensity' => $validated['intensity'],
             'notes' => $validated['notes'],
         ]);
+        $contract->generateUniqueUrl();
 
         // Calculate each payback amount
         $paybackAmount = ($validated['total_price'] - $validated['start_amount']) / ($validated['contract_type'] - 1);
@@ -184,7 +188,7 @@ class ContractController extends Controller
                     $path = $this->saveImage($request->file("proof" . $i + 1));
                 Bond::create([
                     'contract_id' => $contract->id,
-                    'amount' => $i == 0 ? $validated['start_amount'] : $paybackAmount,
+                    'amount' => $paybackAmount,
                     'payement_date' => $i == 0 ? $startDate : $startDate->copy()->startOfMonth()->addMonth()->addMonths($i - 1),
                     'proof_image' => $path,
                     'postable' => true,
@@ -202,9 +206,45 @@ class ContractController extends Controller
         return to_route("contracts.show", $contract->id);
     }
 
-    /**
-     * Remove the specified resource from storage.
-     */
+    public function live(Request $request, $uuid)
+    {
+        $contract = Contract::where('uuid', $uuid)->firstOrFail();
+
+        // Mark as read if not already
+        if (!$contract->read) {
+            $contract->read = true;
+            $contract->read_at = now();
+            $contract->save();
+        }
+        // Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($contract->client->full_name));
+        $contract_data = $contract
+            ->with(['bonds' => function ($query) {
+                $query->orderBy('id')->select('contract_id', 'amount', 'payement_date');
+            }])
+            ->with(['client' => function ($query) {
+                $query->select('id', 'full_name', 'phone', 'email', 'id_code');
+            }])
+            ->with(['files' => function ($query) {
+                $query->where('as_note', 1)->select('title', 'contract_id');
+            }])
+            ->withSum('bonds', 'amount')
+            ->withCount('bonds')
+            ->find($contract->id);
+        return Inertia::render('contracts/LiveContract', [
+            'contract' => $contract_data,
+        ]);
+    }
+    // public function sign(Request $request, Contract $contract)
+    // {
+    //     $validated = $request->validate([
+    //         'id_code' => 'required|max:18|min:18|exists:clients,id_code',
+    //     ]);
+    //     $client = Client::where('id_code', $validated['id_code'])->firstOrFail();
+    //     $contract->read_by = $client->full_name;
+    //     $contract->read_at = now();
+    //     $contract->save();
+    //     return to_route('contracts.live', $contract->uuid);
+    // }
     public function destroy(Contract $contract)
     {
         $contract->delete();

@@ -1,9 +1,12 @@
+import CopyButton from '@/Components/buttons/CopyButton';
 import BondsList from '@/Components/lists/BondsList';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatMoroccanDate } from '@/utils/functions';
 import { Banknote, File, Info, PenBox, Phone, Undo2 } from 'lucide-react';
 export default function ContractPage({ contract }) {
+    const confirmationUrl =
+        window.location.origin + '/contracts/live/' + contract.uuid;
     return (
         <AuthenticatedLayout>
             <InsideLayout
@@ -36,10 +39,16 @@ export default function ContractPage({ contract }) {
                         أضيف العقد يوم{' '}
                         {formatMoroccanDate(new Date(contract.created_at))}
                     </p>
-                    <p className="mx-auto flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0">
+                    <div className="text-center md:text-start">
+                        <CopyButton
+                            textToCopy={confirmationUrl}
+                            label="نسخ رابط العقد"
+                        />
+                    </div>
+
+                    <p className="mx-auto mt-5 flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0">
                         <Phone size={20} /> {contract.client.phone}
                     </p>
-
                     <hr className="my-8" />
                     <div className="flex flex-wrap gap-2">
                         <h2 className="text-3xl font-bold">
