@@ -158,7 +158,7 @@ const MyDocument = ({ contract }) => (
                     styles.itemsCenter,
                 ]}
             >
-                <Text>{contract.code} jfj</Text>
+                <Text>{contract.code}</Text>
                 <Text style={styles.bold}>: الرقم التسلسلي للعقد </Text>
             </View>
             <Text style={styles.bigTitle}>عقد تصنيع وتوريد اثاث</Text>

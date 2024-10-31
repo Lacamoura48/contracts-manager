@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('contracts', function (Blueprint $table) {
             $table->id();
             $table->string('uuid')->nullable();
-            $table->string('code')->unique();
+            $table->string('code')->nullable();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->text('notes')->nullable();
             $table->integer('work_duration');

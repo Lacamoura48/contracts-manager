@@ -88,6 +88,7 @@ class ContractController extends Controller
             'notes' => $validated['notes'],
         ]);
         $contract->generateUniqueUrl();
+        $contract->generateCode();
 
         // Calculate each payback amount
         $paybackAmount = ($validated['total_price'] - $validated['start_amount']) / ($validated['contract_type'] - 1);
