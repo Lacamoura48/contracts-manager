@@ -5,6 +5,12 @@ import { formatMoroccanDate } from '@/utils/functions';
 import { PenBox, Phone, PlusCircle, Scroll, Undo2, Upload } from 'lucide-react';
 
 export default function ClientPage({ client }) {
+
+    const state = client.state || '';
+    const building = client.building || '';
+    const appart = client.appart || '';
+    const area = client.area || '';
+    const address = state + '، ' + area + ' ' + building + ' ' + appart;
     return (
         <AuthenticatedLayout>
             <InsideLayout
@@ -49,7 +55,7 @@ export default function ClientPage({ client }) {
                         <Phone size={20} /> {client.phone}
                     </a>
                     <div className="mt-6 flex justify-center md:justify-normal">
-                        <ClientPDFButton client={client} />
+                        <ClientPDFButton client={client} address={address} />
                     </div>
                     <hr className="my-5" />
                     <table className="mx-auto max-w-full md:mx-0">
@@ -97,9 +103,7 @@ export default function ClientPage({ client }) {
                             <th className="w-1/2 px-2 py-4 text-right">
                                 العنوان
                             </th>
-                            <td className="w-1/2 px-2 text-left">
-                                {client.address}
-                            </td>
+                            <td className="w-1/2 px-2 text-left">{address}</td>
                         </tr>
                         <tr>
                             <th className="w-1/2 px-2 py-4 text-right">

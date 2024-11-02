@@ -102,7 +102,7 @@ const styles = StyleSheet.create({
 });
 
 // PDF Document Component
-const ClientPDFDocument = ({ client }) => (
+const ClientPDFDocument = ({ client, address }) => (
     <Document>
         <Page size="A4" style={styles.page}>
             {/* Client Information */}
@@ -143,7 +143,7 @@ const ClientPDFDocument = ({ client }) => (
                 </View>
                 <View style={styles.flexBetween}>
                     <Text style={styles.label}>العنوان</Text>
-                    <Text style={styles.value}>{client.address}</Text>
+                    <Text style={styles.value}>{address}</Text>
                 </View>
             </View>
 
@@ -182,9 +182,9 @@ const ClientPDFDocument = ({ client }) => (
     </Document>
 );
 
-export default function ClientPDFButton({ client }) {
+export default function ClientPDFButton({ client, address }) {
     const openPdfInNewTab = async () => {
-        const doc = <ClientPDFDocument client={client} />; // Your PDF document
+        const doc = <ClientPDFDocument address={address} client={client} />; // Your PDF document
         const blob = await pdf(doc).toBlob(); // Generate the PDF blob
         const url = URL.createObjectURL(blob); // Create a URL for the blob
         window.open(url, '_blank'); // Open the URL in a new tab

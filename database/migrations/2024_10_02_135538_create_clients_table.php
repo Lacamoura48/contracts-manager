@@ -24,6 +24,12 @@ return new class extends Migration
             $table->string("wife_name")->nullable();
             $table->string("wife_phone")->nullable();
             $table->text("notes")->nullable();
+
+            $table->string("state")->nullable();
+            $table->string("area")->nullable();
+            $table->string("building")->nullable();
+            $table->string("appart")->nullable();
+            $table->string("location")->nullable();
             $table->timestamps();
         });
     }

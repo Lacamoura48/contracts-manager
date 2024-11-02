@@ -223,7 +223,7 @@ function ContractsForm(props) {
                     <div className="mb-4 flex gap-3">
                         <CustomInput
                             type="number"
-                            label="مدة انتهاء العمل"
+                            label="مدة الانجاز"
                             placeholder="عدد أيام"
                             onChange={handleOnChange}
                             defaultValue={data.work_duration}

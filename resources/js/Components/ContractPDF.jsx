@@ -3,13 +3,14 @@ import {
     Document,
     Font,
     Page,
-    PDFViewer,
+    pdf,
     StyleSheet,
     Text,
     View,
 } from '@react-pdf/renderer';
 import RubikBold from '../assets/fonts/Rubik-Bold.ttf';
 import RubikRegular from '../assets/fonts/Rubik-Regular.ttf';
+import { FileDown } from 'lucide-react';
 
 Font.register({
     family: 'rubik',
@@ -529,12 +530,21 @@ const MyDocument = ({ contract }) => (
 );
 
 const ContractPDF = ({ contract }) => {
-    console.log(contract);
+    const openPdfInNewTab = async () => {
+        const doc = <MyDocument contract={contract} />; // Your PDF document
+        const blob = await pdf(doc).toBlob(); // Generate the PDF blob
+        const url = URL.createObjectURL(blob); // Create a URL for the blob
+        window.open(url, '_blank'); // Open the URL in a new tab
+    };
 
     return (
-        <PDFViewer width="100%" height="600">
-            <MyDocument contract={contract} />
-        </PDFViewer>
+        <button
+            onClick={openPdfInNewTab}
+            className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
+        >
+            <FileDown className="ml-2 mr-1 inline" />
+            فتح PDF
+        </button>
     );
 };
 

@@ -1,4 +1,5 @@
 import CustomInput from '@/Components/inputs/CustomInput';
+import CustomSelect from '@/Components/inputs/CustomSelect';
 import FileInput from '@/Components/inputs/FileInput';
 import TextArea from '@/Components/inputs/TextArea';
 import SubmitButton from '@/Components/SubmitButton';
@@ -17,10 +18,14 @@ function ClientsForm(props) {
               email: client.email,
               phone2: client.phone2,
               id_code: client.id_code,
-              address: client.address,
               wife_name: client.wife_name,
               wife_phone: client.wife_phone,
               notes: client.notes,
+              state: client.state,
+              building: client.building,
+              appart: client.appart,
+              location: client.location,
+              area: client.area,
               _method: 'PATCH',
           }
         : {
@@ -33,6 +38,11 @@ function ClientsForm(props) {
               wife_name: '',
               wife_phone: '',
               notes: '',
+              state: 'إمارة أبوظبي',
+              building: '',
+              appart: '',
+              location: '',
+              area: '',
           };
     const { data, setData, post, processing, errors } = useForm({
         ...initialValues,
@@ -147,16 +157,6 @@ function ClientsForm(props) {
                             }
                         />
                     </div>
-                    <div className="mb-4">
-                        <TextArea
-                            id="clients-address"
-                            name="address"
-                            onChange={handleOnChange}
-                            defaultValue={data.address}
-                            label="العنوان"
-                            placeholder="اختياري"
-                        />
-                    </div>
                     <div className="mb-4 flex gap-3">
                         <CustomInput
                             label="اسم الزوجة"
@@ -175,6 +175,72 @@ function ClientsForm(props) {
                             placeholder="اختياري"
                         />
                     </div>
+                    <div className="mb-4">
+                        <h2 className="mb-3 text-2xl font-bold">العنوان</h2>
+                        <div className="mb-4 flex gap-2">
+                            <CustomSelect
+                                onChange={handleOnChange}
+                                defaultValue={data.state}
+                                name="state"
+                                id="clients-state"
+                                label="الإمارة"
+                            >
+                                <option value="إمارة أبوظبي">
+                                    إمارة أبوظبي
+                                </option>
+                                <option value="إمارة دبي">إمارة دبي</option>
+                                <option value="إمارة الشارقة">
+                                    إمارة الشارقة
+                                </option>
+                                <option value="إمارة عجمان">إمارة عجمان</option>
+                                <option value="إمارة أم القيوين">
+                                    إمارة أم القيوين
+                                </option>
+                                <option value="إمارة رأس الخيمة">
+                                    إمارة رأس الخيمة
+                                </option>
+                                <option value="إمارة الفجيرة">
+                                    إمارة الفجيرة
+                                </option>
+                            </CustomSelect>
+                            <CustomInput
+                                label="الجهة"
+                                name="area"
+                                id="clients-area"
+                                defaultValue={data.area}
+                                onChange={handleOnChange}
+                                placeholder="اختياري"
+                            />
+                        </div>
+                        <div className="mb-4 flex gap-2">
+                            <CustomInput
+                                label="رقم/اسم البناية"
+                                name="building"
+                                id="clients-building"
+                                defaultValue={data.building}
+                                onChange={handleOnChange}
+                                placeholder="اختياري"
+                            />
+                            <CustomInput
+                                label="رقم الشقة"
+                                name="appart"
+                                id="clients-appart"
+                                defaultValue={data.appart}
+                                onChange={handleOnChange}
+                                placeholder="اختياري"
+                            />
+                        </div>
+                        <div>
+                            <CustomInput
+                                label="Map location"
+                                name="location"
+                                id="clients-location"
+                                defaultValue={data.location}
+                                onChange={handleOnChange}
+                                placeholder="اختياري"
+                            />
+                        </div>
+                    </div>
                     <div className="mb-8 flex">
                         <TextArea
                             id="clients-notes"
@@ -185,6 +251,7 @@ function ClientsForm(props) {
                             placeholder="اختياري"
                         />
                     </div>
+
                     <div>
                         <SubmitButton loading={processing}>
                             {client ? 'تحديث' : 'إرسال'}

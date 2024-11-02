@@ -54,10 +54,14 @@ class ClientController extends Controller
             "id_code" => 'required|max:18|min:18',
             "id_photo_front" => 'required',
             "id_photo_back" => 'required',
-            "address" => 'nullable',
             "wife_name" => 'nullable',
             "wife_phone" => 'nullable',
             "notes" => 'nullable',
+            "state" => 'nullable',
+            "building" => 'nullable',
+            "appart" => 'nullable',
+            "location" => 'nullable',
+            "area" => 'nullable',
         ]);
 
         $front_path = $this->saveImage($request->file('id_photo_front'));
@@ -89,6 +93,11 @@ class ClientController extends Controller
             "wife_name" => 'nullable',
             "wife_phone" => 'nullable',
             "notes" => 'nullable',
+            "state" => 'nullable',
+            "building" => 'nullable',
+            "appart" => 'nullable',
+            "location" => 'nullable',
+            "area" => 'nullable',
         ]);
         if ($request->file('id_photo_front')) {
             $front_path = $this->saveImage($request->file('id_photo_front'));

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Mail\ContractUrlMail;
 use App\Mail\NotifyViewMail;
 use App\Models\Bond;
 use App\Models\Client;
@@ -234,6 +235,14 @@ class ContractController extends Controller
         return Inertia::render('contracts/LiveContract', [
             'contract' => $contract_data,
         ]);
+    }
+    public function send(Request $request, Contract $contract)
+    {
+        if ($contract->client->email) {
+            // dd($contract->client->email);
+            $contractUrl = env('APP_URL') . '/contracts/live/' . $contract->uuid;
+            Mail::to($contract->client->email)->send(new ContractUrlMail($contractUrl));
+        }
     }
     // public function sign(Request $request, Contract $contract)
     // {
