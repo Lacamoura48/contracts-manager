@@ -8,9 +8,9 @@ import {
     Text,
     View,
 } from '@react-pdf/renderer';
+import { FileDown } from 'lucide-react';
 import RubikBold from '../assets/fonts/Rubik-Bold.ttf';
 import RubikRegular from '../assets/fonts/Rubik-Regular.ttf';
-import { FileDown } from 'lucide-react';
 
 Font.register({
     family: 'rubik',
@@ -273,7 +273,7 @@ const MyDocument = ({ contract }) => (
                         ]}
                     >
                         {numberToArabicTyping(
-                            Math.ceil(+contract.bonds_sum_amount),
+                            parseFloat(contract.bonds_sum_amount),
                         )}{' '}
                         درهم إماراتي
                     </Text>
@@ -303,7 +303,7 @@ const MyDocument = ({ contract }) => (
                 {contract.bonds.map((bond, index) => {
                     return (
                         <View key={bond.payement_date} style={styles.bondCard}>
-                            <Text style={[styles.intro]}>
+                            <Text style={[styles.intro, { marginBottom: 6 }]}>
                                 الدفعة {orderArabic[index]}
                             </Text>
                             <View>
@@ -315,10 +315,13 @@ const MyDocument = ({ contract }) => (
                                     ]}
                                 >
                                     <Text
-                                        style={[styles.padwhiteBg, { flex: 1 }]}
+                                        style={[
+                                            styles.padwhiteBg,
+                                            { flex: 1, fontSize: 8 },
+                                        ]}
                                     >
                                         {numberToArabicTyping(
-                                            Math.ceil(+bond.amount),
+                                            parseFloat(bond.amount),
                                         )}{' '}
                                         درهم إماراتي
                                     </Text>

@@ -9,6 +9,7 @@ use App\Models\Client;
 use App\Models\Contract;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Mail;
 use Inertia\Inertia;
@@ -218,7 +219,9 @@ class ContractController extends Controller
             $contract->read_at = now();
             $contract->save();
         }
-        // Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($contract->client->full_name));
+        if (!Auth::check()) {
+            Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($contract->client->full_name));
+        }
         $contract_data = $contract
             ->with(['bonds' => function ($query) {
                 $query->orderBy('id')->select('contract_id', 'amount', 'payement_date');
@@ -236,11 +239,12 @@ class ContractController extends Controller
             'contract' => $contract_data,
         ]);
     }
-    public function send(Request $request, Contract $contract)
+    public function send(Contract $contract)
     {
         if ($contract->client->email) {
             // dd($contract->client->email);
-            $contractUrl = env('APP_URL') . '/contracts/live/' . $contract->uuid;
+            $contractUrl = url(env('APP_URL') . '/contracts/live/' . $contract->uuid);
+            // dd(url($contractUrl));
             Mail::to($contract->client->email)->send(new ContractUrlMail($contractUrl));
         }
     }

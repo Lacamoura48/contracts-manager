@@ -22,7 +22,7 @@ export const formatIdCode = (value) => {
 
 export function formatMoroccanDate(date) {
     try {
-        const formattedDate = date.toLocaleString('ar-UA', {
+        const formattedDate = date.toLocaleString('ar-MA', {
             weekday: 'long',
             day: 'numeric',
             month: 'long',
@@ -123,6 +123,8 @@ export function checkDateReturnDiff(inputDate) {
     }
 }
 export function numberToArabicTyping(num) {
+    if (num === 0) return 'صفر';
+
     const ones = [
         '',
         'واحد',
@@ -173,15 +175,11 @@ export function numberToArabicTyping(num) {
     ];
 
     function getBelowHundred(num) {
-        if (num < 10) {
-            return ones[num];
-        } else if (num >= 10 && num < 20) {
-            return teens[num - 10];
-        } else if (num >= 20 && num < 100) {
-            const tenPart = tens[Math.floor(num / 10)];
-            const onePart = ones[num % 10];
-            return onePart ? `${onePart} و ${tenPart}` : tenPart;
-        }
+        if (num < 10) return ones[num];
+        if (num < 20) return teens[num - 10];
+        const tenPart = tens[Math.floor(num / 10)];
+        const onePart = ones[num % 10];
+        return onePart ? `${onePart} و ${tenPart}` : tenPart;
     }
 
     function getBelowThousand(num) {
@@ -189,37 +187,49 @@ export function numberToArabicTyping(num) {
         const belowHundred = getBelowHundred(num % 100);
         return hundredPart && belowHundred
             ? `${hundredPart} و ${belowHundred}`
-            : belowHundred || hundredPart;
+            : hundredPart || belowHundred;
     }
 
     function getThousandsPart(num) {
         const thousandValue = Math.floor(num / 1000);
-        let thousandPart;
-        if (thousandValue === 1) {
-            thousandPart = 'ألف';
-        } else if (thousandValue === 2) {
-            thousandPart = 'ألفان';
-        } else if (thousandValue >= 3 && thousandValue <= 9) {
-            thousandPart = ones[thousandValue] + ' آلاف';
-        } else {
-            thousandPart =
-                getBelowThousand(thousandValue) +
-                `${thousandValue == 10 ? ' آلاف' : ' ألف'}`;
-        }
-        return thousandPart;
+        if (thousandValue === 1) return 'ألف';
+        if (thousandValue === 2) return 'ألفان';
+        if (thousandValue <= 9) return ones[thousandValue] + ' آلاف';
+        return (
+            getBelowThousand(thousandValue) +
+            (thousandValue === 10 ? ' آلاف' : ' ألف')
+        );
     }
 
-    if (num < 100) {
-        return getBelowHundred(num);
-    } else if (num < 1000) {
-        return getBelowThousand(num);
-    } else if (num < 1000000) {
-        const thousandPart = getThousandsPart(num);
-        const belowThousand = getBelowThousand(num % 1000);
-        return belowThousand
+    function getDecimalPart(decimal) {
+        const decimalNum = Math.round(decimal * 100); // Rounding to handle two decimal places
+        if (decimalNum === 0) return '';
+        return `فاصل ${getBelowHundred(decimalNum)}`;
+    }
+
+    // Main logic
+    const [integerPart, decimalPart] = num.toString().split('.').map(Number); // Split number into integer and decimal
+
+    let result = '';
+
+    // Handle integer part
+    if (integerPart < 100) {
+        result = getBelowHundred(integerPart);
+    } else if (integerPart < 1000) {
+        result = getBelowThousand(integerPart);
+    } else if (integerPart < 1000000) {
+        const thousandPart = getThousandsPart(integerPart);
+        const belowThousand = getBelowThousand(integerPart % 1000);
+        result = belowThousand
             ? `${thousandPart} و ${belowThousand}`
             : thousandPart;
+    } else {
+        return 'العدد كبير جدًا أو غير مدعوم';
     }
 
-    return 'العدد كبير جدًا أو غير مدعوم';
+    // Handle decimal part if it exists
+    if (decimalPart) {
+        result += ` ${getDecimalPart(decimalPart / 100)}`; // Converting to a fraction for easy handling
+    }
+    return result;
 }

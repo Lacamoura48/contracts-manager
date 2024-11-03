@@ -46,6 +46,8 @@ export default function ContractPage({ contract }) {
                             label="نسخ رابط العقد"
                         />
                         <Link
+                            type="button"
+                            method="POST"
                             href={route('contracts.send', contract.id)}
                             className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
                         >

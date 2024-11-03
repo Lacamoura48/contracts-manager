@@ -1,4 +1,5 @@
-import CustomLink from '@/Components/buttons/CustomLink';
+
+import FamousLink from '@/Components/buttons/FamousLink';
 import { Head } from '@inertiajs/react';
 
 export default function InsideLayout({ children, headerTitle, headerLink }) {
@@ -15,7 +16,7 @@ export default function InsideLayout({ children, headerTitle, headerLink }) {
                             {headerLink &&
                                 headerLink.map((hLink) => {
                                     return (
-                                        <CustomLink
+                                        <FamousLink
                                             key={hLink.label}
                                             href={hLink.url}
                                             Icon={hLink.icon}
