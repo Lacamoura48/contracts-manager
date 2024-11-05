@@ -28,7 +28,6 @@ function SignatureSection({
         );
     };
     const save = () => {
-        if (sigCanvas.current.isEmpty()) return;
         const dataURL = sigCanvas.current
             .getTrimmedCanvas()
             .toDataURL('image/png');
