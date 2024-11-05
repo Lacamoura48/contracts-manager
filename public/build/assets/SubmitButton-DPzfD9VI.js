@@ -1,0 +1,1 @@
+import{j as e}from"./app-BJefF5Kw.js";import{L as o}from"./loader-circle-Dn2woTAt.js";function i({children:s,loading:t}){return e.jsx("button",{disabled:t,className:`${t&&"opacity-40"} text-bold block w-full rounded-lg bg-black px-5 py-3 text-white`,children:t?e.jsx("span",{className:"mx-auto block w-fit animate-spin",children:e.jsx(o,{})}):s})}export{i as S};

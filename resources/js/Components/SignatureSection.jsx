@@ -19,15 +19,17 @@ function SignatureSection({
         sigCanvas.current.clear();
     };
     const saveSignature = (dataURL) => {
-        router.patch(
+        router.post(
             route('contracts.sign', id),
             {
                 signature: dataURL,
+                _method: 'patch',
             },
             { onSuccess: () => setCurrentSignature(true) },
         );
     };
     const save = () => {
+        if (sigCanvas.current.isEmpty()) return;
         const dataURL = sigCanvas.current
             .getTrimmedCanvas()
             .toDataURL('image/png');
