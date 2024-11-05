@@ -5,9 +5,7 @@
 </head>
 
 <body>
-    {{-- <a class="btn" href="{{$contractUrl}}">إفتح الرابط</a> --}}
-    <p>الرابط</p>
+    <p>تم فتح العقد الخاص ب</p>
 </body>
 
 </html>
-

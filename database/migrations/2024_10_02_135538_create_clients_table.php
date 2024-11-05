@@ -17,7 +17,7 @@ return new class extends Migration
             $table->string("phone");
             $table->string("email")->nullable();
             $table->string("phone2")->nullable();
-            $table->string("id_code");
+            $table->string("id_code")->unique();
             $table->string("id_photo_front");
             $table->string("id_photo_back");
             $table->text("address")->nullable();

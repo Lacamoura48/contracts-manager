@@ -274,8 +274,7 @@ const MyDocument = ({ contract }) => (
                     >
                         {numberToArabicTyping(
                             parseFloat(contract.bonds_sum_amount),
-                        )}{' '}
-                        درهم إماراتي
+                        )}
                     </Text>
                 }
                 <Text>
@@ -322,8 +321,7 @@ const MyDocument = ({ contract }) => (
                                     >
                                         {numberToArabicTyping(
                                             parseFloat(bond.amount),
-                                        )}{' '}
-                                        درهم إماراتي
+                                        )}
                                     </Text>
                                     <Text style={{ width: 28 }}>قدرها </Text>
                                 </View>
@@ -394,12 +392,18 @@ const MyDocument = ({ contract }) => (
                         المتوفرة بالمعرض والتي تم ارسال صورها عبر منصة واتساب
                         وتم الموافقة عليها
                     </Text>
-                    <Text style={styles.intro}>ملاحظات</Text>
-                    <View style={[styles.padwhiteBg, styles.smallMb]}>
-                        {contract.files.map((file, index) => {
-                            return <Text key={index}>{file.title}</Text>;
-                        })}
-                    </View>
+                    {contract.files?.length > 0 && (
+                        <>
+                            <Text style={styles.intro}>ملاحظات</Text>
+                            <View style={[styles.padwhiteBg, styles.smallMb]}>
+                                {contract.files.map((file, index) => {
+                                    return (
+                                        <Text key={index}>{file.title}</Text>
+                                    );
+                                })}
+                            </View>
+                        </>
+                    )}
                     <Text style={styles.intro}>تنویه</Text>
                     <Text style={{ fontSize: 10 }}>
                         تعتبر المحادثات بين الطرفين عبر منصة واتساب والتي يوضح

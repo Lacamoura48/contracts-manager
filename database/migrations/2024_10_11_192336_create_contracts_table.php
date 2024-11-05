@@ -22,6 +22,8 @@ return new class extends Migration
             $table->string('height')->nullable();
             $table->string('intensity')->nullable();
             $table->boolean('read')->default(false);
+            $table->text('signature')->nullable();
+            $table->text('signature_proof')->nullable();
             $table->timestamp('read_at')->nullable();
             $table->timestamps();
         });

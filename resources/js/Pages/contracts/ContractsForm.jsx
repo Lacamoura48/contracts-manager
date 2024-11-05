@@ -3,7 +3,6 @@ import ProofInput from '@/Components/cards/ProofInput';
 import AutocompleteInput from '@/Components/inputs/autocomplete/Autocomplete';
 import CustomInput from '@/Components/inputs/CustomInput';
 import CustomSelect from '@/Components/inputs/CustomSelect';
-import TextArea from '@/Components/inputs/TextArea';
 import SubmitButton from '@/Components/SubmitButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
@@ -249,7 +248,7 @@ function ContractsForm(props) {
                         <h2 className="mb-3 text-2xl font-bold">
                             معلومات عن المنتج
                         </h2>
-                        <div className="flex gap-2">
+                        <div className="mb-8 flex gap-2">
                             <CustomSelect
                                 onChange={handleOnChange}
                                 defaultValue={data.intensity}
@@ -280,16 +279,6 @@ function ContractsForm(props) {
                                 label="ارتفاع"
                             />
                         </div>
-                    </div>
-                    <div className="mb-8 flex">
-                        <TextArea
-                            id="contracts-notes"
-                            name="notes"
-                            onChange={handleOnChange}
-                            defaultValue={data.notes}
-                            label="ملاحظات"
-                            placeholder="اختياري"
-                        />
                     </div>
                     <div>
                         <SubmitButton loading={processing}>

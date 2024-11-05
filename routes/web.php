@@ -23,8 +23,11 @@ Route::get('/autocomplete/clients', [ClientController::class, 'autocomplete'])->
 Route::resource('contracts', ContractController::class)->middleware(['auth', 'verified']);
 Route::get('/contracts/{contract}/files', [ContractController::class, "files"])->middleware(['auth', 'verified'])->name('contracts.files');
 Route::get('/contracts/live/{uuid}', [ContractController::class, "live"])->name('contracts.live');
-Route::post('/contracts/send/{contract}', [ContractController::class, "send"])->name('contracts.send');
+Route::get('/contracts/{contract}/send', [ContractController::class, "send"])->name('contracts.send');
 Route::patch('/contracts/{contract}/read', [ContractController::class, "read"])->name('contracts.read');
+Route::patch('/contracts/{contract}/sign', [ContractController::class, "sign"])->name('contracts.sign');
+Route::patch('/contracts/{contract}/signproof', [ContractController::class, "signProof"])->name('contracts.signProof');
+Route::patch('/contracts/{contract}/signReset', [ContractController::class, "signReset"])->name('contracts.signReset');
 
 Route::post('/contracts/{contract}/files', [SharedfileController::class, "store"])->middleware(['auth', 'verified'])->name('files.store');
 Route::delete('/sharedFiles/{sharedfile}', [SharedfileController::class, "destroy"])->middleware(['auth', 'verified'])->name('files.delete');

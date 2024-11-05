@@ -46,8 +46,6 @@ export default function ContractPage({ contract }) {
                             label="نسخ رابط العقد"
                         />
                         <Link
-                            type="button"
-                            method="POST"
                             href={route('contracts.send', contract.id)}
                             className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
                         >
@@ -71,6 +69,49 @@ export default function ContractPage({ contract }) {
                     </div>
                     <div>
                         <BondsList bonds={contract.bonds} />
+                    </div>
+                    <div className="my-8">
+                        <h2 className="text-xl font-bold">
+                            {' '}
+                            توقيع الزبون:{' '}
+                            <span className="rounded-lg bg-black px-3 py-1 text-white">
+                                {contract.signature && contract.signature_proof
+                                    ? 'مكتمل'
+                                    : contract.signature
+                                      ? 'غير مكتمل'
+                                      : 'في الإنتظار'}
+                            </span>
+                        </h2>
+                        <div className="mt-6 flex justify-between gap-2">
+                            {contract.signature && (
+                                <div className="flex-1 rounded-xl bg-gray-200">
+                                    <img
+                                        className=""
+                                        src={contract.signature}
+                                        alt="signature"
+                                    />
+                                </div>
+                            )}
+                            {contract.signature_proof && (
+                                <div className="flex-1 rounded-xl bg-gray-200">
+                                    <img
+                                        className=""
+                                        src={contract.signature_proof}
+                                        alt="signature-proof"
+                                    />
+                                </div>
+                            )}
+                        </div>
+                        {contract.signature && (
+                            <Link
+                                href={route('contracts.signReset', contract.id)}
+                                type="button"
+                                method="patch"
+                                className="underline my-3"
+                            >
+                                إعادة تهيئة التوقيع
+                            </Link>
+                        )}
                     </div>
                 </div>
             </InsideLayout>

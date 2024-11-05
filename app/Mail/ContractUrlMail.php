@@ -13,11 +13,11 @@ class ContractUrlMail extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $contractUrl;
+    // public $contractUrl;
 
-    public function __construct($contractUrl)
+    public function __construct()
     {
-        $this->contractUrl = $contractUrl;
+        // $this->contractUrl = $contractUrl;
     }
 
     /**
@@ -37,7 +37,7 @@ class ContractUrlMail extends Mailable
     {
         return new Content(
             view: 'emails.contractUrl',
-            with: ['contractUrl'=> $this->contractUrl]
+            // with: ['contractUrl'=> $this->contractUrl]
         );
     }
 

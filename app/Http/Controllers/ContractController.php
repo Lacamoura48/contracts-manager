@@ -22,6 +22,12 @@ class ContractController extends Controller
         $image->move(public_path('images/bi'), $filename);
         return '/images/bi/' . $filename;
     }
+    public function saveSignature($image)
+    {
+        $filename = uniqid('sig_') . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images/sig'), $filename);
+        return '/images/sig/' . $filename;
+    }
 
     public function index(Request $request)
     {
@@ -242,23 +248,39 @@ class ContractController extends Controller
     public function send(Contract $contract)
     {
         if ($contract->client->email) {
-            // dd($contract->client->email);
+            $email = $contract->client->email;
             $contractUrl = url(env('APP_URL') . '/contracts/live/' . $contract->uuid);
             // dd(url($contractUrl));
-            Mail::to($contract->client->email)->send(new ContractUrlMail($contractUrl));
+            Mail::to($email)->send(new ContractUrlMail());
         }
+        return to_route('contracts.show', $contract->id);
     }
-    // public function sign(Request $request, Contract $contract)
-    // {
-    //     $validated = $request->validate([
-    //         'id_code' => 'required|max:18|min:18|exists:clients,id_code',
-    //     ]);
-    //     $client = Client::where('id_code', $validated['id_code'])->firstOrFail();
-    //     $contract->read_by = $client->full_name;
-    //     $contract->read_at = now();
-    //     $contract->save();
-    //     return to_route('contracts.live', $contract->uuid);
-    // }
+    public function sign(Request $request, Contract $contract)
+    {
+        $validated = $request->validate([
+            'signature' => 'required',
+        ]);
+        $contract->signature = $validated['signature'];
+        $contract->save();
+    }
+    public function signProof(Request $request, Contract $contract)
+    {
+        $validated = $request->validate([
+            'signature_proof' => 'required|image',
+        ]);
+        $path = $this->saveImage($request->file('signature_proof'));
+        $contract->signature_proof = $path;
+        $contract->save();
+    }
+    public function signReset(Request $request, Contract $contract)
+    {
+        if (File::exists(substr($contract->signature_proof, 1))) {
+            File::delete(substr($contract->signature_proof, 1));
+        }
+        $contract->signature_proof = null;
+        $contract->signature = null;
+        $contract->save();
+    }
     public function destroy(Contract $contract)
     {
         $contract->delete();

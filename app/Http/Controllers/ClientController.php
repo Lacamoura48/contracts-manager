@@ -51,7 +51,7 @@ class ClientController extends Controller
             "phone" => 'required',
             "email" => 'email|nullable',
             "phone2" => 'nullable',
-            "id_code" => 'required|max:18|min:18',
+            "id_code" => 'required|max:18|min:18|unique:clients,id_code',
             "id_photo_front" => 'required',
             "id_photo_back" => 'required',
             "wife_name" => 'nullable',

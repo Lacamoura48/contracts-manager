@@ -204,7 +204,7 @@ export function numberToArabicTyping(num) {
     function getDecimalPart(decimal) {
         const decimalNum = Math.round(decimal * 100); // Rounding to handle two decimal places
         if (decimalNum === 0) return '';
-        return `فاصل ${getBelowHundred(decimalNum)}`;
+        return `درهم إماراتي و  ${getBelowHundred(decimalNum)} فلس`;
     }
 
     // Main logic
@@ -230,6 +230,8 @@ export function numberToArabicTyping(num) {
     // Handle decimal part if it exists
     if (decimalPart) {
         result += ` ${getDecimalPart(decimalPart / 100)}`; // Converting to a fraction for easy handling
+        return result;
+    } else {
+        return result + ' درهم إماراتي';
     }
-    return result;
 }
