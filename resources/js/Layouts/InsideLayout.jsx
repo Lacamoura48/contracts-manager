@@ -1,4 +1,3 @@
-
 import FamousLink from '@/Components/buttons/FamousLink';
 import { Head } from '@inertiajs/react';
 

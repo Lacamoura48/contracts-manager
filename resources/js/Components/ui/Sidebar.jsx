@@ -4,6 +4,7 @@ import {
     Home,
     ScrollText,
     Settings,
+    Settings2,
     Upload,
     Users,
 } from 'lucide-react';
@@ -78,6 +79,12 @@ function SideBar({ open, openHandler }) {
                             label="الدفعات"
                             icon={<Upload size={22} />}
                         />
+                        <NavLink
+                            showHandler={() => setShown(false)}
+                            link={'profile.edit'}
+                            label="الإعدادات"
+                            icon={<Settings2 size={22} />}
+                        />
 
                         {/* <NavlinksContainer
                             title="Reporting"
@@ -142,7 +149,7 @@ function SideBar({ open, openHandler }) {
                         }
                     />
                 </Link>
-                <Link
+                {/* <Link
                     className={`${route().current('bonds.index') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
                     href="/bonds"
                 >
@@ -152,14 +159,16 @@ function SideBar({ open, openHandler }) {
                             route().current('bonds.index') ? 'black' : 'white'
                         }
                     />
-                </Link>
+                </Link> */}
                 <Link
-                    className={`${route().current('settings.index') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
-                    href="#"
+                    className={`${route().current('profile.edit') && 'rounded-md bg-white'} flex h-full flex-1 items-center justify-center p-5 transition-colors duration-500`}
+                    href={route('profile.edit')}
                 >
                     <Settings
                         size={25}
-                        color={route().current('settings') ? 'black' : 'white'}
+                        color={
+                            route().current('profile.edit') ? 'black' : 'white'
+                        }
                     />
                 </Link>
             </div>
