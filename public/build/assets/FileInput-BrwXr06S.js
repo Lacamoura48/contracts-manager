@@ -1,6 +1,0 @@
-import{j as a}from"./app-BJefF5Kw.js";import{c as t}from"./createLucideIcon-DsqieJ3-.js";/**
- * @license lucide-react v0.447.0 - ISC
- *
- * This source code is licensed under the ISC license.
- * See the LICENSE file in the root directory of this source tree.
- */const l=t("FileUp",[["path",{d:"M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7Z",key:"1rqfz7"}],["path",{d:"M14 2v4a2 2 0 0 0 2 2h4",key:"tnqrlb"}],["path",{d:"M12 12v6",key:"3ahymv"}],["path",{d:"m15 15-3-3-3 3",key:"15xj92"}]]);function i(e){return a.jsxs("div",{className:"w-full",children:[a.jsx("input",{className:"hidden",type:"file",accept:"image/png, image/jpg, image/jpeg",...e}),a.jsx("label",{className:`group flex aspect-square max-h-32 w-full cursor-pointer ${e.imageSelected||e.defaultImage?"":"flex-col items-center justify-center"} gap-2 rounded-2xl border-4 ${e.error?"border-red-100 text-red-600":"border-[rgb(200,200,200)] text-gray-600"} md:max-h-44`,htmlFor:e.id,children:e.imageSelected||e.defaultImage?a.jsx("div",{className:"mx-auto",children:a.jsx("img",{className:"h-full w-full object-contain",src:e.imageSelected?URL.createObjectURL(e.imageSelected):e.defaultImage,alt:"image selected"})}):a.jsxs(a.Fragment,{children:[a.jsx(l,{size:60,color:e.error?"red":"rgb(200,200,200)"}),a.jsx("span",{children:e.error||e.label})]})})]})}export{i as F};

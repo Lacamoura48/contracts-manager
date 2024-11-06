@@ -7,6 +7,9 @@ import { useState } from 'react';
 
 export default function LiveContract({ contract, auth }) {
     const [showSignature, setshowSignature] = useState(false);
+    const paidBonds = contract.bonds.filter(
+        (bond) => bond.status === 'paid' || bond.status === 'posted',
+    );
     return (
         <div className="flex min-h-screen flex-col justify-center pt-5 text-center">
             <h1 className="text-2xl font-bold md:text-3xl">{`عقد خاص ب${contract.client.full_name}`}</h1>
@@ -15,6 +18,23 @@ export default function LiveContract({ contract, auth }) {
                 أنشئ العقد يوم{' '}
                 {formatMoroccanDate(new Date(contract.created_at))}
             </p>
+            <div className="mx-auto mb-4 flex gap-4">
+                <div className="rounded-2xl bg-gray-200 px-4 py-6">
+                    <h3>القيمة الإجمالية</h3>
+                    <p className="mt-2 rounded-full bg-white px-2 py-1 text-xl font-bold">
+                        {contract.bonds_sum_amount}
+                    </p>
+                </div>
+                <div className="rounded-2xl bg-gray-200 px-4 py-6">
+                    <h3>الدفعات المدفوعة</h3>
+                    <p className="mt-2 rounded-full bg-white px-2 py-1 text-xl font-bold">
+                        {paidBonds.length}
+                        <span className="font-normal text-gray-500">
+                            /{contract.bonds.length}
+                        </span>
+                    </p>
+                </div>
+            </div>
             <div className="flex items-center justify-center gap-3">
                 {auth.user && (
                     <>

@@ -3,11 +3,16 @@ import BondsList from '@/Components/lists/BondsList';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatMoroccanDate } from '@/utils/functions';
-import { Link } from '@inertiajs/react';
+import { Link, router } from '@inertiajs/react';
 import { Banknote, File, Info, Mail, PenBox, Phone, Undo2 } from 'lucide-react';
 export default function ContractPage({ contract }) {
     const confirmationUrl =
         window.location.origin + '/contracts/live/' + contract.uuid;
+    function resetSignature() {
+        router.post(route('contracts.signReset', contract.id), {
+            _method: 'patch',
+        });
+    }
     return (
         <AuthenticatedLayout>
             <InsideLayout
@@ -103,14 +108,13 @@ export default function ContractPage({ contract }) {
                             )}
                         </div>
                         {contract.signature && (
-                            <Link
-                                href={route('contracts.signReset', contract.id)}
+                            <button
+                                onClick={resetSignature}
                                 type="button"
-                                method="patch"
-                                className="underline my-3"
+                                className="my-3 underline"
                             >
                                 إعادة تهيئة التوقيع
-                            </Link>
+                            </button>
                         )}
                     </div>
                 </div>
