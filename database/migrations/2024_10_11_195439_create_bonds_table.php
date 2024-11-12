@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('bonds', function (Blueprint $table) {
             $table->id();
-            $table->decimal('amount', 10, 2);
+            $table->decimal('amount', 15, 5);
             $table->string('status')->nullable();
             $table->date('payement_date');
             $table->string('title')->nullable();

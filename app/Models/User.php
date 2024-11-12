@@ -19,8 +19,17 @@ class User extends Authenticatable
     protected $fillable = [
         'name',
         'email',
+        'code',
+        'company',
+        'address',
+        'phone',
         'password',
     ];
+
+    public function contracts()
+    {
+        return $this->hasMany(Contract::class);
+    }
 
     /**
      * The attributes that should be hidden for serialization.

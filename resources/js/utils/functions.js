@@ -235,3 +235,18 @@ export function numberToArabicTyping(num) {
         return result + ' درهم إماراتي';
     }
 }
+
+export function dateTimeToArabic(currDate) {
+    const date = new Date(currDate);
+
+    // Format date to 'dd/mm/yyyy' and time to 24-hour format with options
+    return date.toLocaleString('ar-MA', {
+        day: '2-digit',
+        month: '2-digit',
+        year: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: false, // 24-hour format
+    });
+    // .replace(',', ' | ');
+}

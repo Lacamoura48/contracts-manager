@@ -69,7 +69,7 @@ export default function ContractPage({ contract }) {
                         </h2>
                         <p className="flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 md:mx-0">
                             <Banknote size={20} /> المبلغ الإجمالي :{' '}
-                            {contract.bonds_sum_amount}
+                            {parseFloat(contract.bonds_sum_amount).toFixed(2)}
                         </p>
                     </div>
                     <div>

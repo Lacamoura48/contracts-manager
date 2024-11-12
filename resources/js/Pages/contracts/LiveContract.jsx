@@ -1,11 +1,11 @@
-import ContractPDF from '@/Components/ContractPDF';
+import ContractPDF from '@/Components/buttons/pdfs/ContractPDF';
 import SignatureSection from '@/Components/SignatureSection';
 import { formatMoroccanDate } from '@/utils/functions';
 import { Link } from '@inertiajs/react';
 import { Mail, PenLine } from 'lucide-react';
 import { useState } from 'react';
 
-export default function LiveContract({ contract, auth }) {
+export default function LiveContract({ contract, auth, terms }) {
     const [showSignature, setshowSignature] = useState(false);
     const paidBonds = contract.bonds.filter(
         (bond) => bond.status === 'paid' || bond.status === 'posted',
@@ -22,7 +22,7 @@ export default function LiveContract({ contract, auth }) {
                 <div className="rounded-2xl bg-gray-200 px-4 py-6">
                     <h3>القيمة الإجمالية</h3>
                     <p className="mt-2 rounded-full bg-white px-2 py-1 text-xl font-bold">
-                        {contract.bonds_sum_amount}
+                        {parseFloat(contract.bonds_sum_amount).toFixed(2)}
                     </p>
                 </div>
                 <div className="rounded-2xl bg-gray-200 px-4 py-6">
@@ -58,7 +58,7 @@ export default function LiveContract({ contract, auth }) {
                         </button>
                     </>
                 )}
-                <ContractPDF contract={contract} />
+                <ContractPDF terms={terms} auth={auth} contract={contract} />
 
                 <SignatureSection
                     signature={contract.signature}

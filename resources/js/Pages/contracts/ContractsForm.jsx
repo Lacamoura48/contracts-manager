@@ -18,7 +18,7 @@ function ContractsForm(props) {
     const initialValues = contract
         ? {
               client_id: contract.client_id,
-              total_price: contract.bonds_sum_amount,
+              total_price: Math.round(parseFloat(contract.bonds_sum_amount)),
               contract_type: contract.bonds_count,
               start_date: formatFilterDate(
                   new Date(contract.bonds[0].created_at),
@@ -203,6 +203,7 @@ function ContractsForm(props) {
                                 type="number"
                                 placeholder="المبلغ بالدرهم"
                                 min={1}
+                                step=".01"
                                 max={data.total_price}
                                 onChange={handleOnChange}
                                 ref={startAmountInput}

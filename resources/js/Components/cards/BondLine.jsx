@@ -7,6 +7,7 @@ import { Link, router } from '@inertiajs/react';
 import {
     ArrowLeftRight,
     HandCoins,
+    Phone,
     ReceiptText,
     Settings,
     TimerReset,
@@ -18,7 +19,7 @@ import BondMarkAsPaid from '../bond-modals/BondMarkAsPaid';
 import BondOptionsContent from '../bond-modals/BondOptionsContent';
 import CustomInput from '../inputs/CustomInput';
 
-function BondLine({ bond }) {
+function BondLine({ bond, noActions }) {
     const proofImageRef = useRef();
     const currStatus = generateCheckStatus(bond.status);
     const [amount, setAmount] = useState();
@@ -136,7 +137,7 @@ function BondLine({ bond }) {
                         </div>
                         <div>
                             <span className="block font-medium">
-                                {bond.amount} درهم{' '}
+                                {parseFloat(bond.amount).toFixed(2)} درهم{' '}
                                 {!bond.postable && (
                                     <span className="mb-4 whitespace-nowrap rounded-full bg-orange-100 px-4 py-1 text-center text-xs text-orange-800">
                                         شيك ضمان
@@ -167,27 +168,36 @@ function BondLine({ bond }) {
                                 >
                                     {bond.contract.client.full_name}
                                 </Link>
-                                {/* <a
+                                <a
                                     className="w-10 rounded-lg border border-gray-300 bg-gray-100 px-2 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
                                     href={'tel:' + bond.contract.client.phone}
                                 >
                                     <Phone className="inline-block" size={20} />
-                                </a> */}
+                                </a>
                             </>
                         )}
-                        <button
-                            className="w-10 rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
-                            onClick={() => setShow('showProof')}
-                        >
-                            <ReceiptText className="inline-block" size={20} />
-                        </button>
-
-                        <button
-                            onClick={() => setShow('updateBond')}
-                            className="w-10 rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
-                        >
-                            <Settings className="inline-block" size={20} />
-                        </button>
+                        {!noActions && (
+                            <>
+                                <button
+                                    className="w-10 rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                                    onClick={() => setShow('showProof')}
+                                >
+                                    <ReceiptText
+                                        className="inline-block"
+                                        size={20}
+                                    />
+                                </button>
+                                <button
+                                    onClick={() => setShow('updateBond')}
+                                    className="w-10 rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                                >
+                                    <Settings
+                                        className="inline-block"
+                                        size={20}
+                                    />
+                                </button>
+                            </>
+                        )}
                     </div>
 
                     <input
@@ -197,7 +207,7 @@ function BondLine({ bond }) {
                         type="file"
                     />
                 </div>
-                {!bond.status && (
+                {!bond.status && !noActions && (
                     <div className="mt-6 flex gap-2 text-sm">
                         <button
                             onClick={() => setShow('delayBond')}

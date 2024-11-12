@@ -4,12 +4,14 @@ use App\Http\Controllers\BondController;
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\ContractController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\PrefrenceController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SharedfileController;
 use App\Models\Sharedfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use Spatie\Activitylog\Models\Activity;
 
 Route::get('/', function () {
     return Inertia::location('/dashboard');
@@ -42,6 +44,16 @@ Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
+    Route::post('/profiles', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/prefrences/terms', [PrefrenceController::class, 'edit'])->name('terms.edit');
 });
+
+Route::get('/activities', function () {
+    $activities = Activity::orderBy('created_at', 'desc')->get();
+    return Inertia::render('settings/Activities', ["activities" => $activities]);
+})->name('settings.activities');
+
+
 
 require __DIR__ . '/auth.php';

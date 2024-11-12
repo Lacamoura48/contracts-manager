@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('uuid')->nullable();
             $table->string('code')->nullable();
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
+            $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('notes')->nullable();
             $table->integer('work_duration');
             $table->string('width')->nullable();

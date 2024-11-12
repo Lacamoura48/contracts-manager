@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bond;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
@@ -69,7 +70,7 @@ class BondController extends Controller
                 }
             ])
             ->orderBy('created_at', 'desc')
-            ->paginate(10);
+            ->get();
 
         return Inertia::render('bonds/Bonds', [
             'bonds' => $bonds,
@@ -127,6 +128,7 @@ class BondController extends Controller
         }
         if ($request->has('status')) {
             $data['status'] = $request->get('status');
+            Activity()->performedOn($bond)->log(Auth::user()->name . " قام بتغيير حالة الدفعة على العقد " . $bond->contract->code);
         }
         if ($request->has('amount')) {
             $data['amount'] = $request->get('amount');
@@ -168,6 +170,7 @@ class BondController extends Controller
                 //     $amount = 0;
                 // }
                 $currentBond->save(); // Save the updated bond
+                Activity()->performedOn($currentBond)->log(Auth::user()->name . " قام بتأخير الدفعة على العقد " . $currentBond->contract->code);
             }
 
             // Check if the current bond matches the provided bond
@@ -198,6 +201,7 @@ class BondController extends Controller
                 $currentBond->amount = $amount;
                 $currentBond->status = "paid";
                 $currentBond->save(); // Save the updated bond
+                Activity()->performedOn($currentBond)->log(Auth::user()->name . " قام بإتبات دفع جزئي على العقد " . $currentBond->contract->code);
             }
         }
     }

@@ -1,3 +1,4 @@
+import BondsPDF from '@/Components/buttons/pdfs/BondsPDF';
 import BondsFilterSection from '@/Components/filters/BondsFilterSection';
 import BondsList from '@/Components/lists/BondsList';
 import EmptyList from '@/Components/lists/EmptyList';
@@ -24,9 +25,15 @@ export default function Bonds({ bonds }) {
                 ]}
             >
                 <BondsFilterSection />
+                <div>
+                    <BondsPDF
+                        bonds={bonds}
+                        currentMonth={queryParams.get('month')}
+                    />
+                </div>
                 <div className="max-w-2xl">
-                    {bonds.data.length > 0 ? (
-                        <BondsList bonds={bonds.data} />
+                    {bonds.length > 0 ? (
+                        <BondsList noActions={true} bonds={bonds} />
                     ) : (
                         <EmptyList model="عقود" />
                     )}

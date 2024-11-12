@@ -5,18 +5,25 @@ import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
 import { Link, useForm, usePage } from '@inertiajs/react';
 
-export default function UpdateProfileInformation({
-    mustVerifyEmail,
-    status,
-    className = '',
-}) {
+export default function UpdateProfileInformation({ status, className = '' }) {
     const user = usePage().props.auth.user;
 
-    const { data, setData, patch, errors, processing, recentlySuccessful } =
-        useForm({
-            name: user.name,
-            email: user.email,
-        });
+    const {
+        data,
+        setData,
+        post: patch,
+        errors,
+        processing,
+        recentlySuccessful,
+    } = useForm({
+        name: user.name,
+        email: user.email,
+        code: user.code,
+        company: user.company,
+        address: user.address,
+        phone: user.phone,
+        _method: 'patch',
+    });
 
     const submit = (e) => {
         e.preventDefault();
@@ -39,7 +46,6 @@ export default function UpdateProfileInformation({
             <form onSubmit={submit} className="mt-6 space-y-6">
                 <div>
                     <InputLabel htmlFor="name" value="الاسم" />
-
                     <TextInput
                         id="name"
                         className="mt-1 block w-full"
@@ -52,7 +58,50 @@ export default function UpdateProfileInformation({
 
                     <InputError className="mt-2" message={errors.name} />
                 </div>
+                <div>
+                    <InputLabel htmlFor="company" value="اسم الشركة" />
+                    <TextInput
+                        id="company"
+                        className="mt-1 block w-full"
+                        value={data.company}
+                        onChange={(e) => setData('company', e.target.value)}
+                    />
+                    <InputError className="mt-2" message={errors.company} />
+                </div>
+                <div>
+                    <InputLabel htmlFor="code" value="رقم الرخصة" />
+                    <TextInput
+                        id="code"
+                        className="mt-1 block w-full"
+                        value={data.code}
+                        onChange={(e) => setData('code', e.target.value)}
+                    />
+                    <InputError className="mt-2" message={errors.code} />
+                </div>
+                <div>
+                    <InputLabel htmlFor="phone" value="رقم الهاتف" />
 
+                    <TextInput
+                        id="phone"
+                        className="mt-1 block w-full"
+                        value={data.phone}
+                        onChange={(e) => setData('phone', e.target.value)}
+                    />
+
+                    <InputError className="mt-2" message={errors.phone} />
+                </div>
+                <div>
+                    <InputLabel htmlFor="address" value="العنوان" />
+
+                    <TextInput
+                        id="address"
+                        className="mt-1 block w-full"
+                        value={data.address}
+                        onChange={(e) => setData('address', e.target.value)}
+                    />
+
+                    <InputError className="mt-2" message={errors.address} />
+                </div>
                 <div>
                     <InputLabel htmlFor="email" value="البريد الإلكتروني" />
 
@@ -69,7 +118,7 @@ export default function UpdateProfileInformation({
                     <InputError className="mt-2" message={errors.email} />
                 </div>
 
-                {mustVerifyEmail && user.email_verified_at === null && (
+                {user.email_verified_at === null && (
                     <div>
                         <p className="mt-2 text-sm text-gray-800">
                             عنوان بريدك الإلكتروني غير موثق.

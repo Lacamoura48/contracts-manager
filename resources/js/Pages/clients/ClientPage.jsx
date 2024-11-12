@@ -1,4 +1,4 @@
-import ClientPDFButton from '@/Components/buttons/ClientPDFButton';
+import ClientPDFButton from '@/Components/buttons/pdfs/ClientPDFButton';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatMoroccanDate } from '@/utils/functions';

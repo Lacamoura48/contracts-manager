@@ -1,5 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
+import { Link } from '@inertiajs/react';
+import { Scroll, UserPlus } from 'lucide-react';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 
@@ -12,7 +14,21 @@ export default function Edit({ mustVerifyEmail, status }) {
                 </h2>
             }
         >
-            <InsideLayout headerTitle="الملف الشخصي">
+            <InsideLayout
+                headerLink={[
+                    {
+                        label: 'سجل الأنشطة',
+                        url: route('settings.activities'),
+                        icon: Scroll,
+                    },
+                    {
+                        label: 'إضافة مدير',
+                        url: route('contracts.create'),
+                        icon: UserPlus,
+                    },
+                ]}
+                headerTitle="الملف الشخصي"
+            >
                 <div className="py-12">
                     <div className="mx-auto max-w-7xl space-y-6 sm:px-6 lg:px-8">
                         <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
@@ -25,6 +41,16 @@ export default function Edit({ mustVerifyEmail, status }) {
 
                         <div className="bg-white p-4 shadow sm:rounded-lg sm:p-8">
                             <UpdatePasswordForm className="max-w-xl" />
+                        </div>
+                        <div>
+                            <Link
+                                href={route('logout')}
+                                method="post"
+                                as="button"
+                                className="rounded-lg bg-red-700 px-6 py-2 text-white"
+                            >
+                                تسجيل الخروج
+                            </Link>
                         </div>
                     </div>
                 </div>

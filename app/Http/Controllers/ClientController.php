@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Client;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 
@@ -70,6 +71,7 @@ class ClientController extends Controller
         $validated['id_photo_front'] = $front_path;
         $validated['id_photo_back'] = $back_path;
         $client_created = Client::create($validated);
+        Activity()->performedOn($client_created)->log(Auth::user()->name . " قام بإضافة الزبون " . $client_created->full_name);
         return redirect("/clients/" . $client_created['id']);
     }
     public function edit(Client $client)
@@ -119,6 +121,7 @@ class ClientController extends Controller
             $validated['id_photo_back'] = $client['id_photo_back'];
         }
         $client->update($validated);
+        Activity()->performedOn($client)->log(Auth::user()->name . " قام بتعديل على الزبون " . $client->full_name);
         return redirect("/clients/" . $client['id']);
     }
     public function autocomplete(Request $request)

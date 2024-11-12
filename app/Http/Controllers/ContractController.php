@@ -5,8 +5,8 @@ namespace App\Http\Controllers;
 use App\Mail\ContractUrlMail;
 use App\Mail\NotifyViewMail;
 use App\Models\Bond;
-use App\Models\Client;
 use App\Models\Contract;
+use App\Models\Prefrence;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -31,6 +31,7 @@ class ContractController extends Controller
 
     public function index(Request $request)
     {
+
         $client_id = $request->get("client_id");
         $contractsQuery = Contract::query();
         if ($client_id) {
@@ -94,6 +95,7 @@ class ContractController extends Controller
             'height' => $validated['height'],
             'intensity' => $validated['intensity'],
             'notes' => $validated['notes'],
+            'user_id' => Auth::user()->id,
         ]);
         $contract->generateUniqueUrl();
         $contract->generateCode();
@@ -116,6 +118,7 @@ class ContractController extends Controller
                 'postable' => $currentBond['postable'],
             ]);
         }
+        Activity()->performedOn($contract)->log(Auth::user()->name . "قام بإنشاء عقد ل " . $contract->client->full_name);
         return to_route("contracts.show", $contract->id);
     }
 
@@ -212,6 +215,7 @@ class ContractController extends Controller
                 $old_bonds[$i]->delete();
             }
         }
+        Activity()->performedOn($contract)->log(Auth::user()->name . " قام بتعديل على عقد " . $contract->client->full_name);
         return to_route("contracts.show", $contract->id);
     }
 
@@ -238,22 +242,25 @@ class ContractController extends Controller
             ->with(['files' => function ($query) {
                 $query->where('as_note', 1)->select('title', 'contract_id');
             }])
+            ->with('user')
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
             ->find($contract->id);
+            $terms = Prefrence::all('terms');
         return Inertia::render('contracts/LiveContract', [
             'contract' => $contract_data,
+            'terms'=> $terms
         ]);
     }
-    public function send(Contract $contract)
+    public function send(Request $request, Contract $contract)
     {
         if ($contract->client->email) {
             $email = $contract->client->email;
             $contractUrl = url(env('APP_URL') . '/contracts/live/' . $contract->uuid);
             // dd(url($contractUrl));
-            Mail::to($email)->send(new ContractUrlMail());
+            Mail::to($email)->send(new ContractUrlMail($contractUrl));
         }
-        return to_route('contracts.show', $contract->id);
+        // return to_route('contracts.show', $contract->id);
     }
     public function sign(Request $request, Contract $contract)
     {
@@ -283,6 +290,7 @@ class ContractController extends Controller
     }
     public function destroy(Contract $contract)
     {
+        Activity()->performedOn($contract)->log(Auth::user()->name . "قام بحذف عقد ل " . $contract->client->full_name);
         $contract->delete();
         return to_route('contracts.index');
     }
