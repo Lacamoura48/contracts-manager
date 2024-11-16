@@ -43,10 +43,12 @@ Route::patch('/bonds/{bond}/part', [BondController::class, "part"])->middleware(
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
+    Route::patch('/profile', [ProfileController::class, 'signature'])->name('profile.signature');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
     Route::post('/profiles', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/prefrences/terms', [PrefrenceController::class, 'edit'])->name('terms.edit');
+    Route::post('/prefrences/terms', [PrefrenceController::class, 'update'])->name('terms.update');
 });
 
 Route::get('/activities', function () {

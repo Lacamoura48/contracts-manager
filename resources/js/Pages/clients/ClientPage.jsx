@@ -61,7 +61,7 @@ export default function ClientPage({ client }) {
                     <table className="mx-auto max-w-full md:mx-0">
                         <tr>
                             <th className="w-1/2 px-2 py-4 text-right">
-                                رقم واتساب
+                                رقم ثانوي
                             </th>
                             <td className="w-1/2 px-2 text-left">
                                 {client.phone2}

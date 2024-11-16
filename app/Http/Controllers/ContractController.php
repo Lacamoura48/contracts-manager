@@ -234,7 +234,7 @@ class ContractController extends Controller
         }
         $contract_data = $contract
             ->with(['bonds' => function ($query) {
-                $query->orderBy('id')->select('contract_id', 'amount', 'payement_date', 'status');
+                $query->orderBy('id')->select('contract_id', 'amount', 'payement_date', 'status', 'postable');
             }])
             ->with(['client' => function ($query) {
                 $query->select('id', 'full_name', 'phone', 'email', 'id_code');

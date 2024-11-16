@@ -135,6 +135,9 @@ const styles = StyleSheet.create({
         fontSize: 8,
         gap: 8,
     },
+    fixedWidth: {
+        width: 60,
+    },
 });
 
 const orderArabic = [
@@ -195,7 +198,7 @@ const MyDocument = ({ contract, terms }) => (
                         <Text style={styles.padwhiteBg}>
                             {contract.client.full_name}
                         </Text>
-                        <Text>الاسم الكامل</Text>
+                        <Text style={styles.fixedWidth}>الاسم الكامل</Text>
                     </View>
 
                     <View
@@ -208,7 +211,9 @@ const MyDocument = ({ contract, terms }) => (
                         <Text style={styles.padwhiteBg}>
                             {contract.client.phone}
                         </Text>
-                        <Text style={styles.esmallMb}>الهاتف</Text>
+                        <Text style={[styles.esmallMb, styles.fixedWidth]}>
+                            الهاتف
+                        </Text>
                     </View>
                     <View
                         style={[
@@ -220,7 +225,9 @@ const MyDocument = ({ contract, terms }) => (
                         <Text style={styles.padwhiteBg}>
                             {contract.client.id_code}
                         </Text>
-                        <Text style={styles.esmallMb}>رقم الهوية</Text>
+                        <Text style={[styles.esmallMb, styles.fixedWidth]}>
+                            رقم الهوية
+                        </Text>
                     </View>
 
                     <View
@@ -233,7 +240,7 @@ const MyDocument = ({ contract, terms }) => (
                         <Text style={styles.padwhiteBg}>
                             {contract.client.email}
                         </Text>
-                        <Text>الايميل</Text>
+                        <Text style={styles.fixedWidth}>الايميل</Text>
                     </View>
                 </View>
                 <View style={styles.squareCard}>
@@ -505,6 +512,12 @@ const MyDocument = ({ contract, terms }) => (
                 </View>
                 <View style={styles.signatureCard}>
                     <Text style={[styles.intro]}>الطرف الأول</Text>
+                    {contract.user.signature && (
+                        <Image
+                            style={styles.signatureImage}
+                            src={contract.user.signature}
+                        />
+                    )}
                 </View>
             </View>
         </Page>
@@ -522,10 +535,10 @@ const ContractPDF = ({ contract, terms }) => {
     return (
         <button
             onClick={openPdfInNewTab}
-            className="relative top-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
+            className="relative top-1 w-full max-w-xl rounded-xl bg-gray-200 py-3 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
         >
             <FileDown className="ml-2 mr-1 inline" />
-            فتح PDF
+            رؤية العقد PDF
         </button>
     );
 };

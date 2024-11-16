@@ -1,13 +1,17 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
+import Modal from '@/Components/Modal';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
 import { Transition } from '@headlessui/react';
-import { Link, useForm, usePage } from '@inertiajs/react';
+import { Link, router, useForm, usePage } from '@inertiajs/react';
+import { PenLine } from 'lucide-react';
+import { useRef, useState } from 'react';
+import ReactSignatureCanvas from 'react-signature-canvas';
 
 export default function UpdateProfileInformation({ status, className = '' }) {
     const user = usePage().props.auth.user;
-
+    const [showSignature, setshowSignature] = useState(false);
     const {
         data,
         setData,
@@ -30,7 +34,28 @@ export default function UpdateProfileInformation({ status, className = '' }) {
 
         patch(route('profile.update'));
     };
+    const sigCanvas = useRef({});
+    const clear = () => {
+        sigCanvas.current.clear();
+    };
+    const saveSignature = (dataURL) => {
+        router.post(
+            route('profile.signature'),
+            {
+                signature: dataURL,
+                _method: 'patch',
+            },
+            { onSuccess: () => setshowSignature(false) },
+        );
+    };
+    const save = () => {
+        if (sigCanvas.current.isEmpty()) return;
+        const dataURL = sigCanvas.current
+            .getTrimmedCanvas()
+            .toDataURL('image/png');
 
+        saveSignature(dataURL);
+    };
     return (
         <section className={className}>
             <header>
@@ -139,6 +164,22 @@ export default function UpdateProfileInformation({ status, className = '' }) {
                         )}
                     </div>
                 )}
+                <div className="flex gap-4">
+                    <button
+                        onClick={() => setshowSignature(true)}
+                        className="relative top-1 rounded-xl border border-black bg-black px-4 py-3 pr-1 text-sm text-white transition-colors duration-500 hover:bg-gray-800 hover:text-white"
+                    >
+                        <PenLine size={20} className="ml-2 inline" />
+                        تغيير توقيع
+                    </button>
+                    {user.signature && (
+                        <img
+                            className="w-24"
+                            src={user.signature}
+                            alt="user signature"
+                        />
+                    )}
+                </div>
 
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing}>حفظ</PrimaryButton>
@@ -154,6 +195,32 @@ export default function UpdateProfileInformation({ status, className = '' }) {
                     </Transition>
                 </div>
             </form>
+            <Modal show={showSignature}>
+                <div className="flex flex-col items-center py-4">
+                    <h2 className="text-black">
+                        الرجاء التوقيع في المنطقة أدناه
+                    </h2>
+                    <ReactSignatureCanvas
+                        ref={sigCanvas}
+                        penColor="black"
+                        canvasProps={{
+                            width: 400,
+                            height: 250,
+                            className:
+                                'sigCanvas border-2 border-gray-600 rounded-xl mb-3',
+                        }}
+                    />
+                    <div className="flex gap-2">
+                        <PrimaryButton onClick={save}>تأكيد</PrimaryButton>
+                        <PrimaryButton onClick={clear}>
+                            إعادة المحاولة
+                        </PrimaryButton>
+                        <PrimaryButton onClick={() => setshowSignature(false)}>
+                            رجوع
+                        </PrimaryButton>
+                    </div>
+                </div>
+            </Modal>
         </section>
     );
 }

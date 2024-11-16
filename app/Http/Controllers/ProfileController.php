@@ -47,9 +47,15 @@ class ProfileController extends Controller
         return Redirect::route('profile.edit');
     }
 
-    /**
-     * Delete the user's account.
-     */
+    public function signature(Request $request)
+    {
+        $validated = $request->validate([
+            'signature' => 'required',
+        ]);
+        $request->user()->signature = $validated['signature'];
+        $request->user()->save();
+    }
+
     public function destroy(Request $request): RedirectResponse
     {
         $request->validate([

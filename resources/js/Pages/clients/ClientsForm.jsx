@@ -124,7 +124,7 @@ function ClientsForm(props) {
                             id="clients-phone"
                         />
                         <CustomInput
-                            label="رقم واتساب"
+                            label="رقم ثانوي"
                             name="phone2"
                             placeholder="اختياري"
                             defaultValue={data.phone2}

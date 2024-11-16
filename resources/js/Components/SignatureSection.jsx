@@ -5,13 +5,7 @@ import Modal from './Modal';
 import PrimaryButton from './PrimaryButton';
 import FileInput from './inputs/FileInput';
 
-function SignatureSection({
-    show,
-    signature,
-    signatureProof,
-    id,
-    closeHandler,
-}) {
+function SignatureSection({ show, signature, id, closeHandler }) {
     const sigCanvas = useRef({});
     const [currentSignature, setCurrentSignature] = useState();
     const [currentProof, setCurrentProof] = useState();

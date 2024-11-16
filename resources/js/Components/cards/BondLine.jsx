@@ -7,8 +7,9 @@ import { Link, router } from '@inertiajs/react';
 import {
     ArrowLeftRight,
     HandCoins,
+    ImageIcon,
+    ImageOff,
     Phone,
-    ReceiptText,
     Settings,
     TimerReset,
 } from 'lucide-react';
@@ -19,7 +20,7 @@ import BondMarkAsPaid from '../bond-modals/BondMarkAsPaid';
 import BondOptionsContent from '../bond-modals/BondOptionsContent';
 import CustomInput from '../inputs/CustomInput';
 
-function BondLine({ bond, noActions }) {
+function BondLine({ bond, noActions, ranking }) {
     const proofImageRef = useRef();
     const currStatus = generateCheckStatus(bond.status);
     const [amount, setAmount] = useState();
@@ -119,22 +120,28 @@ function BondLine({ bond, noActions }) {
     return (
         <>
             <div
-                className={`mb-4 rounded-xl border px-3 py-4 transition-colors duration-500 ${bond.status == 'paid' ? 'border-green-500 bg-green-100' : ''}`}
+                className={`mb-4 rounded-xl border px-3 py-4 transition-colors duration-500 ${bond.status == 'paid' ? 'border-green-500 bg-green-100' : 'bg-white'}`}
             >
                 <div className="flex items-center justify-between">
                     <div className="flex items-center gap-4">
-                        <div>
-                            <button
-                                onClick={() => setShow('markAsPaid')}
-                                className={`${bond.status ? currStatus.bg : 'bg-gray-200'} flex h-9 w-9 items-center justify-center rounded-xl transition-colors`}
-                            >
-                                {bond.status && currStatus ? (
-                                    <currStatus.icon
-                                        className={`transition-all duration-500 ${bond.status ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
-                                    />
-                                ) : null}
-                            </button>
-                        </div>
+                        {!noActions ? (
+                            <div>
+                                <button
+                                    onClick={() => setShow('markAsPaid')}
+                                    className={`${bond.status ? currStatus.bg : 'bg-gray-200'} flex h-9 w-9 items-center justify-center rounded-xl transition-colors`}
+                                >
+                                    {bond.status && currStatus ? (
+                                        <currStatus.icon
+                                            className={`transition-all duration-500 ${bond.status ? 'scale-100 opacity-100' : 'scale-0 opacity-0'}`}
+                                        />
+                                    ) : null}
+                                </button>
+                            </div>
+                        ) : (
+                            <p className="border-l border-l-gray-500 pl-3">
+                                الدفعة {ranking}
+                            </p>
+                        )}
                         <div>
                             <span className="block font-medium">
                                 {parseFloat(bond.amount).toFixed(2)} درهم{' '}
@@ -182,10 +189,17 @@ function BondLine({ bond, noActions }) {
                                     className="w-10 rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
                                     onClick={() => setShow('showProof')}
                                 >
-                                    <ReceiptText
-                                        className="inline-block"
-                                        size={20}
-                                    />
+                                    {bond.proof_image ? (
+                                        <ImageIcon
+                                            className="inline-block"
+                                            size={20}
+                                        />
+                                    ) : (
+                                        <ImageOff
+                                            className="inline-block"
+                                            size={20}
+                                        />
+                                    )}
                                 </button>
                                 <button
                                     onClick={() => setShow('updateBond')}
