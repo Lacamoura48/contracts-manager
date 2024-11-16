@@ -135,8 +135,8 @@ class BondController extends Controller
             $bonds = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->get();
             $total = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->sum('amount');
             $count = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->count();
-            foreach ($bonds as $key => $currentBond) {
-                if ($key != 0) {
+            foreach ($bonds as $currentBond) {
+                if ($currentBond['id'] != $bond['id']) {
                     $currentBond->amount = ($total - $request->get('amount')) / ($count - 1);
                     $currentBond->save();
                 }
