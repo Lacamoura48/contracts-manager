@@ -24,6 +24,7 @@ class DatabaseSeeder extends Seeder
         User::factory()->create([
             'name' => 'asalat meknes',
             'email' => 'asalat.meknes@gmail.com',
+            'role' => 'admin',
             'code' => '783512',
             'company' => 'شركة فن المجالس لصناعة الأثاث ذ.م.م',
             'address' => 'مقرها بالشارقة',

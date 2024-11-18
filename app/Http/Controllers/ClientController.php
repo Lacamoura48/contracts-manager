@@ -70,6 +70,7 @@ class ClientController extends Controller
 
         $validated['id_photo_front'] = $front_path;
         $validated['id_photo_back'] = $back_path;
+        $validated['phone'] = $validated['phone'] . ' ' . '971+' ;
         $client_created = Client::create($validated);
         Activity()->performedOn($client_created)->log(Auth::user()->name . " قام بإضافة الزبون " . $client_created->full_name);
         return redirect("/clients/" . $client_created['id']);

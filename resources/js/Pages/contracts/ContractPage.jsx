@@ -1,4 +1,5 @@
 import CopyButton from '@/Components/buttons/CopyButton';
+import OpenInWhatsapp from '@/Components/buttons/OpenInWhatsapp';
 import BondsList from '@/Components/lists/BondsList';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
@@ -57,6 +58,10 @@ export default function ContractPage({ contract }) {
                             <Mail className="ml-2 inline" />
                             البعث للزبون
                         </Link>
+                        <OpenInWhatsapp
+                            phone={contract.client.phone}
+                            text={`${encodeURIComponent(confirmationUrl)}%0A%0A${contract.user.whatsapp_msg}`}
+                        />
                     </div>
 
                     <p className="mx-auto mt-5 flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 font-bold md:mx-0">

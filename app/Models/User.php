@@ -16,15 +16,7 @@ class User extends Authenticatable
      *
      * @var array<int, string>
      */
-    protected $fillable = [
-        'name',
-        'email',
-        'code',
-        'company',
-        'address',
-        'phone',
-        'password',
-    ];
+    protected $guarded = [];
 
     public function contracts()
     {

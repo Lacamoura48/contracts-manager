@@ -42,11 +42,15 @@ Route::patch('/bonds/{bond}/part', [BondController::class, "part"])->middleware(
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::get('/users/{user}/edit', [ProfileController::class, 'editUser'])->name('users.edit');
+    Route::patch('/users/{user}/edit', [ProfileController::class, 'updateUser'])->name('users.update');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
-    Route::patch('/profile', [ProfileController::class, 'signature'])->name('profile.signature');
+    Route::patch('/profile/sign', [ProfileController::class, 'signature'])->name('profile.signature');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
+    Route::delete('/users/{user}', [ProfileController::class, 'destroyUser'])->name('users.destroy');
+    Route::get('/users', [ProfileController::class, 'index'])->name('profile.index');
+    Route::get('/users/create', [ProfileController::class, 'create'])->name('profile.create');
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
-    Route::post('/profiles', [ProfileController::class, 'index'])->name('profile.index');
     Route::get('/prefrences/terms', [PrefrenceController::class, 'edit'])->name('terms.edit');
     Route::post('/prefrences/terms', [PrefrenceController::class, 'update'])->name('terms.update');
 });

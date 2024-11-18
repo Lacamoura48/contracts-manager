@@ -1,7 +1,7 @@
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { Link } from '@inertiajs/react';
-import { Handshake, Scroll, UserPlus } from 'lucide-react';
+import { Handshake, Scroll, Users } from 'lucide-react';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm';
 
@@ -22,9 +22,9 @@ export default function Edit({ mustVerifyEmail, status }) {
                         icon: Scroll,
                     },
                     {
-                        label: 'إضافة مدير',
-                        url: route('contracts.create'),
-                        icon: UserPlus,
+                        label: 'المدراء',
+                        url: route('profile.index'),
+                        icon: Users,
                     },
                     {
                         label: 'شروط و أحكام',

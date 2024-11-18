@@ -68,7 +68,7 @@ function ClientsForm(props) {
             });
         }
     };
-    console.log(errors.email);
+
     return (
         <AuthenticatedLayout>
             <InsideLayout
@@ -115,14 +115,29 @@ function ClientsForm(props) {
                         />
                     </div>
                     <div className="mb-8 flex gap-3">
-                        <CustomInput
-                            label="رقم الهاتف"
-                            name="phone"
-                            defaultValue={data.phone}
-                            onChange={handleOnChange}
-                            error={errors.phone}
-                            id="clients-phone"
-                        />
+                        <div className="relative w-full">
+                            {!client && (
+                                <span className="absolute left-3 top-9">
+                                    971+
+                                </span>
+                            )}
+                            <label
+                                className="mb-1 block"
+                                htmlFor="clients-phone"
+                            >
+                                رقم الهاتف
+                            </label>
+                            <input
+                                className={`w-full border-none px-2 py-2 ${!client && 'pl-[3.2rem]'} text-left accent-black placeholder:text-gray-400 focus:ring-black ${
+                                    errors.phone ? 'bg-red-100' : 'bg-gray-100'
+                                } placeholder:text-placeholder rounded-lg`}
+                                name="phone"
+                                defaultValue={data.phone}
+                                onChange={handleOnChange}
+                                id="clients-phone"
+                            />
+                        </div>
+
                         <CustomInput
                             label="رقم ثانوي"
                             name="phone2"

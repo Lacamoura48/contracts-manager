@@ -26,12 +26,12 @@ export default function UpdateProfileInformation({ status, className = '' }) {
         company: user.company,
         address: user.address,
         phone: user.phone,
+        whatsapp_msg: user.whatsapp_msg,
         _method: 'patch',
     });
 
     const submit = (e) => {
         e.preventDefault();
-
         patch(route('profile.update'));
     };
     const sigCanvas = useRef({});
@@ -56,6 +56,7 @@ export default function UpdateProfileInformation({ status, className = '' }) {
 
         saveSignature(dataURL);
     };
+
     return (
         <section className={className}>
             <header>
@@ -142,6 +143,22 @@ export default function UpdateProfileInformation({ status, className = '' }) {
 
                     <InputError className="mt-2" message={errors.email} />
                 </div>
+                <div>
+                    <InputLabel htmlFor="whatsapp_msg" value="رسالة واتساب" />
+                    <TextInput
+                        id="whatsapp_msg"
+                        name="whatsapp_msg"
+                        className="mt-1 block w-full"
+                        value={data.whatsapp_msg}
+                        onChange={(e) =>
+                            setData('whatsapp_msg', e.target.value)
+                        }
+                    />
+                    <InputError
+                        className="mt-2"
+                        message={errors.whatsapp_msg}
+                    />
+                </div>
 
                 {user.email_verified_at === null && (
                     <div>
@@ -166,6 +183,7 @@ export default function UpdateProfileInformation({ status, className = '' }) {
                 )}
                 <div className="flex gap-4">
                     <button
+                        type="button"
                         onClick={() => setshowSignature(true)}
                         className="relative top-1 rounded-xl border border-black bg-black px-4 py-3 pr-1 text-sm text-white transition-colors duration-500 hover:bg-gray-800 hover:text-white"
                     >

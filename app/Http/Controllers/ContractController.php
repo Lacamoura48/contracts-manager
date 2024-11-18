@@ -132,6 +132,9 @@ class ContractController extends Controller
             ->with(['client' => function ($query) {
                 $query->select('full_name', 'phone', 'phone2', 'id');
             }])
+            ->with(['user' => function ($query) {
+                $query->select('whatsapp_msg', 'id');
+            }])
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
             ->withCount('files')
@@ -226,12 +229,17 @@ class ContractController extends Controller
         // Mark as read if not already
         if (!$contract->read) {
             $contract->read = true;
-            $contract->read_at = now();
-            $contract->save();
+            if (!Auth::check()) {
+                Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($contract->client->full_name));
+            }
         }
-        if (!Auth::check()) {
+        $delayedTime = Carbon::create($contract->read_at)->addMinutes(5);
+        $currentTime = Carbon::now();
+        if (!Auth::check() && $currentTime > $delayedTime) {
             Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($contract->client->full_name));
         }
+        $contract->read_at = now();
+        $contract->save();
         $contract_data = $contract
             ->with(['bonds' => function ($query) {
                 $query->orderBy('id')->select('contract_id', 'amount', 'payement_date', 'status', 'postable');
@@ -246,10 +254,10 @@ class ContractController extends Controller
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
             ->find($contract->id);
-            $terms = Prefrence::all('terms');
+        $terms = Prefrence::all('terms');
         return Inertia::render('contracts/LiveContract', [
             'contract' => $contract_data,
-            'terms'=> $terms
+            'terms' => $terms
         ]);
     }
     public function send(Request $request, Contract $contract)
