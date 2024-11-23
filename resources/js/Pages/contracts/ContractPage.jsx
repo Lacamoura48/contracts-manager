@@ -1,5 +1,6 @@
 import CopyButton from '@/Components/buttons/CopyButton';
 import OpenInWhatsapp from '@/Components/buttons/OpenInWhatsapp';
+import ContractPDF from '@/Components/buttons/pdfs/ContractPDF';
 import BondsList from '@/Components/lists/BondsList';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
@@ -14,7 +15,7 @@ import {
     PenBox,
     Phone,
 } from 'lucide-react';
-export default function ContractPage({ contract }) {
+export default function ContractPage({ contract, terms, auth }) {
     const phoneNum = contract.client.phone.split(' ')[0];
     const confirmationUrl =
         window.location.origin + '/contracts/live/' + contract.uuid;
@@ -52,7 +53,7 @@ export default function ContractPage({ contract }) {
                         أضيف العقد يوم{' '}
                         {formatMoroccanDate(new Date(contract.created_at))}
                     </p>
-                    <div className="mb-4 grid grid-cols-2 justify-center md:justify-start md:text-start">
+                    <div className="mb-4 grid grid-cols-3 justify-center md:justify-start md:text-start">
                         <Link
                             href={`/contracts/${contract.id}/files?type=files`}
                             className="relative top-1 flex flex-col items-center rounded-full"
@@ -71,8 +72,14 @@ export default function ContractPage({ contract }) {
                                 إضافة ملاحظة
                             </span>
                         </Link>
+                        <ContractPDF
+                            contractPage
+                            contract={contract}
+                            terms={terms}
+                            auth={auth}
+                        />
                     </div>
-                    <div className="mb-4 grid grid-cols-3 md:justify-start md:text-start">
+                    <div className="mb-4 grid grid-cols-3 justify-center md:justify-start md:text-start">
                         <CopyButton
                             textToCopy={confirmationUrl}
                             label="نسخ رابط العقد"

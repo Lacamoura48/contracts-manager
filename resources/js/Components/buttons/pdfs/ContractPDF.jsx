@@ -9,7 +9,7 @@ import {
     Text,
     View,
 } from '@react-pdf/renderer';
-import { File } from 'lucide-react';
+import { File, ScrollText } from 'lucide-react';
 import RubikBold from '../../../assets/fonts/Rubik-Bold.ttf';
 import RubikRegular from '../../../assets/fonts/Rubik-Regular.ttf';
 
@@ -155,7 +155,7 @@ const orderArabic = [
     'الثانية عشرة',
 ];
 
-const MyDocument = ({ contract, terms }) => (
+const MyDocument = ({ contract, terms, phone }) => (
     <Document>
         <Page size="A4" style={styles.page}>
             <View
@@ -180,7 +180,7 @@ const MyDocument = ({ contract, terms }) => (
                 <Text>{contract.code}</Text>
                 <Text style={styles.bold}>: الرقم التسلسلي للعقد </Text>
             </View>
-            <Text style={styles.bigTitle}>عقد تصنيع وتوريد اثاث</Text>
+            <Text style={styles.bigTitle}>{contract.type}</Text>
             <Text style={[styles.intro, styles.textCenter]}>مقدمة</Text>
             <Text style={[styles.textCenter, styles.smallMb]}>
                 وبعون من الله تعالى تم الاتفاق بين كل من
@@ -208,9 +208,7 @@ const MyDocument = ({ contract, terms }) => (
                             styles.esmallMb,
                         ]}
                     >
-                        <Text style={styles.padwhiteBg}>
-                            {contract.client.phone}
-                        </Text>
+                        <Text style={styles.padwhiteBg}>{phone}</Text>
                         <Text style={[styles.esmallMb, styles.fixedWidth]}>
                             الهاتف
                         </Text>
@@ -339,7 +337,7 @@ const MyDocument = ({ contract, terms }) => (
                     <Text>{contract.bonds_count}</Text>
                     <Text>{+contract.bonds_count > 10 ? 'دفعة' : 'دفعات'}</Text>
                 </View>
-                <Text>دفعات حسب جدول التواريخ التالية ذكرها</Text>
+                <Text> حسب جدول التواريخ التالية ذكرها</Text>
             </View>
         </Page>
         <Page size="A4" style={styles.page}>
@@ -524,23 +522,40 @@ const MyDocument = ({ contract, terms }) => (
     </Document>
 );
 
-const ContractPDF = ({ contract, terms }) => {
+const ContractPDF = ({ contract, terms, contractPage }) => {
     const openPdfInNewTab = async () => {
-        const doc = <MyDocument terms={terms} contract={contract} />; // Your PDF document
+        const phoneNum = contract.client.phone.split(' ')[0];
+        const phone = `+971${phoneNum}`;
+        const doc = (
+            <MyDocument phone={phone} terms={terms} contract={contract} />
+        ); // Your PDF document
         const blob = await pdf(doc).toBlob(); // Generate the PDF blob
         const url = URL.createObjectURL(blob); // Create a URL for the blob
         window.open(url, '_blank'); // Open the URL in a new tab
     };
-
-    return (
-        <button
-            onClick={openPdfInNewTab}
-            className="relative top-1 w-full max-w-xl rounded-xl bg-gray-200 py-3 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
-        >
-            <File className="ml-2 mr-1 inline" />
-            الإطلاع على العقد
-        </button>
-    );
+    if (contractPage) {
+        return (
+            <button
+                onClick={openPdfInNewTab}
+                className="relative top-1 flex flex-col items-center rounded-full"
+            >
+                <ScrollText size={35} />
+                <span className="mt-1 rounded-full bg-black px-3 py-1 text-sm text-white">
+                    معاينة العقد
+                </span>
+            </button>
+        );
+    } else {
+        return (
+            <button
+                onClick={openPdfInNewTab}
+                className="relative top-1 w-full max-w-xl rounded-xl bg-gray-200 py-3 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
+            >
+                <File className="ml-2 mr-1 inline" />
+                الإطلاع على العقد
+            </button>
+        );
+    }
 };
 
 export default ContractPDF;

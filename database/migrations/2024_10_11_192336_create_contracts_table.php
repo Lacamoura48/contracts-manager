@@ -18,6 +18,7 @@ return new class extends Migration
             $table->foreignId('client_id')->constrained()->onDelete('cascade');
             $table->foreignId('user_id')->constrained()->onDelete('cascade');
             $table->text('notes')->nullable();
+            $table->string('type');
             $table->integer('work_duration');
             $table->string('width')->nullable();
             $table->string('height')->nullable();

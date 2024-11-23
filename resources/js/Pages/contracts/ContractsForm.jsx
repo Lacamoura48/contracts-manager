@@ -8,7 +8,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { formatFilterDate } from '@/utils/functions';
 import { useForm } from '@inertiajs/react';
-import { PlusCircle, Undo2 } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 import { useEffect, useRef } from 'react';
 function ContractsForm(props) {
     const contract = props.contract;
@@ -29,6 +29,7 @@ function ContractsForm(props) {
               intensity: contract.intensity,
               work_duration: contract.work_duration,
               notes: contract.notes,
+              type: contract.type,
               _method: 'PATCH',
           }
         : {
@@ -42,6 +43,7 @@ function ContractsForm(props) {
               width: '75cm',
               intensity: '25kg/H',
               work_duration: '',
+              type: 'عقد التصنيع و التوريد',
               notes: '',
           };
 
@@ -116,18 +118,12 @@ function ContractsForm(props) {
             });
         }
     };
-    console.log('bondsarray', data.bonds_array);
 
     return (
         <AuthenticatedLayout>
             <InsideLayout
                 headerTitle="إضافة عقد جديد"
                 headerLink={[
-                    {
-                        label: 'رجوع إلى قائمة العقود',
-                        url: route('contracts.index'),
-                        icon: Undo2,
-                    },
                     {
                         label: 'إضافة زبون جديد',
                         url: route('clients.create'),
@@ -136,6 +132,16 @@ function ContractsForm(props) {
                 ]}
             >
                 <form onSubmit={submit} className="max-w-2xl py-8">
+                    <div className="mb-4">
+                        <CustomInput
+                            label="نوع العقد"
+                            onChange={handleOnChange}
+                            defaultValue={data.type}
+                            name="type"
+                            id="contracts-type"
+                            error={errors.type}
+                        />
+                    </div>
                     <div className="mb-4 flex gap-3">
                         <AutocompleteInput
                             placeholder={'إختر زبونا '}
@@ -246,9 +252,7 @@ function ContractsForm(props) {
                         </div>
                     )}
                     <div className="my-4">
-                        <h2 className="mb-3 text-2xl font-bold">
-                            معلومات عن المنتج
-                        </h2>
+                        <h2 className="mb-3 text-2xl font-bold">المواصفات</h2>
                         <div className="mb-8 flex gap-2">
                             <CustomSelect
                                 onChange={handleOnChange}

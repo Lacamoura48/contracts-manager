@@ -56,26 +56,26 @@ class ContractController extends Controller
     {
         $type = $request->get('type');
         $contract_data = null;
-        if($type === 'notes'){
+        if ($type === 'notes') {
             $contract_data = $contract
-            ->with(['files' => function ($query) {
-                $query->where('as_note', 1)->orderBy('created_at', 'desc');
-            }])
-            ->with(['client' => function ($query) {
-                $query->select('id', 'full_name');
-            }])
-            ->find($contract->id);
-        }else {
+                ->with(['files' => function ($query) {
+                    $query->where('as_note', 1)->orderBy('created_at', 'desc');
+                }])
+                ->with(['client' => function ($query) {
+                    $query->select('id', 'full_name');
+                }])
+                ->find($contract->id);
+        } else {
             $contract_data = $contract
-            ->with(['files' => function ($query) {
-                $query->where('as_note', 0)->orderBy('created_at', 'desc');
-            }])
-            ->with(['client' => function ($query) {
-                $query->select('id', 'full_name');
-            }])
-            ->find($contract->id);
+                ->with(['files' => function ($query) {
+                    $query->where('as_note', 0)->orderBy('created_at', 'desc');
+                }])
+                ->with(['client' => function ($query) {
+                    $query->select('id', 'full_name');
+                }])
+                ->find($contract->id);
         }
-        
+
         return Inertia::render('contracts/ContractFiles', ["contract" => $contract_data]);
     }
     public function create()
@@ -91,6 +91,7 @@ class ContractController extends Controller
         $validated = $request->validate([
             'client_id' => 'required|exists:clients,id',
             'total_price' => 'required|numeric|min:1',
+            'type' => 'required',
             'contract_type' => 'required|in:3,4,6,8,10,12',
             'start_date' => 'date|required',
             'work_duration' => 'numeric|min:1|required',
@@ -107,6 +108,7 @@ class ContractController extends Controller
             'work_duration' => $validated['work_duration'],
             'width' => $validated['width'],
             'height' => $validated['height'],
+            'type' => $validated['type'],
             'intensity' => $validated['intensity'],
             'notes' => $validated['notes'],
             'user_id' => Auth::user()->id,
@@ -144,17 +146,17 @@ class ContractController extends Controller
         $contract_data = $contract
             ->with('bonds')
             ->with(['client' => function ($query) {
-                $query->select('full_name', 'phone', 'phone2', 'id');
+                $query->select('full_name', 'phone', 'phone2', 'id', 'email', 'id_code');
             }])
-            ->with(['user' => function ($query) {
-                $query->select('whatsapp_msg', 'id');
-            }])
+            ->with('user')
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
             ->withCount('files')
             ->find($contract->id);
+        $terms = Prefrence::all('terms');
         return Inertia::render('contracts/ContractPage', [
-            'contract' => $contract_data
+            'contract' => $contract_data,
+            'terms' => $terms
         ]);
     }
 
@@ -181,6 +183,7 @@ class ContractController extends Controller
             'total_price' => 'required|numeric|min:1',
             'contract_type' => 'required|in:3,4,6,8,10,12',
             'start_date' => 'date|required',
+            'type' => 'required',
             'work_duration' => 'numeric|min:1|required',
             'start_amount' => 'numeric|min:1|required',
             'bonds_array' => 'nullable',
@@ -195,6 +198,7 @@ class ContractController extends Controller
             'work_duration' => $validated['work_duration'],
             'width' => $validated['width'],
             'height' => $validated['height'],
+            'type' => $validated['type'],
             'intensity' => $validated['intensity'],
             'notes' => $validated['notes'],
         ]);
