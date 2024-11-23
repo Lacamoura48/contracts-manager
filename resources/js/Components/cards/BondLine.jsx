@@ -149,8 +149,14 @@ function BondLine({ bond, noActions, ranking }) {
                                     <span className="mb-4 whitespace-nowrap rounded-full bg-orange-100 px-4 py-1 text-center text-xs text-orange-800">
                                         شيك ضمان
                                     </span>
+                                )}{' '}
+                                {bond.action_done && !noActions && (
+                                    <span className="mb-4 whitespace-nowrap rounded-full bg-violet-100 px-2 py-1 text-center text-xs text-violet-800">
+                                        {bond.action_done}
+                                    </span>
                                 )}
                             </span>
+
                             <span
                                 className={`text-xs ${new Date(bond.payement_date) < new Date() && !bond.status ? 'text-red-500' : 'text-gray-500'}`}
                             >
@@ -183,6 +189,7 @@ function BondLine({ bond, noActions, ranking }) {
                                 </a>
                             </>
                         )}
+
                         {!noActions && (
                             <>
                                 <button
@@ -211,6 +218,22 @@ function BondLine({ bond, noActions, ranking }) {
                                     />
                                 </button>
                             </>
+                        )}
+                        {noActions && (
+                            <div className="flex flex-col">
+                                {bond.action_done && (
+                                    <span className="mb-4 whitespace-nowrap rounded-full bg-violet-100 px-2 py-1 text-center text-xs text-violet-800">
+                                        {bond.action_done}
+                                    </span>
+                                )}
+                                {bond.status && (
+                                    <span
+                                        className={`mb-4 whitespace-nowrap rounded-full px-2 py-1 text-center text-xs ${currStatus.bg}`}
+                                    >
+                                        {currStatus.label}
+                                    </span>
+                                )}
+                            </div>
                         )}
                     </div>
 

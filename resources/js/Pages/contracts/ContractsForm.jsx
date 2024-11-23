@@ -38,9 +38,9 @@ function ContractsForm(props) {
               start_amount: '',
               start_date: formatFilterDate(new Date()),
               bonds_array: [],
-              height: '',
-              width: '70cm',
-              intensity: '20kg/H',
+              height: '27cm',
+              width: '75cm',
+              intensity: '25kg/H',
               work_duration: '',
               notes: '',
           };
@@ -272,13 +272,19 @@ function ContractsForm(props) {
                                 <option value="75cm">75cm</option>
                                 <option value="80cm">80cm</option>
                             </CustomSelect>
-                            <CustomInput
+                            <CustomSelect
                                 onChange={handleOnChange}
                                 defaultValue={data.height}
                                 name="height"
                                 id="contracts-height"
                                 label="ارتفاع"
-                            />
+                            >
+                                <option value="20cm">20cm</option>
+                                <option value="22cm">22cm</option>
+                                <option value="25cm">25cm</option>
+                                <option value="27cm">27cm</option>
+                                <option value="30cm">30cm</option>
+                            </CustomSelect>
                         </div>
                     </div>
                     <div>

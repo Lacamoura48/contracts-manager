@@ -5,30 +5,30 @@ function ContractsList({ contracts }) {
     return (
         <table className="mt-12 w-full">
             <thead>
-                <tr className="w-full border-b-2 border-b-black">
+                <tr className="w-full">
                     <th
                         scope="col"
-                        className="small:text-xs hidden pb-4 text-start text-base md:block"
+                        className="hidden rounded-full bg-black px-2 py-1 text-start text-sm text-white md:block"
                     >
                         الحالة
                     </th>
                     <th
                         scope="col"
-                        className="small:text-xs me-5 pb-4 text-start md:pr-10"
+                        className="mb-2 rounded-full bg-black px-2 py-1 text-start text-sm text-white md:pr-10"
                     >
-                        اسم الزبون
+                        الزبون
                     </th>
                     <th
                         scope="col"
-                        className="small:text-xs me-5 pb-4 text-start"
+                        className="mb-2 rounded-full bg-black px-2 py-1 text-start text-sm text-white"
                     >
-                        تاريخ الدفع التالي
+                        تاريخ الدفعة القادمة
                     </th>
                     <th
                         scope="col"
-                        className="small:text-xs me-5 pb-4 text-start"
+                        className="mb-2 rounded-full bg-black px-2 py-1 text-start text-sm text-white"
                     >
-                        الدفعات
+                        حالةالدفعات
                     </th>
                     <th></th>
                 </tr>

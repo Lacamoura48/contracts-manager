@@ -139,7 +139,6 @@ class ContractController extends Controller
             ->withCount('bonds')
             ->withCount('files')
             ->find($contract->id);
-
         return Inertia::render('contracts/ContractPage', [
             'contract' => $contract_data
         ]);
@@ -242,7 +241,7 @@ class ContractController extends Controller
         $contract->save();
         $contract_data = $contract
             ->with(['bonds' => function ($query) {
-                $query->orderBy('id')->select('contract_id', 'amount', 'payement_date', 'status', 'postable');
+                $query->orderBy('id')->select('contract_id', 'amount', 'payement_date', 'status', 'postable', 'action_done');
             }])
             ->with(['client' => function ($query) {
                 $query->select('id', 'full_name', 'phone', 'email', 'id_code');

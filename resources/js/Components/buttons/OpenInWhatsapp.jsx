@@ -6,11 +6,13 @@ export default function OpenInWhatsapp({ phone, text }) {
         <a
             target="_blank"
             href={url}
-            className="relative top-1 flex gap-1 rounded-full border border-black py-1 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
+            className="relative top-1 flex flex-col items-center"
             rel="noreferrer"
         >
-            <img className="w-8" src="/icons/wa.png" alt="whatsapp icon" />
-            إرسال عبر Whatsapp
+            <img className="w-12" src="/icons/wa.png" alt="whatsapp icon" />
+            <span className="mt-1 rounded-full bg-black px-3 py-1 text-sm text-white">
+                إرسال عبر وتساب
+            </span>
         </a>
     );
 }

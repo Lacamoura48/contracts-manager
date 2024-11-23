@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('title')->nullable();
             $table->boolean('postable');
             $table->string('proof_image')->nullable();
+            $table->string('action_done')->nullable();
             $table->foreignId('contract_id')->constrained()->onDelete('cascade');
             $table->timestamps();
         });

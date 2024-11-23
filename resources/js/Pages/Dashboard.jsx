@@ -10,6 +10,7 @@ export default function Dashboard({ data }) {
         <AuthenticatedLayout>
             <InsideLayout
                 headerTitle="الرئيسية"
+                noBack
                 headerLink={[
                     {
                         label: 'إضافة عقد جديد',

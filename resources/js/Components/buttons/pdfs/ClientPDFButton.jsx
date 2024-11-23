@@ -65,6 +65,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row-reverse',
         justifyContent: 'space-between',
         marginBottom: 16,
+        borderBottom: 1,
+        borderColor: '#ddd',
+        paddingBottom: 8,
     },
     imageSection: {
         textAlign: 'center',
@@ -140,6 +143,10 @@ const ClientPDFDocument = ({ client, address }) => (
                 <View style={styles.flexBetween}>
                     <Text style={styles.label}>هاتف الزوجة</Text>
                     <Text style={styles.value}>{client.wife_phone}</Text>
+                </View>
+                <View style={styles.flexBetween}>
+                    <Text style={styles.label}>Map location</Text>
+                    <Text style={styles.value}>{client.location}</Text>
                 </View>
                 <View style={styles.flexBetween}>
                     <Text style={styles.label}>العنوان</Text>

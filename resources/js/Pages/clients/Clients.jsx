@@ -9,6 +9,7 @@ export default function Clients({ clients }) {
         <AuthenticatedLayout>
             <InsideLayout
                 headerTitle="الزبناء"
+                noBack
                 headerLink={[
                     {
                         label: 'إضافة زبون جديد',

@@ -135,6 +135,7 @@ class BondController extends Controller
             $bonds = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->get();
             $total = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->sum('amount');
             $count = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->count();
+            $data['action_done'] = 'مبلغ مغير';
             foreach ($bonds as $currentBond) {
                 if ($currentBond['id'] != $bond['id']) {
                     $currentBond->amount = ($total - $request->get('amount')) / ($count - 1);
@@ -176,6 +177,7 @@ class BondController extends Controller
             // Check if the current bond matches the provided bond
             if ($currentBond->id === $bond->id) {
                 $bondDate = Carbon::createFromFormat('Y-m-d', $currentBond->payement_date);
+                $currentBond->action_done = 'دفعة مؤجلة';
                 $currentBond->payement_date = $bondDate->copy()->addMonth()->firstOfMonth();
                 $currentBond->save(); // Save the updated bond
                 $found = true;
@@ -200,6 +202,7 @@ class BondController extends Controller
                 $found = $currentBond->amount;
                 $currentBond->amount = $amount;
                 $currentBond->status = "paid";
+                $currentBond->action_done = 'دفع جزئي';
                 $currentBond->save(); // Save the updated bond
                 Activity()->performedOn($currentBond)->log(Auth::user()->name . " قام بإتبات دفع جزئي على العقد " . $currentBond->contract->code);
             }

@@ -19,15 +19,17 @@ const CopyButton = ({ textToCopy, label }) => {
     return (
         <div>
             <button
-                className="relative top-1 rounded-full border border-black py-1 pl-4 pr-2 transition-colors duration-500 hover:bg-black hover:text-white"
+                className="relative top-1 flex flex-col items-center rounded-full"
                 onClick={handleCopy}
             >
                 {copied ? (
-                    <Check className="ml-2 inline" />
+                    <Check size={35} className="ml-2 inline" />
                 ) : (
-                    <Copy className="ml-2 inline" />
+                    <Copy size={35} className="ml-2 inline" />
                 )}
-                {copied ? 'تم النسخ!' : label}
+                <span className="mt-1 rounded-full bg-black px-3 py-1 text-sm text-white">
+                    {copied ? 'تم النسخ!' : label}
+                </span>
             </button>
         </div>
     );

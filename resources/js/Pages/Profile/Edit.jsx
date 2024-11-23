@@ -15,6 +15,7 @@ export default function Edit({ mustVerifyEmail, status }) {
             }
         >
             <InsideLayout
+                noBack
                 headerLink={[
                     {
                         label: 'سجل الأنشطة',

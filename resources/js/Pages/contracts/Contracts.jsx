@@ -10,6 +10,7 @@ export default function Contracts({ contracts }) {
         <AuthenticatedLayout>
             <InsideLayout
                 headerTitle="العقود"
+                noBack
                 headerLink={[
                     {
                         label: 'إضافة عقد جديد',

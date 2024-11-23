@@ -100,9 +100,13 @@ export const formatFilterDate = (date) => {
 };
 export function generateCheckStatus(currentStatus) {
     const statuses = {
-        paid: { bg: 'bcg-green text-white', icon: Check },
-        posted: { bg: 'bcg-blue text-white', icon: ArrowUpFromLine },
-        denied: { bg: 'bcg-red text-white', icon: X },
+        paid: { bg: 'bcg-green text-white', icon: Check, label: 'مدفوع' },
+        posted: {
+            bg: 'bcg-blue text-white',
+            icon: ArrowUpFromLine,
+            label: 'تم إداع الشيك',
+        },
+        denied: { bg: 'bcg-red text-white', icon: X, label: 'شيك مرتجع' },
         // none: { bg: 'bg-gray-200 text-gray-200', icon: X },
     };
     return statuses[currentStatus];

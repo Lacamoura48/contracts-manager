@@ -9,7 +9,7 @@ import {
     Text,
     View,
 } from '@react-pdf/renderer';
-import { FileDown } from 'lucide-react';
+import { File } from 'lucide-react';
 import RubikBold from '../../../assets/fonts/Rubik-Bold.ttf';
 import RubikRegular from '../../../assets/fonts/Rubik-Regular.ttf';
 
@@ -537,8 +537,8 @@ const ContractPDF = ({ contract, terms }) => {
             onClick={openPdfInNewTab}
             className="relative top-1 w-full max-w-xl rounded-xl bg-gray-200 py-3 pl-4 pr-1 transition-colors duration-500 hover:bg-black hover:text-white"
         >
-            <FileDown className="ml-2 mr-1 inline" />
-            رؤية العقد PDF
+            <File className="ml-2 mr-1 inline" />
+            الإطلاع على العقد
         </button>
     );
 };
