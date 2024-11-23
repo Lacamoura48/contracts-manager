@@ -120,6 +120,11 @@ const styles = StyleSheet.create({
         flex: 1,
         padding: 10,
     },
+    squareCardnoflex: {
+        backgroundColor: 'rgb(220,220,240)',
+        borderRadius: 8,
+        padding: 10,
+    },
     bondsGrid: {
         flexDirection: 'row',
         flexWrap: 'wrap',
@@ -138,6 +143,7 @@ const styles = StyleSheet.create({
     fixedWidth: {
         width: 60,
     },
+    tamhimText: { width: 350, marginHorizontal: 'auto', textAlign: 'center' },
 });
 
 const orderArabic = [
@@ -257,12 +263,14 @@ const MyDocument = ({ contract, terms, phone }) => (
                     </Text>
                 </View>
             </View>
-            <Text style={styles.intro}>تمهيد</Text>
-            <Text style={styles.smallMb}>
-                فإنه ولما كان الطرف الثاني يرغب في تصنيع وتوريد أعمال أثاث مغربي
-                وحيت أن الطرف الاول مختص في هذا النوع من الأعمال فقد اتفق
-                الطرفان على ما يلي
-            </Text>
+            <View style={[styles.squareCardnoflex, styles.esmallMb]}>
+                <Text style={[styles.intro, styles.textCenter]}>تمهيد</Text>
+                <Text style={styles.tamhimText}>
+                    فإنه ولما كان الطرف الثاني يرغب في تصنيع و توريد الأعمال
+                    المذكورة في العقد و حيت أن الطرف الاول مختص في هذا النوع من
+                    الأعمال فقد اتفق الطرفان على ما يلي
+                </Text>
+            </View>
             <View style={styles.squareCard}>
                 <Text style={[styles.intro, styles.textLg]}>البند الأول</Text>
                 <Text>
@@ -295,9 +303,9 @@ const MyDocument = ({ contract, terms, phone }) => (
                     البند الرابع: قيمة العقد
                 </Text>
                 <Text>
-                    اتفق الطرفان على أن يقوم الطرف الاول بتصنيع وتوريد الأثاث
-                    طبقا للأسعار التالية ذكرها حسب ما هو موضح تفصيلا في عرض
-                    السعر بمبلغ إجمالى وقدره
+                    اتفق الطرفان على أن يقوم الطرف الاول بتصنيع وتوريد المذكورة
+                    في العقد حسب ما هو موضح تفصيلا في عرض السعر بمبلغ إجمالى
+                    وقدره
                 </Text>
                 {
                     <Text
