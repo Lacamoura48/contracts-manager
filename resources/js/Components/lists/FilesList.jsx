@@ -4,7 +4,7 @@ import FileCard from '../cards/FileCard';
 import FileForm from '../cards/FileForm';
 import EmptyList from './EmptyList';
 
-export default function FilesList({ files, contract_id }) {
+export default function FilesList({ files, contract_id, type }) {
     const [showForm, setShowForm] = useState(false);
 
     return (
@@ -12,6 +12,7 @@ export default function FilesList({ files, contract_id }) {
             <div className="my-6">
                 {showForm ? (
                     <FileForm
+                        type={type}
                         closeHandler={() => setShowForm(false)}
                         contract_id={contract_id}
                     />
@@ -21,7 +22,9 @@ export default function FilesList({ files, contract_id }) {
                         className="w-full rounded-lg bg-black py-3 text-center font-medium text-white"
                     >
                         <PlusSquare size={25} className="ml-3 inline-block" />
-                        <span>إضافة ملحق</span>
+                        <span>
+                            {type === 'files' ? 'إضافة ملحق' : 'إضافة ملاحظة'}
+                        </span>
                     </button>
                 )}
             </div>
@@ -32,7 +35,7 @@ export default function FilesList({ files, contract_id }) {
                     })}
                 </div>
             ) : (
-                <EmptyList model="ملحقات" />
+                <EmptyList model={type === 'files' ? 'ملحق' : 'ملاحظة'} />
             )}
         </div>
     );

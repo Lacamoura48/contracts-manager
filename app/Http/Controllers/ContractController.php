@@ -54,14 +54,28 @@ class ContractController extends Controller
 
     public function files(Request $request, Contract $contract)
     {
-        $contract_data = $contract
+        $type = $request->get('type');
+        $contract_data = null;
+        if($type === 'notes'){
+            $contract_data = $contract
             ->with(['files' => function ($query) {
-                $query->orderBy('created_at', 'desc');
+                $query->where('as_note', 1)->orderBy('created_at', 'desc');
             }])
             ->with(['client' => function ($query) {
                 $query->select('id', 'full_name');
             }])
             ->find($contract->id);
+        }else {
+            $contract_data = $contract
+            ->with(['files' => function ($query) {
+                $query->where('as_note', 0)->orderBy('created_at', 'desc');
+            }])
+            ->with(['client' => function ($query) {
+                $query->select('id', 'full_name');
+            }])
+            ->find($contract->id);
+        }
+        
         return Inertia::render('contracts/ContractFiles', ["contract" => $contract_data]);
     }
     public function create()

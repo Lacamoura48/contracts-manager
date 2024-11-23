@@ -24,17 +24,18 @@ class SharedfileController extends Controller
      */
     public function store(Request $request, Contract $contract)
     {
-            $path = null;
-            if ($request->hasFile('image')) {
-                $path = $this->saveImage($request->file('image'));
-            }
-            Sharedfile::create([
-                'image' => $path,
-                'title' => $request->get('title'),
-                'as_note' => $request->get('as_note'),
-                'contract_id' => $contract->id
-            ]);
-            return to_route('contracts.files', $contract->id);
+        $path = null;
+        if ($request->hasFile('image')) {
+            $path = $this->saveImage($request->file('image'));
+        }
+        $asNote = $request->get('as_note') ? 'notes' : 'files';
+        Sharedfile::create([
+            'image' => $path,
+            'title' => $request->get('title'),
+            'as_note' => $request->get('as_note'),
+            'contract_id' => $contract->id
+        ]);
+        return redirect('/contracts/' . $contract->id . '/files?type=' . $asNote);
     }
 
     /**

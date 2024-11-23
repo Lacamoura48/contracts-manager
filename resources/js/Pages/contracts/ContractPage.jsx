@@ -34,9 +34,9 @@ export default function ContractPage({ contract }) {
                             className="inline"
                             href={route('clients.show', contract.client.id)}
                         >
-                            <Info size={38} className="ml-2 inline" />
+                            <Info size={30} className="ml-2 inline" />
                         </Link>
-                        <span className="rounded-full bg-black px-5 py-1 text-white">
+                        <span className="rounded-full bg-black px-3 py-1 text-2xl text-white">
                             {contract.client.full_name}
                         </span>
                     </p>
@@ -54,7 +54,7 @@ export default function ContractPage({ contract }) {
                     </p>
                     <div className="mb-4 grid grid-cols-2 justify-center md:justify-start md:text-start">
                         <Link
-                            href={route('contracts.send', contract.id)}
+                            href={`/contracts/${contract.id}/files?type=files`}
                             className="relative top-1 flex flex-col items-center rounded-full"
                         >
                             <Paperclip size={35} />
@@ -63,7 +63,7 @@ export default function ContractPage({ contract }) {
                             </span>
                         </Link>
                         <Link
-                            href={route('contracts.send', contract.id)}
+                            href={`/contracts/${contract.id}/files?type=notes`}
                             className="relative top-1 flex flex-col items-center rounded-full"
                         >
                             <ClipboardPenLine size={35} />
