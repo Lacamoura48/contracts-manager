@@ -8,6 +8,7 @@ export default function BondOptionsContent({ proof, closeHandler }) {
         payement_date: proof.payement_date,
         title: proof.title,
         postable: proof.postable,
+        action_done: proof.action_done,
         proof_image: proof.proof_image,
         _method: 'PATCH',
     });
@@ -36,6 +37,16 @@ export default function BondOptionsContent({ proof, closeHandler }) {
                         name="payement_date"
                         id="contracts-payement_date"
                         error={errors.payement_date}
+                    />
+                </div>
+                <div className="my-3">
+                    <CustomInput
+                        label="ملاحظة"
+                        onChange={(e) => setData('action_done', e.target.value)}
+                        defaultValue={data.action_done}
+                        name="action_done"
+                        id="contracts-action_done"
+                        error={errors.action_done}
                     />
                 </div>
                 <SubmitButton loading={processing}>تحديث</SubmitButton>

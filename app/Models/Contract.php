@@ -17,11 +17,15 @@ class Contract extends Model
         return $this->hasMany(Bond::class);
     }
 
+    
     public function files()
     {
         return $this->hasMany(Sharedfile::class);
     }
-
+    public function contract_prefrences()
+    {
+        return $this->hasMany(ContractPrefrence::class);
+    }
     public function client()
     {
         return $this->belongsTo(Client::class);

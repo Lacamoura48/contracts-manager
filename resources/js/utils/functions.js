@@ -51,13 +51,16 @@ export function getNextPaymentDate(payements) {
 }
 
 export const getDiscColor = (status, payment_date) => {
-    if (status === 'paid') return 'bcg-green';
+    if (status) {
+        const color = generateCheckStatus(status);
+        return color.bg;
+    }
     const today = new Date();
     const paymentDate = new Date(payment_date);
     const diffInDays = (today - paymentDate) / (1000 * 60 * 60 * 24);
-    if (diffInDays < 1.5 && diffInDays >= 0) return 'bcg-blue';
+    if (diffInDays < 1.5 && diffInDays >= 0) return 'bcg-turq';
     if (diffInDays > 1.5 && diffInDays <= 3) return 'bcg-orange';
-    if (diffInDays > 3) return 'bcg-red';
+    if (diffInDays > 3) return 'bcg-black';
     return 'bg-gray-200'; // Default
 };
 export const getStatusFromClasses = (classes) => {

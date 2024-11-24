@@ -24,7 +24,8 @@ export default function ContractPage({ contract, terms, auth }) {
             _method: 'patch',
         });
     }
-
+    console.log(contract);
+    
     return (
         <AuthenticatedLayout>
             <InsideLayout

@@ -27,4 +27,10 @@ html {
 .bcg-green {
     background: green;
 }
+.bcg-black {
+    background: black;
+}
+.bcg-turq {
+    background: rgb(239, 111, 246);
+}
 

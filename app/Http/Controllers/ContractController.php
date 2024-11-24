@@ -6,6 +6,7 @@ use App\Mail\ContractUrlMail;
 use App\Mail\NotifyViewMail;
 use App\Models\Bond;
 use App\Models\Contract;
+use App\Models\ContractPrefrence;
 use App\Models\Prefrence;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -97,6 +98,7 @@ class ContractController extends Controller
             'work_duration' => 'numeric|min:1|required',
             'start_amount' => 'numeric|min:1|required',
             'bonds_array' => 'nullable',
+            'contract_prefrences' => 'array',
             'width' => 'nullable',
             'height' => 'nullable',
             'intensity' => 'nullable',
@@ -113,6 +115,13 @@ class ContractController extends Controller
             'notes' => $validated['notes'],
             'user_id' => Auth::user()->id,
         ]);
+        foreach ($validated['contract_prefrences'] as $pref) {
+            ContractPrefrence::create([
+                'title' => $pref['title'],
+                'description' => $pref['description'],
+                'contract_id' => $contract->id,
+            ]);
+        }
         $contract->generateUniqueUrl();
         $contract->generateCode();
 
@@ -149,6 +158,7 @@ class ContractController extends Controller
                 $query->select('full_name', 'phone', 'phone2', 'id', 'email', 'id_code');
             }])
             ->with('user')
+            ->with('contract_prefrences')
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
             ->withCount('files')
@@ -160,13 +170,12 @@ class ContractController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
+
     public function edit(Contract $contract)
     {
         $contract_data = $contract
             ->with('bonds')
+            ->with('contract_prefrences')
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
             ->find($contract->id);
@@ -191,8 +200,16 @@ class ContractController extends Controller
             'height' => 'nullable',
             'intensity' => 'nullable',
             'notes' => 'nullable',
+            'contract_prefrences' => 'array',
         ]);
-
+        ContractPrefrence::where('contract_id', $contract->id)->delete();
+        foreach ($validated['contract_prefrences'] as $pref) {
+            ContractPrefrence::create([
+                'title' => $pref['title'],
+                'description' => $pref['description'],
+                'contract_id' => $contract->id,
+            ]);
+        }
         $contract->update([
             'client_id' => $validated['client_id'],
             'work_duration' => $validated['work_duration'],
@@ -268,6 +285,7 @@ class ContractController extends Controller
                 $query->where('as_note', 1)->select('title', 'contract_id');
             }])
             ->with('user')
+            ->with('contract_prefrences')
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
             ->find($contract->id);
@@ -285,7 +303,7 @@ class ContractController extends Controller
             // dd(url($contractUrl));
             Mail::to($email)->send(new ContractUrlMail($contractUrl));
         }
-        // return to_route('contracts.show', $contract->id);
+ 
     }
     public function sign(Request $request, Contract $contract)
     {

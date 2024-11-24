@@ -1,6 +1,7 @@
 import { autocompleteFetch } from '@/actions/autocomplete';
 import ProofInput from '@/Components/cards/ProofInput';
 import AutocompleteInput from '@/Components/inputs/autocomplete/Autocomplete';
+import ContractPrefrences from '@/Components/inputs/ContractPrefrences';
 import CustomInput from '@/Components/inputs/CustomInput';
 import CustomSelect from '@/Components/inputs/CustomSelect';
 import SubmitButton from '@/Components/SubmitButton';
@@ -30,6 +31,7 @@ function ContractsForm(props) {
               work_duration: contract.work_duration,
               notes: contract.notes,
               type: contract.type,
+              contract_prefrences: contract.contract_prefrences,
               _method: 'PATCH',
           }
         : {
@@ -44,6 +46,7 @@ function ContractsForm(props) {
               intensity: '25kg/H',
               work_duration: '',
               type: 'عقد التصنيع و التوريد',
+              contract_prefrences: [],
               notes: '',
           };
 
@@ -290,6 +293,14 @@ function ContractsForm(props) {
                                 <option value="30cm">30cm</option>
                             </CustomSelect>
                         </div>
+                    </div>
+                    <div className="mb-8">
+                        <ContractPrefrences
+                            prefrencesHandler={(prefs) =>
+                                setData('contract_prefrences', prefs)
+                            }
+                            prefrences={data.contract_prefrences}
+                        />
                     </div>
                     <div>
                         <SubmitButton loading={processing}>

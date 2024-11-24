@@ -462,6 +462,16 @@ const MyDocument = ({ contract, terms, phone }) => (
                     المتوفرة بالمعرض والتي تم ارسال صورها عبر منصة واتساب وتم
                     الموافقة عليها
                 </Text>
+                {contract.contract_prefrences.map((pref) => {
+                    return (
+                        <View key={pref.id}>
+                            <Text style={styles.intro}>{pref.title}</Text>
+                            <Text style={styles.smallMb}>
+                                {pref.description}
+                            </Text>
+                        </View>
+                    );
+                })}
                 {contract.files?.length > 0 && (
                     <>
                         <Text style={styles.intro}>ملاحظات</Text>

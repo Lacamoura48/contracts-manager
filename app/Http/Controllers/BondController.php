@@ -130,6 +130,10 @@ class BondController extends Controller
             $data['status'] = $request->get('status');
             Activity()->performedOn($bond)->log(Auth::user()->name . " قام بتغيير حالة الدفعة على العقد " . $bond->contract->code);
         }
+        if ($request->has('action_done')) {
+            $data['action_done'] = $request->get('action_done');
+            Activity()->performedOn($bond)->log(Auth::user()->name . " قام بتغيير ملاحظة الدفعة على العقد " . $bond->contract->code);
+        }
         if ($request->has('amount')) {
             $data['amount'] = $request->get('amount');
             $bonds = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->get();
