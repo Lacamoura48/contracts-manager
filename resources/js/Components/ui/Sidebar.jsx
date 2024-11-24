@@ -1,4 +1,4 @@
-import { Link } from '@inertiajs/react';
+import { Link, usePage } from '@inertiajs/react';
 import {
     ChevronRight,
     Home,
@@ -13,6 +13,8 @@ import NavLink from './NavLink';
 
 function SideBar({ open, openHandler }) {
     const [shown, setShown] = useState(false);
+    const { auth } = usePage().props;
+
     return (
         <>
             <nav
@@ -20,11 +22,13 @@ function SideBar({ open, openHandler }) {
                     'bg-primary z-20 flex h-16 w-full items-center gap-2 bg-black pl-4 md:hidden'
                 }
             >
-                <img
-                    className="mx-auto block w-20"
-                    src="/icons/logo.png"
-                    alt="logo"
-                />
+                <div className="mx-auto h-14 w-24">
+                    <img
+                        className="mx-auto block h-full w-full object-contain"
+                        src={auth.user.logo || '/icons/logo.png'}
+                        alt="logo"
+                    />
+                </div>
             </nav>
             <aside
                 className={`translate-transform fixed right-0 top-0 z-50 hidden h-screen w-full bg-black px-2 duration-500 md:block md:w-[15rem] ${
@@ -45,13 +49,13 @@ function SideBar({ open, openHandler }) {
                     }`}
                 >
                     <a href="/dashboard">
-                        <img
-                            width={120}
-                            height={120}
-                            className="mx-auto mb-8 block"
-                            src={'/icons/logo.png'}
-                            alt="carlock logo"
-                        />
+                        <div className="mx-auto h-24 w-28">
+                            <img
+                                className="mx-auto block h-full w-full object-contain"
+                                src={auth.user.logo || '/icons/logo.png'}
+                                alt="logo"
+                            />
+                        </div>
                     </a>
 
                     <div className="relative top-3 flex flex-col">

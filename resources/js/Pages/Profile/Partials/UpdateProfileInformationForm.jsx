@@ -1,5 +1,6 @@
 import InputError from '@/Components/InputError';
 import InputLabel from '@/Components/InputLabel';
+import FileInput from '@/Components/inputs/FileInput';
 import Modal from '@/Components/Modal';
 import PrimaryButton from '@/Components/PrimaryButton';
 import TextInput from '@/Components/TextInput';
@@ -198,7 +199,17 @@ export default function UpdateProfileInformation({ status, className = '' }) {
                         />
                     )}
                 </div>
-
+                <div >
+                    <FileInput
+                        id="users-logo"
+                        name="logo"
+                        label="شعار الشركة"
+                        defaultImage={user?.logo}
+                        error={errors.logo}
+                        imageSelected={data.logo}
+                        onChange={(e) => setData('logo', e.target.files[0])}
+                    />
+                </div>
                 <div className="flex items-center gap-4">
                     <PrimaryButton disabled={processing}>حفظ</PrimaryButton>
 

@@ -12,9 +12,16 @@ use Illuminate\Support\Facades\Redirect;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Validation\Rules;
+use Illuminate\Support\Facades\File;
 
 class ProfileController extends Controller
 {
+    public function saveImage($image)
+    {
+        $filename = uniqid('logo_') . '.' . $image->getClientOriginalExtension();
+        $image->move(public_path('images/logo'), $filename);
+        return '/images/logo/' . $filename;
+    }
 
     public function index()
     {
@@ -68,6 +75,7 @@ class ProfileController extends Controller
             'phone' => 'nullable',
             'address' => 'nullable',
             'whatsapp_msg' => 'nullable',
+            'logo' => 'nullable',
             'password' => ['required', 'confirmed', Rules\Password::defaults()],
         ]);
         $user->update($validated);
@@ -88,7 +96,13 @@ class ProfileController extends Controller
         if ($request->user()->isDirty('email')) {
             $request->user()->email_verified_at = null;
         }
-
+        if ($request->file('logo')) {
+            $front_path = $this->saveImage($request->file('logo'));
+            if (File::exists(substr($request->user()->logo, 1))) {
+                File::delete(substr($request->user()->logo, 1));
+            }
+            $request->user()->logo = $front_path;
+        }
         $request->user()->save();
 
         return Redirect::route('profile.edit');
