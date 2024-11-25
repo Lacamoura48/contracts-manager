@@ -20,7 +20,7 @@ import BondMarkAsPaid from '../bond-modals/BondMarkAsPaid';
 import BondOptionsContent from '../bond-modals/BondOptionsContent';
 import CustomInput from '../inputs/CustomInput';
 
-function BondLine({ bond, noActions, ranking }) {
+function BondLine({ bond, noActions, ranking, last }) {
     const proofImageRef = useRef();
     const currStatus = generateCheckStatus(bond.status);
     const [amount, setAmount] = useState();
@@ -253,22 +253,22 @@ function BondLine({ bond, noActions, ranking }) {
                             <TimerReset className="ml-2 inline-block" /> تأجيل
                             الدفعة
                         </button>
-                        <>
+
+                        {!last && (
                             <button
                                 onClick={() => setShow('changeAmount')}
                                 className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
                             >
                                 <ArrowLeftRight className="ml-2 inline-block" />{' '}
                                 تغيير المبلغ
-                            </button>{' '}
-                            <button
-                                onClick={() => setShow('partPayement')}
-                                className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
-                            >
-                                <HandCoins className="ml-2 inline-block" /> دفع
-                                جزئي
                             </button>
-                        </>
+                        )}
+                        <button
+                            onClick={() => setShow('partPayement')}
+                            className="w-full rounded-lg border border-gray-300 bg-gray-100 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
+                        >
+                            <HandCoins className="ml-2 inline-block" /> دفع جزئي
+                        </button>
                     </div>
                 )}
             </div>

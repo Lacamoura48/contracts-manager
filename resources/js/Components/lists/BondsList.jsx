@@ -10,6 +10,7 @@ function BondsList({ bonds, noActions }) {
                         ranking={index + 1}
                         key={line.id}
                         bond={line}
+                        last={index === bonds.length - 1}
                     />
                 );
             })}

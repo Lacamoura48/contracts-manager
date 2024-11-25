@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Bond;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon as SupportCarbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
@@ -193,7 +194,7 @@ class BondController extends Controller
         foreach ($bonds as $currentBond) {
             if ($found !== false) {
                 $currentBond->amount = $currentBond->amount + $found - $amount;
-                $currentBond->save(); // Save the updated bond
+                $currentBond->save();
                 $found = false;
             }
 
@@ -203,11 +204,32 @@ class BondController extends Controller
                 $currentBond->amount = $amount;
                 $currentBond->status = "paid";
                 $currentBond->action_done = 'دفع جزئي';
-                $currentBond->save(); // Save the updated bond
+                $currentBond->save();
                 Activity()->performedOn($currentBond)->log(Auth::user()->name . " قام بإتبات دفع جزئي على العقد " . $currentBond->contract->code);
+
+                // Check if this is the last bond
+                if ($currentBond->id === $bonds->last()->id) {
+                    // Calculate the remaining amount
+                    $remainingAmount = $found - $amount;
+
+                    if ($remainingAmount > 0) {
+                        $newBond = Bond::create([
+                            'contract_id' => $bond->contract_id,
+                            'amount' => $remainingAmount,
+                            'postable' => true,
+                            'action_done' => 'دفعة متأخرة',
+                            'payement_date' => Carbon::parse($bond->payement_date)->addMonth(),
+
+                        ]);
+
+
+                        Activity()->performedOn($newBond)->log(Auth::user()->name . " قام بإنشاء سند جديد بمبلغ " . $remainingAmount . " للشهر القادم.");
+                    }
+                }
             }
         }
     }
+
 
     /**
      * Remove the specified resource from storage.
