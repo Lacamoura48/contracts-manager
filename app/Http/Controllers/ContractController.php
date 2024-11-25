@@ -158,6 +158,7 @@ class ContractController extends Controller
                 $query->select('full_name', 'phone', 'phone2', 'id', 'email', 'id_code');
             }])
             ->with('user')
+            ->with('files')
             ->with('contract_prefrences')
             ->withSum('bonds', 'amount')
             ->withCount('bonds')
@@ -281,9 +282,7 @@ class ContractController extends Controller
             ->with(['client' => function ($query) {
                 $query->select('id', 'full_name', 'phone', 'email', 'id_code');
             }])
-            ->with(['files' => function ($query) {
-                $query->where('as_note', 1)->select('title', 'contract_id');
-            }])
+            ->with('files')
             ->with('user')
             ->with('contract_prefrences')
             ->withSum('bonds', 'amount')
@@ -303,7 +302,6 @@ class ContractController extends Controller
             // dd(url($contractUrl));
             Mail::to($email)->send(new ContractUrlMail($contractUrl));
         }
- 
     }
     public function sign(Request $request, Contract $contract)
     {

@@ -22,7 +22,8 @@ Font.register({
 });
 const styles = StyleSheet.create({
     page: {
-        padding: 30,
+        paddingVertical: 12,
+        paddingHorizontal: 12,
         flexDirection: 'rtl',
         textAlign: 'right',
         fontFamily: 'rubik',
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
         border: 1,
         borderColor: '#aaa',
         borderRadius: 6,
-        padding: 10,
+        padding: 5,
         flex: 1,
     },
     textMd: {
@@ -75,7 +76,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 12,
         textDecoration: 'underline',
-        marginBottom: 12,
+        marginBottom: 6,
     },
     textCenter: {
         textAlign: 'center',
@@ -131,7 +132,7 @@ const styles = StyleSheet.create({
         gap: 5,
     },
     bondCard: {
-        width: 265,
+        width: 280,
         backgroundColor: 'rgb(220,220,240)',
         borderRadius: 8,
         padding: 10,
@@ -144,6 +145,26 @@ const styles = StyleSheet.create({
         width: 60,
     },
     tamhimText: { width: 350, marginHorizontal: 'auto', textAlign: 'center' },
+    smallLineHeight: {
+        lineHeight: 1.1,
+    },
+    title: {
+        fontWeight: 'bold',
+        textAlign: 'center',
+        marginBottom: 14,
+        fontSize: 18,
+    },
+    smallInfo: {
+        fontWeight: 'light',
+        fontSize: 11,
+        textAlign: 'center',
+    },
+    mb: {
+        marginBottom: 14,
+    },
+    maxh: {
+        maxHeight: 200,
+    },
 });
 
 const orderArabic = [
@@ -333,19 +354,32 @@ const MyDocument = ({ contract, terms, phone }) => (
                     البند الخامس: الدفعات
                 </Text>
                 <Text>
-                    تم الاتفاق بين الطرفين أن تتم المحاسبة ودفع المبلغ على عدد
+                    تم الاتفاق بين الطرفين أن تتم المحاسبة ودفع المبلغ على عدد{' '}
+                    {contract.bonds_count}{' '}
+                    {+contract.bonds_count > 10 ? 'دفعة' : 'دفعات'} حسب جدول
+                    التواريخ التالية ذكرها
                 </Text>
-                <View
-                    style={[
-                        styles.padwhiteBg,
-                        styles.flexSmallGap,
-                        { flexDirection: 'row-reverse' },
-                    ]}
-                >
-                    <Text>{contract.bonds_count}</Text>
-                    <Text>{+contract.bonds_count > 10 ? 'دفعة' : 'دفعات'}</Text>
+                <Text> </Text>
+            </View>
+            <View style={styles.bondsGrid}>
+                <View style={styles.signatureCard}>
+                    <Text style={[styles.intro]}>الطرف الثانى</Text>
+                    {contract.signature && (
+                        <Image
+                            style={styles.signatureImage}
+                            src={contract.signature}
+                        />
+                    )}
                 </View>
-                <Text> حسب جدول التواريخ التالية ذكرها</Text>
+                <View style={styles.signatureCard}>
+                    <Text style={[styles.intro]}>الطرف الأول</Text>
+                    {contract.user.signature && (
+                        <Image
+                            style={styles.signatureImage}
+                            src={contract.user.signature}
+                        />
+                    )}
+                </View>
             </View>
         </Page>
         <Page size="A4" style={styles.page}>
@@ -427,6 +461,26 @@ const MyDocument = ({ contract, terms, phone }) => (
                     );
                 })}
             </View>
+            <View style={styles.bondsGrid}>
+                <View style={styles.signatureCard}>
+                    <Text style={[styles.intro]}>الطرف الثانى</Text>
+                    {contract.signature && (
+                        <Image
+                            style={styles.signatureImage}
+                            src={contract.signature}
+                        />
+                    )}
+                </View>
+                <View style={styles.signatureCard}>
+                    <Text style={[styles.intro]}>الطرف الأول</Text>
+                    {contract.user.signature && (
+                        <Image
+                            style={styles.signatureImage}
+                            src={contract.user.signature}
+                        />
+                    )}
+                </View>
+            </View>
         </Page>
         <Page size="A4" style={styles.page}>
             <View style={styles.squareCard}>
@@ -477,7 +531,10 @@ const MyDocument = ({ contract, terms, phone }) => (
                         <Text style={styles.intro}>ملاحظات</Text>
                         <View style={[styles.padwhiteBg, styles.smallMb]}>
                             {contract.files.map((file, index) => {
-                                return <Text key={index}>{file.title}</Text>;
+                                if (file.as_note)
+                                    return (
+                                        <Text key={index}>{file.title}</Text>
+                                    );
                             })}
                         </View>
                     </>
@@ -498,12 +555,28 @@ const MyDocument = ({ contract, terms, phone }) => (
                 <View>
                     {terms.map((term) => {
                         return (
-                            <Text
-                                style={[styles.eesmallMb, styles.smallText]}
+                            <View
                                 key={term.id}
+                                style={[
+                                    styles.esmallMb,
+                                    {
+                                        display: 'flex',
+                                        flexDirection: 'row-reverse',
+                                        gap: 3,
+                                    },
+                                ]}
                             >
-                                {term.terms}
-                            </Text>
+                                <Text style={{ flexShrink: 0 }}>•</Text>
+                                <Text
+                                    style={[
+                                        styles.smallText,
+                                        styles.smallLineHeight,
+                                        { flexGrow: 0, flex: 1 },
+                                    ]}
+                                >
+                                    {term.terms}
+                                </Text>
+                            </View>
                         );
                     })}
                 </View>
@@ -537,6 +610,40 @@ const MyDocument = ({ contract, terms, phone }) => (
                 </View>
             </View>
         </Page>
+        {contract.files?.length > 0 && (
+            <Page size="A4" style={styles.page}>
+                <Text style={styles.title}>الملحقات</Text>
+                <View style={[styles.bondsGrid]}>
+                    {contract.files.map((bond) => {
+                        if (!bond.as_note)
+                            return (
+                                <View key={bond.title} style={styles.bondCard}>
+                                    <View style={[styles.mb, styles.maxh]}>
+                                        {bond.image ? (
+                                            <Image
+                                                style={styles.bondProof}
+                                                src={bond.image}
+                                            />
+                                        ) : (
+                                            <Text
+                                                style={[
+                                                    styles.smallInfo,
+                                                    styles.padwhiteBg,
+                                                ]}
+                                            >
+                                                بدون صورة
+                                            </Text>
+                                        )}
+                                    </View>
+                                    <Text style={styles.smallInfo}>
+                                        {bond.title}
+                                    </Text>
+                                </View>
+                            );
+                    })}
+                </View>
+            </Page>
+        )}
     </Document>
 );
 
