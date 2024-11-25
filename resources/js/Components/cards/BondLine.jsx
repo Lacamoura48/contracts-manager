@@ -137,6 +137,10 @@ function BondLine({ bond, noActions, ranking, last }) {
                                     ) : null}
                                 </button>
                             </div>
+                        ) : bond.action_done === 'دفعة متأخرة' ? (
+                            <p className="border-l border-l-gray-500 pl-3">
+                                دفعة متأخرة
+                            </p>
                         ) : (
                             <p className="border-l border-l-gray-500 pl-3">
                                 الدفعة {ranking}
