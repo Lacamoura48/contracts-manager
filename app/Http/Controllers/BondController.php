@@ -170,10 +170,6 @@ class BondController extends Controller
             if ($found) {
                 $bondDate = Carbon::createFromFormat('Y-m-d', $currentBond->payement_date);
                 $currentBond->payement_date = $bondDate->addMonth();
-                // if ($amount > 0) {
-                //     $currentBond->amount = $currentBond->amount + $amount;
-                //     $amount = 0;
-                // }
                 $currentBond->save(); // Save the updated bond
                 Activity()->performedOn($currentBond)->log(Auth::user()->name . " قام بتأخير الدفعة على العقد " . $currentBond->contract->code);
             }

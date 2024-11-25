@@ -20,6 +20,11 @@ export default function Contracts({ contracts }) {
                 ]}
             >
                 <ContractsFilterSection />
+                <img
+                    className="w-[20rem]"
+                    src="/icons/status_table.png"
+                    alt="status table image"
+                />
                 {contracts.data.length > 0 ? (
                     <ContractsList contracts={contracts} />
                 ) : (
