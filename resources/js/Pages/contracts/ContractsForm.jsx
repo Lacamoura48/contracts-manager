@@ -15,7 +15,6 @@ function ContractsForm(props) {
     const contract = props.contract;
     const queryParams = new URLSearchParams(window.location.search);
     const startAmountInput = useRef();
-
     const initialValues = contract
         ? {
               client_id: contract.client_id,

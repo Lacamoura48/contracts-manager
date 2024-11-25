@@ -98,7 +98,7 @@ class ContractController extends Controller
             'work_duration' => 'numeric|min:1|required',
             'start_amount' => 'numeric|min:1|required',
             'bonds_array' => 'nullable',
-            'contract_prefrences' => 'array',
+            'contract_prefrences' => 'nullable',
             'width' => 'nullable',
             'height' => 'nullable',
             'intensity' => 'nullable',
@@ -115,13 +115,16 @@ class ContractController extends Controller
             'notes' => $validated['notes'],
             'user_id' => Auth::user()->id,
         ]);
-        foreach ($validated['contract_prefrences'] as $pref) {
-            ContractPrefrence::create([
-                'title' => $pref['title'],
-                'description' => $pref['description'],
-                'contract_id' => $contract->id,
-            ]);
+        if ($request->get('contract_prefrences') && count($request->get('contract_prefrences')) > 0) {
+            foreach ($request->get('contract_prefrences') as $pref) {
+                ContractPrefrence::create([
+                    'title' => $pref['title'],
+                    'description' => $pref['description'],
+                    'contract_id' => $contract->id,
+                ]);
+            }
         }
+
         $contract->generateUniqueUrl();
         $contract->generateCode();
 
@@ -201,15 +204,17 @@ class ContractController extends Controller
             'height' => 'nullable',
             'intensity' => 'nullable',
             'notes' => 'nullable',
-            'contract_prefrences' => 'array',
+            'contract_prefrences' => 'nullable',
         ]);
         ContractPrefrence::where('contract_id', $contract->id)->delete();
-        foreach ($validated['contract_prefrences'] as $pref) {
-            ContractPrefrence::create([
-                'title' => $pref['title'],
-                'description' => $pref['description'],
-                'contract_id' => $contract->id,
-            ]);
+        if ($request->get('contract_prefrences') && count($request->get('contract_prefrences')) > 0) {
+            foreach ($validated['contract_prefrences'] as $pref) {
+                ContractPrefrence::create([
+                    'title' => $pref['title'],
+                    'description' => $pref['description'],
+                    'contract_id' => $contract->id,
+                ]);
+            }
         }
         $contract->update([
             'client_id' => $validated['client_id'],

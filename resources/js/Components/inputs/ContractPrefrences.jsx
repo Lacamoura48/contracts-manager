@@ -5,7 +5,6 @@ import CustomInput from './CustomInput';
 
 function ContractPrefrences({ prefrences, prefrencesHandler }) {
     const [prefrencesList, setPrefrencesList] = useState(prefrences);
-
     const handleOnChange = (id, name, value) => {
         const newData = prefrencesList.map((ter) => {
             return ter.id === id ? { ...ter, [name]: value } : ter;
