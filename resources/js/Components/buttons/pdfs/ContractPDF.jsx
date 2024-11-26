@@ -49,6 +49,13 @@ const styles = StyleSheet.create({
         width: 120,
         maxHeight: 80,
     },
+    infoCardTop: {
+        border: 1,
+        borderColor: '#aaa',
+        borderRadius: 6,
+        padding: 10,
+        flex: 1,
+    },
     signatureImage: {
         width: '100%',
         height: '100%',
@@ -192,7 +199,7 @@ const MyDocument = ({ contract, terms, phone }) => (
             <View
                 style={[
                     styles.topLeft,
-                    styles.signatureCard,
+                    styles.infoCardTop,
                     styles.flexSmallGap,
                     styles.itemsCenter,
                 ]}
@@ -203,7 +210,7 @@ const MyDocument = ({ contract, terms, phone }) => (
             <View
                 style={[
                     styles.topRight,
-                    styles.signatureCard,
+                    styles.infoCardTop,
                     styles.flexSmallGap,
                     styles.itemsCenter,
                 ]}
@@ -564,7 +571,7 @@ const MyDocument = ({ contract, terms, phone }) => (
             </View>
         </Page>
         <Page style={styles.page}>
-            <View style={[styles.squareCard, styles.smallMb]}>
+            <View style={[styles.squareCard]}>
                 <Text style={[styles.intro]}>الشروط والاحكام</Text>
                 <View>
                     {terms.map((term) => {
