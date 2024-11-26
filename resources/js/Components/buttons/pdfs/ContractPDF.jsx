@@ -46,6 +46,14 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         padding: 5,
         flex: 1,
+        width: 120,
+        maxHeight: 80,
+    },
+    signatureImage: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
+        marginHorizontal: 'auto',
     },
     textMd: {
         fontSize: 12,
@@ -60,11 +68,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'flex-end',
     },
-    signatureImage: {
-        maxWidth: 80,
-        maxHeight: 80,
-        marginHorizontal: 'auto',
-    },
+
     bold: {
         fontWeight: 'bold',
     },
@@ -304,20 +308,10 @@ const MyDocument = ({ contract, terms, phone }) => (
                 <Text style={[styles.intro, styles.textLg]}>
                     البند الثالث: مدة الإنجاز
                 </Text>
-                <Text>توعد الطرف الأول بإنجاز الأعمال وتسليمها خلال</Text>
-                <View
-                    style={[
-                        styles.padwhiteBg,
-                        styles.flexSmallGap,
-                        { flexDirection: 'row-reverse' },
-                    ]}
-                >
-                    <Text>{contract.work_duration}</Text>
-                    <Text>
-                        {+contract.work_duration > 10 ? 'يوم عمل' : 'أيام عمل'}
-                    </Text>
-                </View>
                 <Text>
+                    توعد الطرف الأول بإنجاز الأعمال وتسليمها خلال{' '}
+                    {contract.work_duration}{' '}
+                    {+contract.work_duration > 10 ? 'يوم عمل' : 'أيام عمل'}{' '}
                     ابتداء من تاريخ أول دفعة الذي سيتم ذكره في البند الخامس
                 </Text>
                 <Text style={[styles.intro, styles.textLg]}>
@@ -547,6 +541,26 @@ const MyDocument = ({ contract, terms, phone }) => (
                     بالعقد اما عن طريق فيديوهات او صور لما تم اختياره والموافقة
                     عليه
                 </Text>
+            </View>
+            <View style={styles.bondsGrid}>
+                <View style={styles.signatureCard}>
+                    <Text style={[styles.intro]}>الطرف الثانى</Text>
+                    {contract.signature && (
+                        <Image
+                            style={styles.signatureImage}
+                            src={contract.signature}
+                        />
+                    )}
+                </View>
+                <View style={styles.signatureCard}>
+                    <Text style={[styles.intro]}>الطرف الأول</Text>
+                    {contract.user.signature && (
+                        <Image
+                            style={styles.signatureImage}
+                            src={contract.user.signature}
+                        />
+                    )}
+                </View>
             </View>
         </Page>
         <Page style={styles.page}>

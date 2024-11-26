@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
+use Intervention\Image\ImageManager;
 
 class BondController extends Controller
 {
@@ -112,9 +113,15 @@ class BondController extends Controller
 
     public function saveImage($image)
     {
+        
         $filename = uniqid('bi_') . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('images/bi'), $filename);
-        return '/images/bi/' . $filename;
+        $path =  '/images/bi/' . $filename;
+        $imageToResize = ImageManager::imagick()->read($path);
+        $image->resize(600, 400);
+        $image->save();
+        return $path;
+
     }
     public function update(Request $request, Bond $bond)
     {
