@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Inertia\Inertia;
 use Intervention\Image\ImageManager;
+use Intervention\Image\Drivers\Gd\Driver;
 
 class BondController extends Controller
 {
@@ -117,9 +118,10 @@ class BondController extends Controller
         $filename = uniqid('bi_') . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('images/bi'), $filename);
         $path =  '/images/bi/' . $filename;
-        $imageToResize = ImageManager::imagick()->read($path);
-        $image->resize(600, 400);
-        $image->save();
+        $manager = new ImageManager(new Driver());
+        $imageToResize = $manager->read($path);
+        $imageToResize->resize(600, 400);
+        $imageToResize->save();
         return $path;
 
     }
