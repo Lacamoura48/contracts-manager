@@ -1,3 +1,4 @@
+import { resizeImageForUpload } from '@/utils/functions';
 import { useEffect, useState } from 'react';
 import Checkbox from '../Checkbox';
 import CustomInput from '../inputs/CustomInput';
@@ -24,11 +25,14 @@ export default function ProofInput({ number, changeHandler, proof }) {
                 label={`إثبات الدفعة ${number || ''}`}
                 imageSelected={currentData.proof_image}
                 defaultImage={proof?.proof_image}
-                onChange={(e) =>
+                onChange={async (e) => {
+                    const resizedImage = await resizeImageForUpload(
+                        e.target.files[0],
+                    );
                     setCurrentData((p) => {
-                        return { ...p, proof_image: e.target.files[0] };
-                    })
-                }
+                        return { ...p, proof_image: resizedImage };
+                    });
+                }}
             />
             <CustomInput
                 placeholder="ملاحظة"

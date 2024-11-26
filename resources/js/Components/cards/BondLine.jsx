@@ -2,6 +2,7 @@ import {
     checkDateReturnDiff,
     formatMoroccanDate,
     generateCheckStatus,
+    resizeImageForUpload,
 } from '@/utils/functions';
 import { Link, router } from '@inertiajs/react';
 import {
@@ -27,9 +28,10 @@ function BondLine({ bond, noActions, ranking, last }) {
     const [show, setShow] = useState(false);
     const [amountPaid, setAmountPaid] = useState();
 
-    function updateProofPic(e) {
+    async function updateProofPic(e) {
+        const resizedImage = await resizeImageForUpload(e.target.files[0]);
         router.post(route('bonds.update', bond.id), {
-            proof_image: e.target.files[0],
+            proof_image: resizedImage,
             _method: 'PATCH',
         });
     }

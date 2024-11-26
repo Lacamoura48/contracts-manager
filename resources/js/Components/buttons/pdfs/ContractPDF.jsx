@@ -174,7 +174,13 @@ const styles = StyleSheet.create({
         marginBottom: 14,
     },
     maxh: {
-        maxHeight: 200,
+        height: 200,
+        width: '100%',
+    },
+    bondProof: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
     },
 });
 

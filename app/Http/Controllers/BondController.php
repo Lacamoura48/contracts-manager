@@ -113,17 +113,10 @@ class BondController extends Controller
     }
 
     public function saveImage($image)
-    {
-        
+    { 
         $filename = uniqid('bi_') . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('images/bi'), $filename);
-        $path =  '/images/bi/' . $filename;
-        $manager = new ImageManager(new Driver());
-        $imageToResize = $manager->read($path);
-        $imageToResize->resize(600, 400);
-        $imageToResize->save();
-        return $path;
-
+        return '/images/bi/' . $filename;
     }
     public function update(Request $request, Bond $bond)
     {

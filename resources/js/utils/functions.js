@@ -257,3 +257,61 @@ export function dateTimeToArabic(currDate) {
     });
     // .replace(',', ' | ');
 }
+
+export function resizeImageForUpload(
+    file,
+    targetWidth = 800,
+    mimeType = 'image/jpeg',
+    quality = 0.8,
+) {
+    return new Promise((resolve, reject) => {
+        const reader = new FileReader();
+
+        reader.onload = function (e) {
+            const img = new Image();
+
+            img.onload = function () {
+                // Calculate the target height based on the aspect ratio
+                const aspectRatio = img.height / img.width;
+                const targetHeight = Math.round(targetWidth * aspectRatio);
+
+                // Create an offscreen canvas
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+
+                // Set canvas dimensions
+                canvas.width = targetWidth;
+                canvas.height = targetHeight;
+
+                // Draw the resized image
+                ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
+
+                // Export the resized image
+                canvas.toBlob(
+                    (blob) => {
+                        if (blob) {
+                            // Create a new File-like object with a name for upload
+                            const resizedFile = new File([blob], file.name, {
+                                type: mimeType,
+                                lastModified: Date.now(),
+                            });
+                            resolve(resizedFile); // Return the resized file
+                        } else {
+                            reject(
+                                new Error('Failed to create Blob from canvas.'),
+                            );
+                        }
+                    },
+                    mimeType,
+                    quality,
+                );
+            };
+
+            img.onerror = () => reject(new Error('Failed to load the image.'));
+            img.src = e.target.result;
+        };
+
+        reader.onerror = () => reject(new Error('Failed to read the file.'));
+        reader.readAsDataURL(file);
+    });
+}

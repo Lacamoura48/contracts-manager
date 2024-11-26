@@ -1,3 +1,4 @@
+import { resizeImageForUpload } from '@/utils/functions';
 import { useForm } from '@inertiajs/react';
 import { useState } from 'react';
 import CustomInput from '../inputs/CustomInput';
@@ -37,7 +38,12 @@ export default function FileForm({ closeHandler, contract_id, type }) {
             {type === 'files' && (
                 <FileInput
                     imageSelected={data.image}
-                    onChange={(e) => setData('image', e.target.files[0])}
+                    onChange={async (e) => {
+                        const resizedImage = await resizeImageForUpload(
+                            e.target.files[0],
+                        );
+                        setData('image', resizedImage);
+                    }}
                     name="image"
                     id="image-files"
                     label="صورة الملحق"

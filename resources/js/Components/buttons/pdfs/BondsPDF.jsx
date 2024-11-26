@@ -65,7 +65,13 @@ const styles = StyleSheet.create({
         backgroundColor: 'white',
     },
     maxh: {
-        maxHeight: 200,
+        height: 200,
+        width: '100%',
+    },
+    bondProof: {
+        width: '100%',
+        height: '100%',
+        objectFit: 'contain',
     },
     postableNo: {
         borderRadius: 999,
