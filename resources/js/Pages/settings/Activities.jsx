@@ -1,3 +1,5 @@
+import ActivitiesPDF from '@/Components/buttons/pdfs/ActivitiesPDF';
+import ActivitiesFilterSection from '@/Components/filters/ActivitiesFilterSection';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout';
 import InsideLayout from '@/Layouts/InsideLayout';
 import { dateTimeToArabic } from '@/utils/functions';
@@ -16,7 +18,9 @@ function Activities({ activities }) {
                 ]}
                 headerTitle="سجل الأنشطة"
             >
+                <ActivitiesPDF activities={activities} />
                 <div>
+                    <ActivitiesFilterSection />
                     {activities.map((act) => {
                         return (
                             <div

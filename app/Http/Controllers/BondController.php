@@ -113,7 +113,7 @@ class BondController extends Controller
     }
 
     public function saveImage($image)
-    { 
+    {
         $filename = uniqid('bi_') . '.' . $image->getClientOriginalExtension();
         $image->move(public_path('images/bi'), $filename);
         return '/images/bi/' . $filename;
@@ -131,11 +131,11 @@ class BondController extends Controller
         }
         if ($request->has('status')) {
             $data['status'] = $request->get('status');
-            Activity()->performedOn($bond)->log(Auth::user()->name . " قام بتغيير حالة الدفعة على العقد " . $bond->contract->code);
+            Activity()->performedOn($bond)->withProperty('client_id', $bond->contract->client->id)->log(Auth::user()->name . " قام بتغيير حالة الدفعة على عقد " . $bond->contract->client->full_name);
         }
         if ($request->has('action_done')) {
             $data['action_done'] = $request->get('action_done');
-            Activity()->performedOn($bond)->log(Auth::user()->name . " قام بتغيير ملاحظة الدفعة على العقد " . $bond->contract->code);
+            Activity()->performedOn($bond)->withProperty('client_id', $bond->contract->client->id)->log(Auth::user()->name . " قام بتغيير ملاحظة الدفعة على عقد " . $bond->contract->client->full_name);
         }
         if ($request->has('amount')) {
             $data['amount'] = $request->get('amount');
@@ -174,7 +174,7 @@ class BondController extends Controller
                 $bondDate = Carbon::createFromFormat('Y-m-d', $currentBond->payement_date);
                 $currentBond->payement_date = $bondDate->addMonth();
                 $currentBond->save(); // Save the updated bond
-                Activity()->performedOn($currentBond)->log(Auth::user()->name . " قام بتأخير الدفعة على العقد " . $currentBond->contract->code);
+                Activity()->performedOn($currentBond)->withProperty('client_id', $currentBond->contract->client->id)->log(Auth::user()->name . " قام بتأخير الدفعة على عقد " . $currentBond->contract->client->full_name);
             }
 
             // Check if the current bond matches the provided bond
@@ -207,7 +207,7 @@ class BondController extends Controller
                 $currentBond->status = "paid";
                 $currentBond->action_done = 'دفع جزئي';
                 $currentBond->save();
-                Activity()->performedOn($currentBond)->log(Auth::user()->name . " قام بإتبات دفع جزئي على العقد " . $currentBond->contract->code);
+                Activity()->performedOn($currentBond)->withProperty('client_id', $currentBond->contract->client->id)->log(Auth::user()->name . " قام بإتبات دفع جزئي على عقد " . $currentBond->contract->client->full_name);
 
                 // Check if this is the last bond
                 if ($currentBond->id === $bonds->last()->id) {
@@ -225,7 +225,7 @@ class BondController extends Controller
                         ]);
 
 
-                        Activity()->performedOn($newBond)->log(Auth::user()->name . " قام بإنشاء سند جديد بمبلغ " . $remainingAmount . " للشهر القادم.");
+                        Activity()->performedOn($newBond)->withProperty('client_id', $newBond->contract->client->id)->log(Auth::user()->name . " قام بإنشاء دفعة متأخرة بمبلغ " . $remainingAmount . " للشهر القادم.");
                     }
                 }
             }

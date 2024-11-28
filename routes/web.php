@@ -11,7 +11,7 @@ use App\Models\Sharedfile;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
-use Spatie\Activitylog\Models\Activity;
+
 
 Route::get('/', function () {
     return Inertia::location('/dashboard');
@@ -53,12 +53,9 @@ Route::middleware('auth')->group(function () {
     Route::post('/profile', [ProfileController::class, 'store'])->name('profile.store');
     Route::get('/prefrences/terms', [PrefrenceController::class, 'edit'])->name('terms.edit');
     Route::post('/prefrences/terms', [PrefrenceController::class, 'update'])->name('terms.update');
+    Route::get('/activities', [ProfileController::class, 'activities'])->name('settings.activities');
 });
 
-Route::get('/activities', function () {
-    $activities = Activity::orderBy('created_at', 'desc')->get();
-    return Inertia::render('settings/Activities', ["activities" => $activities]);
-})->name('settings.activities');
 
 
 

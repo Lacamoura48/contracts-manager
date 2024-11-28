@@ -13,6 +13,7 @@ use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Validation\Rules;
 use Illuminate\Support\Facades\File;
+use Spatie\Activitylog\Models\Activity;
 
 class ProfileController extends Controller
 {
@@ -106,6 +107,17 @@ class ProfileController extends Controller
         $request->user()->save();
 
         return Redirect::route('profile.edit');
+    }
+    function activities(Request $request)
+    {
+        $client_id = $request->get('client_id');
+        $activities = null;
+        if ($client_id) {
+            $activities = Activity::where('properties->client_id', $client_id)->get();
+        } else {
+            $activities = Activity::orderBy('created_at', 'desc')->get();
+        }
+        return Inertia::render('settings/Activities', ["activities" => $activities]);
     }
 
     public function signature(Request $request)
