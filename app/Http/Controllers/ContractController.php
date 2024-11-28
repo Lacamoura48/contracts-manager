@@ -146,7 +146,7 @@ class ContractController extends Controller
                 'postable' => $currentBond['postable'],
             ]);
         }
-        Activity()->performedOn($contract)->withProperty('client_id', $contract->client->id)->log(Auth::user()->name . "قام بإنشاء عقد ل " . $contract->client->full_name);
+        Activity()->performedOn($contract)->withProperty('client_id', $contract->client->id)->log(Auth::user()->name . " قام بإنشاء عقد ل " . $contract->client->full_name);
         return to_route("contracts.show", $contract->id);
     }
 
@@ -336,7 +336,7 @@ class ContractController extends Controller
     }
     public function destroy(Contract $contract)
     {
-        Activity()->performedOn($contract)->withProperty('client_id', $contract->client->id)->log(Auth::user()->name . "قام بحذف عقد ل " . $contract->client->full_name);
+        Activity()->performedOn($contract)->withProperty('client_id', $contract->client->id)->log(Auth::user()->name . " قام بحذف عقد ل " . $contract->client->full_name);
         $contract->delete();
         return to_route('contracts.index');
     }
