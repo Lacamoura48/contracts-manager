@@ -27,6 +27,7 @@ return new class extends Migration
             $table->text('signature')->nullable();
             $table->text('signature_proof')->nullable();
             $table->timestamp('read_at')->nullable();
+            $table->boolean('trash')->default(false);
             $table->timestamps();
         });
     }

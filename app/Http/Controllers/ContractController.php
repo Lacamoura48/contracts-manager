@@ -45,6 +45,7 @@ class ContractController extends Controller
             ->with(['bonds' => function ($query) {
                 $query->select('contract_id', 'status', 'payement_date');
             }])
+            ->where('trash', 0)
             ->orderBy('created_at', 'desc')
             ->paginate(5);
 
@@ -334,6 +335,16 @@ class ContractController extends Controller
         $contract->signature = null;
         $contract->save();
     }
+
+    public function trash(Request $request, Contract $contract){
+        if($contract->trash == 1){
+            $contract->trash = 0;
+        }else{
+            $contract->trash = 1;
+        }
+        $contract->save();
+    }
+
     public function destroy(Contract $contract)
     {
         Activity()->performedOn($contract)->withProperty('client_id', $contract->client->id)->log(Auth::user()->name . " قام بحذف عقد ل " . $contract->client->full_name);

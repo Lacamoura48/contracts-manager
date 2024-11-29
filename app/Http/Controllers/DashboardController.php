@@ -25,6 +25,7 @@ class DashboardController extends Controller
         $data['paid_contracts'] = Contract::whereExists(function ($query) use ($startOfMonth, $endOfMonth) {
             $query->select(DB::raw(1))
                 ->from('bonds')
+                ->whereColumn('bonds.contract_id', 'contracts.id')
                 ->whereBetween('bonds.payement_date', [$startOfMonth, $endOfMonth])
                 ->where('bonds.status', 'paid');
         })->count();

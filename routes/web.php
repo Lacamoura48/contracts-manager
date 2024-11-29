@@ -20,6 +20,7 @@ Route::get('/', function () {
 Route::get('/dashboard', [DashboardController::class, 'index'])->middleware(['auth', 'verified'])->name('dashboard');
 
 Route::resource('/clients', ClientController::class)->middleware(['auth', 'verified']);
+Route::patch('/clients/{client}/trash', [ClientController::class, "trash"])->name('clients.trash');
 Route::get('/autocomplete/clients', [ClientController::class, 'autocomplete'])->middleware(['auth', 'verified']);
 
 Route::resource('contracts', ContractController::class)->middleware(['auth', 'verified']);
@@ -30,6 +31,7 @@ Route::patch('/contracts/{contract}/read', [ContractController::class, "read"])-
 Route::patch('/contracts/{contract}/sign', [ContractController::class, "sign"])->name('contracts.sign');
 Route::patch('/contracts/{contract}/signproof', [ContractController::class, "signProof"])->name('contracts.signProof');
 Route::patch('/contracts/{contract}/signReset', [ContractController::class, "signReset"])->name('contracts.signReset');
+Route::patch('/contracts/{contract}/trash', [ContractController::class, "trash"])->name('contracts.trash');
 
 Route::post('/contracts/{contract}/files', [SharedfileController::class, "store"])->middleware(['auth', 'verified'])->name('files.store');
 Route::delete('/sharedFiles/{sharedfile}', [SharedfileController::class, "destroy"])->middleware(['auth', 'verified'])->name('files.delete');

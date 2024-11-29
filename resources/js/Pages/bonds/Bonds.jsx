@@ -35,7 +35,7 @@ export default function Bonds({ bonds }) {
                     {bonds.length > 0 ? (
                         <BondsList noActions={true} bonds={bonds} />
                     ) : (
-                        <EmptyList model="عقود" />
+                        <EmptyList model="دفعات" />
                     )}
                 </div>
             </InsideLayout>

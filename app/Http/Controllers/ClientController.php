@@ -30,7 +30,7 @@ class ClientController extends Controller
                     ->orWhere('address', 'like', "%$search%");
             });
         }
-        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "email", "phone", "id"])->orderBy('created_at', 'desc')->paginate(12);
+        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "email", "phone", "id"])->where('trash', 0)->orderBy('created_at', 'desc')->paginate(12);
         return Inertia::render('clients/Clients', [
             'clients' => $clients,
         ]);
@@ -70,7 +70,7 @@ class ClientController extends Controller
 
         $validated['id_photo_front'] = $front_path;
         $validated['id_photo_back'] = $back_path;
-        $validated['phone'] = $validated['phone'] . ' ' . '971+' ;
+        $validated['phone'] = $validated['phone'] . ' ' . '971+';
         $client_created = Client::create($validated);
         Activity()->performedOn($client_created)->withProperty('client_id', $client_created->id)->log(Auth::user()->name . " قام بإضافة الزبون " . $client_created->full_name);
         return redirect("/clients/" . $client_created['id']);
@@ -145,6 +145,17 @@ class ClientController extends Controller
         }
         $clients = $clientsQuery->select(["full_name", "id"])->paginate(6);
         return response()->json($clients);
+    }
+
+
+    public function trash(Request $request, Client $client)
+    {
+        if ($client->trash == 1) {
+            $client->trash = 0;
+        } else {
+            $client->trash = 1;
+        }
+        $client->save();
     }
 
     public function destroy(Request $request, Client $client)

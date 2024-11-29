@@ -6,10 +6,9 @@ import PrimaryButton from '../PrimaryButton';
 import SecondaryButton from '../SecondaryButton';
 
 function ClientCard({ client }) {
-    
     const [showDelete, setShowDelete] = useState(false);
-    function deleteClient() {
-        router.delete(`/clients/${client.id}`);
+    function trashClient() {
+        router.post(route('clients.trash', client.id), { _method: 'patch' });
     }
     return (
         <div className="rounded-lg border border-gray-400 bg-gray-100 p-3">
@@ -55,7 +54,7 @@ function ClientCard({ client }) {
                     <div className="flex gap-4">
                         <PrimaryButton
                             className="text-xl"
-                            onClick={deleteClient}
+                            onClick={trashClient}
                         >
                             نعم
                         </PrimaryButton>
