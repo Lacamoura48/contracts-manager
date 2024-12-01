@@ -26,7 +26,7 @@ Route::get('/autocomplete/clients', [ClientController::class, 'autocomplete'])->
 Route::resource('contracts', ContractController::class)->middleware(['auth', 'verified']);
 Route::get('/contracts/{contract}/files', [ContractController::class, "files"])->middleware(['auth', 'verified'])->name('contracts.files');
 Route::get('/contracts/live/{uuid}', [ContractController::class, "live"])->name('contracts.live');
-Route::get('/contracts/{contract}/send', [ContractController::class, "send"])->name('contracts.send');
+Route::post('/contracts/{contract}/send', [ContractController::class, "send"])->middleware(['auth', 'verified'])->name('contracts.send');
 Route::patch('/contracts/{contract}/read', [ContractController::class, "read"])->name('contracts.read');
 Route::patch('/contracts/{contract}/sign', [ContractController::class, "sign"])->name('contracts.sign');
 Route::patch('/contracts/{contract}/signproof', [ContractController::class, "signProof"])->name('contracts.signProof');

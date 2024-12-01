@@ -19,6 +19,7 @@ class ClientController extends Controller
     public function index(Request $request)
     {
         $search = $request->get("search");
+        $trashView = $request->get("trash");
         $clientsQuery = Client::query();
         if ($search) {
             $clientsQuery->where(function ($queryBuilder) use ($search) {
@@ -30,7 +31,10 @@ class ClientController extends Controller
                     ->orWhere('address', 'like', "%$search%");
             });
         }
-        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "email", "phone", "id"])->where('trash', 0)->orderBy('created_at', 'desc')->paginate(12);
+        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "email", "phone", "id"])
+            ->where('trash', $trashView ? 1 : 0)
+            ->orderBy('created_at', 'desc')
+            ->paginate(12);
         return Inertia::render('clients/Clients', [
             'clients' => $clients,
         ]);

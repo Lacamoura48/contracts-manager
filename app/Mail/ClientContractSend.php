@@ -9,19 +9,15 @@ use Illuminate\Mail\Mailables\Content;
 use Illuminate\Mail\Mailables\Envelope;
 use Illuminate\Queue\SerializesModels;
 
-class NotifyViewMail extends Mailable
+class ClientContractSend extends Mailable
 {
     use Queueable, SerializesModels;
 
-    public $subject;
-    public $view;
     public $full_name;
     public $date_opened;
     public $time_opened;
-    public function __construct($full_name, $subject, $view)
+    public function __construct($full_name)
     {
-        $this->subject = $subject;
-        $this->view = $view;
         $this->full_name = $full_name;
         $this->date_opened = now()->format('Y-m-d');
         $this->time_opened =  now()->format('H:i');
@@ -33,7 +29,7 @@ class NotifyViewMail extends Mailable
     public function envelope(): Envelope
     {
         return new Envelope(
-            subject: $this->subject,
+            subject: "تم فتح العقد الخاص ب$this->full_name",
         );
     }
 
@@ -43,7 +39,7 @@ class NotifyViewMail extends Mailable
     public function content(): Content
     {
         return new Content(
-            view: $this->view,
+            view: 'emails.sendMail',
             with: ['full_name' => $this->full_name, 'date_opened' => $this->date_opened, 'time_opened' => $this->time_opened]
         );
     }

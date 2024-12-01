@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Mail\ContractUrlMail;
 use App\Mail\NotifyViewMail;
+use App\Mail\ClientContractSend;
 use App\Models\Bond;
 use App\Models\Contract;
 use App\Models\ContractPrefrence;
@@ -34,6 +34,7 @@ class ContractController extends Controller
     {
 
         $client_id = $request->get("client_id");
+        $trashView = $request->get("trash");
         $contractsQuery = Contract::query();
         if ($client_id) {
             $contractsQuery->where('client_id', $client_id);
@@ -45,7 +46,7 @@ class ContractController extends Controller
             ->with(['bonds' => function ($query) {
                 $query->select('contract_id', 'status', 'payement_date');
             }])
-            ->where('trash', 0)
+            ->where('trash', $trashView ? 1 : 0)
             ->orderBy('created_at', 'desc')
             ->paginate(5);
 
@@ -53,6 +54,7 @@ class ContractController extends Controller
             'contracts' => $contracts,
         ]);
     }
+
 
     public function files(Request $request, Contract $contract)
     {
@@ -266,18 +268,19 @@ class ContractController extends Controller
     public function live(Request $request, $uuid)
     {
         $contract = Contract::where('uuid', $uuid)->firstOrFail();
+        $full_name = $contract->client->full_name;
 
         // Mark as read if not already
         if (!$contract->read) {
             $contract->read = true;
             if (!Auth::check()) {
-                Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($contract->client->full_name));
+                Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($full_name, "تم فتح العقد الخاص ب$full_name", "emails.viewMail"));
             }
         }
         $delayedTime = Carbon::create($contract->read_at)->addMinutes(5);
         $currentTime = Carbon::now();
         if (!Auth::check() && $currentTime > $delayedTime) {
-            Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($contract->client->full_name));
+            Mail::to(env('ADMIN_MAIL', 'anasfog@outlook.com'))->send(new NotifyViewMail($full_name, "تم فتح العقد الخاص ب$full_name", "emails.viewMail"));
         }
         $contract->read_at = now();
         $contract->save();
@@ -302,12 +305,8 @@ class ContractController extends Controller
     }
     public function send(Request $request, Contract $contract)
     {
-        if ($contract->client->email) {
-            $email = $contract->client->email;
-            $contractUrl = url(env('APP_URL') . '/contracts/live/' . $contract->uuid);
-            // dd(url($contractUrl));
-            Mail::to($email)->send(new ContractUrlMail($contractUrl));
-        }
+        // dd($contract->client->email);
+        Mail::to($contract->client->email)->send(new NotifyViewMail("hello world", "العقد الخاص بك جاهز", "emails.sendMail"));
     }
     public function sign(Request $request, Contract $contract)
     {
@@ -336,10 +335,11 @@ class ContractController extends Controller
         $contract->save();
     }
 
-    public function trash(Request $request, Contract $contract){
-        if($contract->trash == 1){
+    public function trash(Request $request, Contract $contract)
+    {
+        if ($contract->trash == 1) {
             $contract->trash = 0;
-        }else{
+        } else {
             $contract->trash = 1;
         }
         $contract->save();
@@ -349,6 +349,5 @@ class ContractController extends Controller
     {
         Activity()->performedOn($contract)->withProperty('client_id', $contract->client->id)->log(Auth::user()->name . " قام بحذف عقد ل " . $contract->client->full_name);
         $contract->delete();
-        return to_route('contracts.index');
     }
 }

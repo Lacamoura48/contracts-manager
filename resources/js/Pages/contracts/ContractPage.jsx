@@ -24,7 +24,9 @@ export default function ContractPage({ contract, terms, auth }) {
             _method: 'patch',
         });
     }
-
+    function sendMail() {
+        router.post(route('contracts.send', contract.id));
+    }
     return (
         <AuthenticatedLayout>
             <InsideLayout
@@ -84,15 +86,15 @@ export default function ContractPage({ contract, terms, auth }) {
                             textToCopy={confirmationUrl}
                             label="نسخ رابط العقد"
                         />
-                        <Link
-                            href={route('contracts.send', contract.id)}
+                        <button
+                            onClick={sendMail}
                             className="relative top-1 flex flex-col items-center rounded-full"
                         >
                             <Mail size={35} />
                             <span className="mt-1 rounded-full bg-black px-3 py-1 text-sm text-white">
                                 البعث للزبون
                             </span>
-                        </Link>
+                        </button>
                         <OpenInWhatsapp
                             phone={contract.client.phone}
                             text={`${encodeURIComponent(confirmationUrl)}%0A%0A${contract.user.whatsapp_msg}`}

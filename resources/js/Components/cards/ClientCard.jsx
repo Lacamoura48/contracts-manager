@@ -1,14 +1,18 @@
 import { Link, router } from '@inertiajs/react';
-import { Pen, Phone, Trash, UserCircle } from 'lucide-react';
+import { IterationCw, Pen, Phone, Trash, UserCircle, X } from 'lucide-react';
 import { useState } from 'react';
 import Modal from '../Modal';
 import PrimaryButton from '../PrimaryButton';
 import SecondaryButton from '../SecondaryButton';
 
 function ClientCard({ client }) {
+    const queryParams = new URLSearchParams(window.location.search);
     const [showDelete, setShowDelete] = useState(false);
     function trashClient() {
         router.post(route('clients.trash', client.id), { _method: 'patch' });
+    }
+    function deleteClient() {
+        router.delete(route('clients.destroy', client.id));
     }
     return (
         <div className="rounded-lg border border-gray-400 bg-gray-100 p-3">
@@ -33,17 +37,30 @@ function ClientCard({ client }) {
                 </a>
             </div>
             <div className="flex justify-end gap-1 rounded-lg px-2">
-                <Link
-                    href={`/clients/${client.id}/edit`}
-                    className="flex w-full justify-center rounded-md bg-gray-900 px-3 py-2 lg:w-12"
-                >
-                    <Pen color="white" size={20} />
-                </Link>
+                {queryParams.get('trash') != 1 ? (
+                    <Link
+                        href={`/clients/${client.id}/edit`}
+                        className="flex w-full justify-center rounded-md bg-gray-900 px-3 py-2 lg:w-12"
+                    >
+                        <Pen color="white" size={20} />
+                    </Link>
+                ) : (
+                    <button
+                        onClick={trashClient}
+                        className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 lg:w-12"
+                    >
+                        <IterationCw color="white" size={20} />
+                    </button>
+                )}
                 <button
                     onClick={() => setShowDelete(true)}
                     className="flex w-full justify-center rounded-md bg-gray-600 px-3 py-2 lg:w-12"
                 >
-                    <Trash color="white" size={20} />
+                    {queryParams.get('trash') != 1 ? (
+                        <Trash color="white" size={20} />
+                    ) : (
+                        <X color="white" size={20} />
+                    )}
                 </button>
             </div>
             <Modal show={showDelete}>
@@ -54,7 +71,11 @@ function ClientCard({ client }) {
                     <div className="flex gap-4">
                         <PrimaryButton
                             className="text-xl"
-                            onClick={trashClient}
+                            onClick={() =>
+                                queryParams.get('trash') != 1
+                                    ? trashClient()
+                                    : deleteClient()
+                            }
                         >
                             نعم
                         </PrimaryButton>
