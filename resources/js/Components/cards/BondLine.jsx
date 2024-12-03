@@ -167,7 +167,9 @@ function BondLine({ bond, noActions, ranking, last }) {
                                 className={`text-xs ${new Date(bond.payement_date) < new Date() && !bond.status ? 'text-red-500' : 'text-gray-500'}`}
                             >
                                 {!bond.status
-                                    ? checkDateReturnDiff(bond.payement_date)
+                                    ? `${formatMoroccanDate(
+                                          new Date(bond.payement_date),
+                                      )} (${checkDateReturnDiff(bond.payement_date)})`
                                     : formatMoroccanDate(
                                           new Date(bond.payement_date),
                                       )}
