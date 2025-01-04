@@ -63,6 +63,9 @@ class BondController extends Controller
                 $query->where('client_id', $clientId);
             });
         }
+        $bondsQuery->whereHas('contract', function ($query) use ($clientId) {
+            $query->where('trash', false);
+        });
         $bonds = $bondsQuery
             ->with([
                 'contract' => function ($query) {
