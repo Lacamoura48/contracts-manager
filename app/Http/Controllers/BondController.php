@@ -72,7 +72,7 @@ class BondController extends Controller
                     $query->select('id', 'client_id'); // Select specific columns from the contract table
                 },
                 'contract.client' => function ($query) {
-                    $query->select('id', 'full_name', 'phone'); // Select specific columns from the user table
+                    $query->select('id', 'full_name', 'nickname', 'phone'); // Select specific columns from the user table
                 }
             ])
             ->orderBy('created_at', 'desc')
@@ -142,15 +142,15 @@ class BondController extends Controller
         }
         if ($request->has('amount')) {
             $data['amount'] = $request->get('amount');
-            $bonds = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->get();
-            $total = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->sum('amount');
-            $count = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->count();
+            $bondDate = Carbon::createFromFormat('Y-m-d', $bond->payement_date);
+            $restAfterChange = $bond->amount - $request->get('amount');
+            $bonds = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->where("payement_date", ">", $bondDate)->get();
+            $total = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->where("payement_date", ">", $bondDate)->sum('amount');
+            $count = Bond::where('contract_id', $bond["contract_id"])->whereNull('status')->where("payement_date", ">", $bondDate)->count();
             $data['action_done'] = 'مبلغ مغير';
             foreach ($bonds as $currentBond) {
-                if ($currentBond['id'] != $bond['id']) {
-                    $currentBond->amount = ($total - $request->get('amount')) / ($count - 1);
+                    $currentBond->amount = ($total + $restAfterChange) / ($count);
                     $currentBond->save();
-                }
             }
         }
         if ($request->has('payement_date')) {

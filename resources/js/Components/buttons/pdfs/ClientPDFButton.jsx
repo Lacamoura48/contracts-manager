@@ -111,7 +111,7 @@ const ClientPDFDocument = ({ client, address }) => (
             {/* Client Information */}
             <View style={styles.section}>
                 <Text style={styles.heading}>
-                    {client.full_name} معلومات العميل
+                    {client.full_name}
                 </Text>
                 <Text style={styles.text}>
                     أضيف يوم: {formatMoroccanDate(new Date(client.created_at))}

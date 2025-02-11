@@ -44,6 +44,7 @@ export default function ClientPage({ client }) {
                 ]}
             >
                 <div className="max-w-2xl">
+                    <p className='font-medium text-lg'>({client.nickname})</p>
                     <p className="mb-4 text-center text-sm text-gray-400 md:text-start">
                         أضيف يوم{' '}
                         {formatMoroccanDate(new Date(client.created_at))}

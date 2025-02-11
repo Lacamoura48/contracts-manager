@@ -20,6 +20,7 @@ import PrimaryButton from '../PrimaryButton';
 import BondMarkAsPaid from '../bond-modals/BondMarkAsPaid';
 import BondOptionsContent from '../bond-modals/BondOptionsContent';
 import CustomInput from '../inputs/CustomInput';
+import OpenInWhatsapp from '../buttons/OpenInWhatsapp';
 
 function BondLine({ bond, noActions, ranking, last }) {
     const proofImageRef = useRef();
@@ -27,7 +28,8 @@ function BondLine({ bond, noActions, ranking, last }) {
     const [amount, setAmount] = useState();
     const [show, setShow] = useState(false);
     const [amountPaid, setAmountPaid] = useState();
-
+    const lateWhatsappMessage = `
+نود تذكيرك بأنه لم يتم سداد المبلغ المستحق لهذا الشهر حتى الآن. لقد تأخر السداد لمدة ${checkDateReturnDiff(bond.payement_date)}. نرجو منك تسديد المبلغ في أقرب وقت ممكن لتجنب أي رسوم إضافية أو إجراءات لاحقة`
     async function updateProofPic(e) {
         const resizedImage = await resizeImageForUpload(e.target.files[0]);
         router.post(route('bonds.update', bond.id), {
@@ -168,11 +170,11 @@ function BondLine({ bond, noActions, ranking, last }) {
                             >
                                 {!bond.status
                                     ? `${formatMoroccanDate(
-                                          new Date(bond.payement_date),
-                                      )} (${checkDateReturnDiff(bond.payement_date)})`
+                                        new Date(bond.payement_date),
+                                    )} (${checkDateReturnDiff(bond.payement_date)})`
                                     : formatMoroccanDate(
-                                          new Date(bond.payement_date),
-                                      )}
+                                        new Date(bond.payement_date),
+                                    )}
                             </span>
                         </div>
                     </div>
@@ -183,18 +185,23 @@ function BondLine({ bond, noActions, ranking, last }) {
                                 <Link
                                     className="rounded-lg border border-gray-300 bg-gray-100 px-2 py-2 text-xs text-gray-700 transition-colors hover:bg-black hover:text-white"
                                     href={route(
-                                        'clients.show',
-                                        bond.contract.client.id,
+                                        'contracts.show',
+                                        bond.contract.id,
                                     )}
                                 >
-                                    {bond.contract.client.full_name}
+                                    {bond.contract.client.nickname || bond.contract.client.full_name}
                                 </Link>
-                                <a
+                                {/* <a
                                     className="w-10 rounded-lg border border-gray-300 bg-gray-100 px-2 py-2 text-gray-700 transition-colors hover:bg-black hover:text-white"
                                     href={'tel:' + bond.contract.client.phone}
                                 >
-                                    <Phone className="inline-block" size={20} />
-                                </a>
+                                    <W className="inline-block" size={20} />
+                                </a> */}
+                                <OpenInWhatsapp phone={bond.contract.client.phone} text={lateWhatsappMessage} className="w-11 rounded-lg border border-gray-300 bg-gray-100 px-2 py-2"
+                                >
+                                    <img className="w-20" src="/icons/wa.png" alt="whatsapp icon" />
+
+                                </OpenInWhatsapp>
                             </>
                         )}
 

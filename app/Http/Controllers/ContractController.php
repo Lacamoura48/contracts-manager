@@ -167,6 +167,9 @@ class ContractController extends Controller
             ->with('files')
             ->with('contract_prefrences')
             ->withSum('bonds', 'amount')
+            ->withSum(['bonds as paid_bonds_sum' => function ($query) {
+                $query->where('status', 'paid');
+            }], 'amount')
             ->withCount('bonds')
             ->withCount('files')
             ->find($contract->id);
@@ -305,8 +308,12 @@ class ContractController extends Controller
     }
     public function send(Request $request, Contract $contract)
     {
-        // dd($contract->client->email);
-        Mail::to($contract->client->email)->send(new NotifyViewMail("hello world", "العقد الخاص بك جاهز", "emails.sendMail"));
+        try {
+            Mail::to($contract->client->email)->send(new NotifyViewMail($contract->client->full_name, "العقد الخاص بك جاهز", "emails.sendMail"));
+            return back()->with('success', 'Email sent successfully.');
+        } catch (\Exception $e) {
+            return dd($e->getMessage());
+        }
     }
     public function sign(Request $request, Contract $contract)
     {

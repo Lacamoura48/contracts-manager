@@ -14,6 +14,7 @@ function ClientsForm(props) {
     const initialValues = client
         ? {
               full_name: client.full_name,
+              nickname: client.nickname,
               phone: client.phone,
               email: client.email,
               phone2: client.phone2,
@@ -30,6 +31,7 @@ function ClientsForm(props) {
           }
         : {
               full_name: '',
+              nickname: '',
               phone: '',
               email: '',
               phone2: '',
@@ -101,6 +103,18 @@ function ClientsForm(props) {
                             onChange={(e) =>
                                 setData('id_code', formatIdCode(e.target.value))
                             }
+                        />
+                    </div>
+                    <div className="mb-4">
+                        <CustomInput
+                            onChange={handleOnChange}
+                            defaultValue={data.nickname}
+                            label="اللقب"
+                            placeholder="اختياري"
+                            name="nickname"
+                            id="users-nickname"
+                            error={errors.nickname}
+                            required
                         />
                     </div>
                     <div className="mb-4 flex gap-3">

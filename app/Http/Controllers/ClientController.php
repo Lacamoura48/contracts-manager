@@ -31,7 +31,7 @@ class ClientController extends Controller
                     ->orWhere('address', 'like', "%$search%");
             });
         }
-        $clients = $clientsQuery->select(["full_name", "id_code", "created_at", "email", "phone", "id"])
+        $clients = $clientsQuery->select(["full_name", "nickname", "id_code", "created_at", "email", "phone", "id"])
             ->where('trash', $trashView ? 1 : 0)
             ->orderBy('created_at', 'desc')
             ->paginate(12);
@@ -53,6 +53,7 @@ class ClientController extends Controller
     {
         $validated = $request->validate([
             'full_name' => 'required',
+            'nickname' => 'nullable',
             "phone" => 'required',
             "email" => 'email|nullable',
             "phone2" => 'nullable',
