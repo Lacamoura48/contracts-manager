@@ -24,7 +24,7 @@ function ClientCard({ client }) {
                             href={route('clients.show', client.id)}
                             className="font-bold hover:underline"
                         >
-                            {client.full_name}
+                            {client.nickname || client.full_name}
                         </Link>
                         <p className="text-sm text-gray-400">{client.email}</p>
                     </div>

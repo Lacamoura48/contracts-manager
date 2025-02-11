@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Contract;
+use App\Models\Bond;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
@@ -29,6 +30,7 @@ class DashboardController extends Controller
                 ->whereBetween('bonds.payement_date', [$startOfMonth, $endOfMonth])
                 ->where('bonds.status', 'paid');
         })->count();
+
         $data['late_contracts'] = Contract::where('trash', false)->whereExists(function ($query) use ($twoDaysAfter, $threeDaysLate) {
             $query->select(DB::raw(1))
                 ->from('bonds')
@@ -51,6 +53,29 @@ class DashboardController extends Controller
                 ->whereNull('bonds.status');
         })->count();
 
+        $data['sum_unpaid_amount'] = Bond::whereHas('contract', function ($query) {
+            $query->where('trash', false);
+        })
+        ->where(function ($query) {
+            $query->where('status', '!=', 'paid')
+                  ->orWhereNull('status');
+        })->sum('amount');
+        $data['sum_monthly_paid_amount'] = Bond::whereHas('contract', function ($query) use ($startOfMonth, $endOfMonth) {
+            $query->where('trash', false);
+        })
+        ->where('status', 'paid')
+        ->whereBetween('payement_date', [$startOfMonth, $endOfMonth])
+        ->sum('amount');
+
+        $data['sum_monthly_unpaid_amount'] = Bond::whereHas('contract', function ($query) {
+            $query->where('trash', false);
+        })
+        ->where(function ($query) use ($startOfMonth, $endOfMonth) {
+            $query->where('status', '!=', 'paid')
+                  ->orWhereNull('status');
+                  
+        })->whereBetween('payement_date', [$startOfMonth, $endOfMonth])
+        ->sum('amount');
         return Inertia::render('Dashboard', ['data' => $data]);
     }
 }

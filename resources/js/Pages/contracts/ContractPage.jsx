@@ -15,7 +15,9 @@ import {
     PenBox,
     Phone,
 } from 'lucide-react';
-export default function ContractPage({ contract, terms, auth }) {
+export default function ContractPage(props) {
+    const { contract, auth, terms } = props;
+
     const phoneNum = contract.client.phone.split(' ')[0];
     const confirmationUrl =
         window.location.origin + '/contracts/live/' + contract.uuid;
@@ -96,9 +98,15 @@ export default function ContractPage({ contract, terms, auth }) {
                             </span>
                         </button>
                         <OpenInWhatsapp
+                            className="relative top-1 flex flex-col items-center"
                             phone={contract.client.phone}
                             text={`${encodeURIComponent(confirmationUrl)}%0A%0A${contract.user.whatsapp_msg}`}
-                        />
+                        >
+                            <img className="w-12" src="/icons/wa.png" alt="whatsapp icon" />
+                            <span className="mt-1 rounded-full bg-black px-3 py-1 text-sm text-white">
+                                إرسال عبر وتساب
+                            </span>
+                        </OpenInWhatsapp>
                     </div>
 
                     <a
@@ -115,8 +123,8 @@ export default function ContractPage({ contract, terms, auth }) {
                             {contract.signature && contract.signature_proof
                                 ? 'مكتمل'
                                 : contract.signature
-                                  ? 'غير مكتمل'
-                                  : 'في الإنتظار'}
+                                    ? 'غير مكتمل'
+                                    : 'في الإنتظار'}
                         </span>
                     </h2>
                     <div className="flex flex-wrap gap-2">
@@ -126,6 +134,14 @@ export default function ContractPage({ contract, terms, auth }) {
                         <p className="flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 md:mx-0">
                             <Banknote size={20} /> المبلغ الإجمالي :{' '}
                             {parseFloat(contract.bonds_sum_amount).toFixed(2)}
+                        </p>
+                        <p className="flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 md:mx-0">
+                            <Banknote size={20} /> المبلغ المدفوع :{' '}
+                            {contract.paid_bonds_sum == null ? 0 : parseFloat(contract.paid_bonds_sum).toFixed(2)}
+                        </p>
+                        <p className="flex w-fit flex-row-reverse items-center gap-1 rounded-md bg-gray-200 px-3 py-1 md:mx-0">
+                            <Banknote size={20} /> المبلغ المتبقي :{' '}
+                            {contract.paid_bonds_sum == null ? parseFloat(contract.bonds_sum_amount).toFixed(2) : (parseFloat(contract.bonds_sum_amount) - parseFloat(contract.paid_bonds_sum)).toFixed(2)}
                         </p>
                     </div>
                     <div>
