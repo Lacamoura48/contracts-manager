@@ -91,6 +91,7 @@ class ClientController extends Controller
 
         $validated = $request->validate([
             'full_name' => 'required',
+            'nickname' => 'nullable',
             "phone" => 'required',
             "phone2" => 'nullable',
             "email" => 'email|nullable',
