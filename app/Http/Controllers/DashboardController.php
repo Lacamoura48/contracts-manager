@@ -23,6 +23,12 @@ class DashboardController extends Controller
         $endOfMonth = $today->copy()->endOfMonth();
 
         $data['contracts_count'] = Contract::where('trash', false)->count();
+        $data['contracts_sum'] = Bond::whereHas('contract', function ($query) {
+            $query->where('trash', false);
+        })->sum('amount');
+        $data['contracts_monthly_sum'] = Bond::whereHas('contract', function ($query) use ($startOfMonth, $endOfMonth) {
+            $query->where('trash', false)->whereBetween('payement_date', [$startOfMonth, $endOfMonth]);
+        })->sum('amount');
         $data['paid_contracts'] = Contract::where('trash', false)->whereExists(function ($query) use ($startOfMonth, $endOfMonth) {
             $query->select(DB::raw(1))
                 ->from('bonds')
@@ -60,6 +66,13 @@ class DashboardController extends Controller
             $query->where('status', '!=', 'paid')
                   ->orWhereNull('status');
         })->sum('amount');
+        $data['sum_paid_amount'] = Bond::whereHas('contract', function ($query) {
+            $query->where('trash', false);
+        })
+        ->where(function ($query) {
+            $query->where('status', 'paid');
+        })->sum('amount');
+        
         $data['sum_monthly_paid_amount'] = Bond::whereHas('contract', function ($query) use ($startOfMonth, $endOfMonth) {
             $query->where('trash', false);
         })
