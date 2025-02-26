@@ -99,7 +99,7 @@ export default function Dashboard({ data }) {
                             className="flex aspect-[2] flex-col items-center justify-center rounded-xl bg-green-100 text-4xl font-bold text-green-500"
                         >
                             <p>
-                                {String(data.paid_contracts).padStart(2, '0')}
+                                {span == "month" ? String(data.paid_contracts).padStart(2, '0') : String(data.all_paid_contracts).padStart(2, '0')}
                             </p>
                             <p className="text-sm font-normal">مدفوعة</p>
                         </Link>

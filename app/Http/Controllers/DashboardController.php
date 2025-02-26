@@ -36,27 +36,36 @@ class DashboardController extends Controller
                 ->whereBetween('bonds.payement_date', [$startOfMonth, $endOfMonth])
                 ->where('bonds.status', 'paid');
         })->count();
+        $data['all_paid_contracts'] = Bond::whereHas('contract', function ($query){
+            $query->where('trash', false);
+        })->where('status', 'paid')->count();
 
-        $data['late_contracts'] = Contract::where('trash', false)->whereExists(function ($query) use ($twoDaysAfter, $threeDaysLate) {
-            $query->select(DB::raw(1))
-                ->from('bonds')
-                ->whereColumn('bonds.contract_id', 'contracts.id')
-                ->whereBetween('bonds.payement_date', [$threeDaysLate, $twoDaysAfter])
-                ->whereNull('bonds.status');
+        $data['late_contracts'] = Bond::whereHas('contract', function ($query) {
+            $query->where('trash', false);
+
+        })->whereBetween('payement_date', [$threeDaysLate, $twoDaysAfter])
+                ->where(function ($query) {
+            $query->where('status', '!=', 'paid')
+                  ->orWhereNull('status');
+                  
         })->count();
-        $data['current_contracts'] = Contract::where('trash', false)->whereExists(function ($query) use ($oneDayLate, $today) {
-            $query->select(DB::raw(1))
-                ->from('bonds')
-                ->whereColumn('bonds.contract_id', 'contracts.id')
-                ->whereBetween('bonds.payement_date', [$oneDayLate, $today])
-                ->whereNull('bonds.status');
+
+        $data['current_contracts'] = Bond::whereHas('contract', function ($query) {
+            $query->where('trash', false);
+        })->whereBetween('payement_date', [$oneDayLate, $today])
+                ->where(function ($query) {
+            $query->where('status', '!=', 'paid')
+                  ->orWhereNull('status');
+                  
         })->count();
-        $data['very_late_contracts'] = Contract::where('trash', false)->where('trash', false)->whereExists(function ($query) use ($fourDaysLate) {
-            $query->select(DB::raw(1))
-                ->from('bonds')
-                ->whereColumn('bonds.contract_id', 'contracts.id')
-                ->where('bonds.payement_date', '<=', $fourDaysLate)
-                ->whereNull('bonds.status');
+
+        $data['very_late_contracts'] = Bond::whereHas('contract', function ($query) {
+            $query->where('trash', false);
+        })->where('payement_date', '<=', $fourDaysLate)
+                ->where(function ($query) {
+            $query->where('status', '!=', 'paid')
+                  ->orWhereNull('status');
+                  
         })->count();
 
         $data['sum_unpaid_amount'] = Bond::whereHas('contract', function ($query) {
@@ -83,7 +92,7 @@ class DashboardController extends Controller
         $data['sum_monthly_unpaid_amount'] = Bond::whereHas('contract', function ($query) {
             $query->where('trash', false);
         })
-        ->where(function ($query) use ($startOfMonth, $endOfMonth) {
+        ->where(function ($query) {
             $query->where('status', '!=', 'paid')
                   ->orWhereNull('status');
                   
